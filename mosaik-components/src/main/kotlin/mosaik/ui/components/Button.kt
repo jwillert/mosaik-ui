@@ -7,7 +7,7 @@ import kotlinx.html.*
  * HTML attributes of the underlying `<button>`, delegating the latter straight
  * to the [BUTTON] element so they render natively.
  */
-class ButtonScope(@PublishedApi internal val element: BUTTON) : MosaikScope {
+class ButtonScope(private val element: BUTTON) : MosaikScope {
     override var variant: Variant = Variant.Primary
     override var size: Size = Size.Md
     override var classes: String? = null
