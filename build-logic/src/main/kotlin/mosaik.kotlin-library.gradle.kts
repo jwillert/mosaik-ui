@@ -15,9 +15,12 @@ kotlin {
     jvmToolchain(21)
 }
 
+// Precompiled script plugins can't use the type-safe `libs.` accessor, so resolve the catalog by name.
+val libs = the<VersionCatalogsExtension>().named("libs")
+
 dependencies {
-    "testImplementation"("io.kotest:kotest-runner-junit5:5.9.1")
-    "testImplementation"("io.kotest:kotest-assertions-core:5.9.1")
+    "testImplementation"(libs.findLibrary("kotest-runner-junit5").get())
+    "testImplementation"(libs.findLibrary("kotest-assertions-core").get())
 }
 
 tasks.withType<Test>().configureEach {

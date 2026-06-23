@@ -4,8 +4,11 @@ plugins {
     id("mosaik.kotlin-library")
 }
 
+// Precompiled script plugins can't use the type-safe `libs.` accessor, so resolve the catalog by name.
+val libs = the<VersionCatalogsExtension>().named("libs")
+
 dependencies {
-    "implementation"("io.ktor:ktor-server-core:3.1.3")
-    "implementation"("io.ktor:ktor-server-netty:3.1.3")
-    "implementation"("io.ktor:ktor-server-html-builder:3.1.3")
+    "implementation"(libs.findLibrary("ktor-server-core").get())
+    "implementation"(libs.findLibrary("ktor-server-netty").get())
+    "implementation"(libs.findLibrary("ktor-server-html-builder").get())
 }
