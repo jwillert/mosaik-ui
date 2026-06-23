@@ -1,0 +1,16 @@
+{
+  "components": [
+    {
+      "name": "theme",
+      "description": "Shared foundation: Variant and Size enums, the MosaikScope contract, and the buildClasses utility. Installed automatically with the first component.",
+      "files": ["Theme.kt"],
+      "dependencies": []
+    },
+    {
+      "name": "button",
+      "description": "DaisyUI button with variant, size, custom classes, and delegated HTML attributes (id, name, type, disabled).",
+      "files": ["Button.kt"],
+      "dependencies": ["theme"]
+    }
+  ]
+}
