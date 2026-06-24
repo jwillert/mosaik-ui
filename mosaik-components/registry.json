@@ -11,6 +11,12 @@
       "description": "DaisyUI button with variant, size, custom classes, and delegated HTML attributes (id, name, type, disabled).",
       "files": ["Button.kt"],
       "dependencies": ["theme"]
+    },
+    {
+      "name": "badge",
+      "description": "DaisyUI badge with its own BadgeVariant palette (primary, secondary, accent, ghost, info, success, warning, error, neutral, outline), size, and custom classes.",
+      "files": ["Badge.kt"],
+      "dependencies": ["theme"]
     }
   ]
 }

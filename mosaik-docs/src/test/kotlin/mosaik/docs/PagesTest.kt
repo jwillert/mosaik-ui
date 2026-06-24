@@ -2,6 +2,7 @@ package mosaik.docs
 
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.string.shouldContain
+import mosaik.ui.components.BadgeVariant
 import mosaik.ui.components.Size
 import mosaik.ui.components.Variant
 
@@ -86,5 +87,47 @@ class PagesTest : FunSpec({
         // Types and defaults are documented in the table.
         html shouldContain "Variant.Primary"
         html shouldContain "Size.Md"
+    }
+
+    test("the sidebar links the badge page and it carries the active marker") {
+        landingPage() shouldContain "href=\"/components/badge\""
+        badgePage() shouldContain "menu-active"
+    }
+
+    test("the badge page opens with a title and a description of what Badge is") {
+        val html = badgePage()
+        html shouldContain "<h1>Badge</h1>"
+        html shouldContain "mBadge"
+        html shouldContain "BadgeVariant"
+        html shouldContain "DaisyUI"
+    }
+
+    test("the badge page shows the Gradle installation command and a usage block") {
+        val html = badgePage()
+        html shouldContain "./gradlew mosaikAdd --component=badge"
+        html shouldContain "Basic usage"
+        html shouldContain "mBadge(BadgeVariant.Success, Size.Sm)"
+    }
+
+    test("the badge page renders every BadgeVariant as its DaisyUI class") {
+        val html = badgePage()
+        BadgeVariant.entries.forEach { variant ->
+            html shouldContain "badge-${variant.token}"
+        }
+    }
+
+    test("the badge page renders every non-default size and omits the medium token") {
+        val html = badgePage()
+        Size.entries.mapNotNull { it.token }.forEach { token ->
+            html shouldContain "badge-$token"
+        }
+    }
+
+    test("the badge page includes an API reference table for every mBadge parameter") {
+        val html = badgePage()
+        html shouldContain "API reference"
+        html shouldContain "BadgeVariant.Primary"
+        // The block param documents the raw SPAN receiver (> is HTML-escaped in the cell).
+        html shouldContain "SPAN.()"
     }
 })
