@@ -1,0 +1,13 @@
+{
+  "name": "mosaik-ui-sandcastle",
+  "private": true,
+  "type": "module",
+  "description": "Sandcastle orchestrator for Mosaik UI",
+  "scripts": {
+    "sandcastle": "npx tsx .sandcastle/run.ts"
+  },
+  "devDependencies": {
+    "@ai-hero/sandcastle": "^0.10.0",
+    "tsx": "^4.22.4"
+  }
+}
