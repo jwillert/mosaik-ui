@@ -4,9 +4,7 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
-import kotlinx.html.ButtonType
-import kotlinx.html.FlowContent
-import kotlinx.html.div
+import kotlinx.html.*
 import kotlinx.html.stream.createHTML
 
 /** Renders a flow fragment without pretty-printing so assertions are deterministic. */
@@ -16,7 +14,7 @@ private fun render(block: FlowContent.() -> Unit): String =
 class ButtonTest : FunSpec({
 
     test("a primary medium button renders the base and variant classes, omitting the default size") {
-        val html = render { mButton { variant = Variant.Primary; size = Size.Md; +"Click" } }
+        val html = render { mButton(Variant.Primary, Size.Md) { +"Click" } }
 
         html shouldContain "<button class=\"btn btn-primary\">Click</button>"
     }
@@ -34,7 +32,7 @@ class ButtonTest : FunSpec({
         )
 
         expected.forEach { (variant, css) ->
-            val html = render { mButton { this.variant = variant } }
+            val html = render { mButton(variant) {} }
             html shouldContain "class=\"btn $css\""
         }
     }
@@ -48,16 +46,16 @@ class ButtonTest : FunSpec({
         )
 
         expected.forEach { (size, css) ->
-            val html = render { mButton { variant = Variant.Primary; this.size = size } }
+            val html = render { mButton(Variant.Primary, size) {} }
             html shouldContain "class=\"btn btn-primary $css\""
         }
 
-        val md = render { mButton { variant = Variant.Primary; size = Size.Md } }
+        val md = render { mButton(Variant.Primary, Size.Md) {} }
         md shouldNotContain "btn-md"
     }
 
     test("disabled state renders the disabled attribute") {
-        val html = render { mButton { variant = Variant.Primary; disabled = true; +"Off" } }
+        val html = render { mButton(Variant.Primary) { disabled = true; +"Off" } }
 
         html shouldContain "disabled=\"disabled\""
         html shouldContain "btn btn-primary"
@@ -65,13 +63,13 @@ class ButtonTest : FunSpec({
 
     test("custom classes are appended after the variant and size classes") {
         val html = render {
-            mButton { variant = Variant.Secondary; size = Size.Lg; classes = "w-full shadow" }
+            mButton(Variant.Secondary, Size.Lg, "w-full shadow") {}
         }
 
         html shouldContain "class=\"btn btn-secondary btn-lg w-full shadow\""
     }
 
-    test("html properties are delegated to the underlying button element") {
+    test("the block receives the raw button element so its html attributes apply natively") {
         val html = render {
             mButton {
                 id = "submit"
@@ -84,6 +82,18 @@ class ButtonTest : FunSpec({
         html shouldContain "id=\"submit\""
         html shouldContain "name=\"action\""
         html shouldContain "type=\"submit\""
+    }
+
+    test("arbitrary attributes (e.g. htmx) work natively via the raw element") {
+        val html = render {
+            mButton(Variant.Primary) {
+                attributes["hx-get"] = "/save"
+                +"Save"
+            }
+        }
+
+        html shouldContain "hx-get=\"/save\""
+        html shouldContain "class=\"btn btn-primary\""
     }
 
     test("buildClasses joins non-blank tokens and drops null and blank ones") {

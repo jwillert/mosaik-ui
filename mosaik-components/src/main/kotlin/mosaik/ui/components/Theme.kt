@@ -3,9 +3,10 @@ package mosaik.ui.components
 /**
  * Shared foundation installed automatically with the first component.
  *
- * Holds the design-token enums every component draws from ([Variant], [Size]),
- * the [MosaikScope] contract each component's scope class implements, and the
- * [buildClasses] helper that assembles the final `class` attribute.
+ * Holds the design-token enums every component draws from ([Variant], [Size])
+ * and the [buildClasses] helper that assembles the final `class` attribute.
+ * Per ADR-0003 components take these tokens as function parameters rather than
+ * through a shared scope contract, so there is no `MosaikScope` interface.
  */
 
 /**
@@ -33,18 +34,6 @@ enum class Size(val token: String?) {
     Md(null),
     Lg("lg"),
     Xl("xl"),
-}
-
-/**
- * The contract shared by every component scope: the Mosaik design properties
- * exposed in the flat DSL block. HTML element properties are added per scope
- * by delegating to the underlying kotlinx.html tag.
- */
-interface MosaikScope {
-    var variant: Variant
-    var size: Size
-    /** Extra classes appended verbatim after the generated component classes. */
-    var classes: String?
 }
 
 /**

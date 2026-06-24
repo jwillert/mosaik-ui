@@ -11,7 +11,7 @@ private const val SOURCE = """package mosaik.ui.components
 
 import kotlinx.html.*
 
-fun FlowContent.mButton(block: ButtonScope.() -> Unit = {}) {}
+fun FlowContent.mButton(variant: Variant = Variant.Primary, block: BUTTON.() -> Unit = {}) {}
 """
 
 class FileWriterTest : FunSpec({
