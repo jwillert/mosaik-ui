@@ -4,14 +4,46 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 /**
- * The `dev.jwillert.mosaik` Gradle plugin. This iteration wires up the CSS toolchain (issue #5):
- * the `mosaikUi { css {} }` extension plus the `installTailwind`, `generateTailwindConfig`,
- * `buildCss` and `watchCss` tasks. The registry/install tasks land in a separate issue.
+ * The `dev.jwillert.mosaik` Gradle plugin. Wires up two task groups on the `mosaikUi {}` extension:
+ *
+ * - "mosaik" — the component install pipeline: `mosaikAdd`, `mosaikList`, `mosaikStatus`.
+ * - "mosaik css" — the CSS toolchain: `installTailwind`, `generateTailwindConfig`, `buildCss`,
+ *   `watchCss`.
  */
 class MosaikUiPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         val extension = project.extensions.create("mosaikUi", MosaikUiExtension::class.java)
+        registerInstallTasks(project, extension)
+        registerCssTasks(project, extension)
+    }
+
+    /** The component install pipeline backed by mosaik-core and the bundled registry. */
+    private fun registerInstallTasks(project: Project, extension: MosaikUiExtension) {
+        val group = "mosaik"
+        val sourceRoot = project.layout.projectDirectory.dir("src/main/kotlin")
+
+        project.tasks.register("mosaikAdd", MosaikAddTask::class.java) { task ->
+            task.group = group
+            task.description = "Install a component and its dependencies (--component=<name> [--force])."
+            task.packageName.set(extension.packageName)
+            task.sourceRoot.set(sourceRoot)
+        }
+
+        project.tasks.register("mosaikList", MosaikListTask::class.java) { task ->
+            task.group = group
+            task.description = "List all available Mosaik components."
+        }
+
+        project.tasks.register("mosaikStatus", MosaikStatusTask::class.java) { task ->
+            task.group = group
+            task.description = "Show which components are already installed in the project."
+            task.packageName.set(extension.packageName)
+            task.sourceRoot.set(sourceRoot)
+        }
+    }
+
+    private fun registerCssTasks(project: Project, extension: MosaikUiExtension) {
         val css = extension.css
         css.tailwindVersion.convention("4")
         css.daisyuiVersion.convention("5")
