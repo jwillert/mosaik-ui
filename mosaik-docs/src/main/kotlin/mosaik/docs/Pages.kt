@@ -24,19 +24,39 @@ val BUTTON = NavItem("/components/button", "Button", ::buttonPage)
 val COMPONENTS = listOf(BUTTON)
 
 /**
+ * The theme the server renders before any client-side preference is applied. The
+ * [themeSwitcher] (and the restore script) override `data-theme` on `<html>` once
+ * the user picks a theme; until then DaisyUI's `light` is the baseline.
+ */
+const val DEFAULT_THEME = "light"
+
+/**
+ * Every DaisyUI built-in theme, offered by the [themeSwitcher]. `input.css`
+ * enables `themes: all`, so each of these compiles into `output.css` and can be
+ * previewed live. Order matches DaisyUI's own theme list.
+ */
+val THEMES = listOf(
+    "light", "dark", "cupcake", "bumblebee", "emerald", "corporate", "synthwave",
+    "retro", "cyberpunk", "valentine", "halloween", "garden", "forest", "aqua",
+    "lofi", "pastel", "fantasy", "wireframe", "black", "luxury", "dracula", "cmyk",
+    "autumn", "business", "acid", "lemonade", "night", "coffee", "winter", "dim",
+    "nord", "sunset", "caramellatte", "abyss", "silk",
+)
+
+/**
  * Opens `<html data-theme="light" lang="en">`. The attributes are passed at tag
  * construction (not inside the block) because a streaming consumer writes the
  * open tag before the block runs, so attributes set afterwards would be too late.
  */
 private fun <T> TagConsumer<T>.htmlDocument(block: HTML.() -> Unit): T =
-    HTML(mapOf("data-theme" to "light", "lang" to "en"), this, namespace = null)
+    HTML(mapOf("data-theme" to DEFAULT_THEME, "lang" to "en"), this, namespace = null)
         .visitAndFinalize(this, block)
 
 /**
- * Wraps page [content] in the shared document: `data-theme="light"` on the html
- * element for DaisyUI, the compiled Tailwind stylesheet, and the sidebar that
- * highlights the [active] page (whose label is also the document title). Returns
- * a full HTML document string.
+ * Wraps page [content] in the shared document: the default `data-theme` on the
+ * html element for DaisyUI, the compiled Tailwind stylesheet, and the sidebar
+ * that highlights the [active] page (whose label is also the document title).
+ * Returns a full HTML document string.
  */
 fun layout(active: NavItem, content: FlowContent.() -> Unit): String =
     buildString {
@@ -54,11 +74,12 @@ fun layout(active: NavItem, content: FlowContent.() -> Unit): String =
                     sidebar(active.path)
                     main(classes = "flex-1 p-8 prose max-w-none") { content() }
                 }
+                themeRestoreScript()
             }
         }
     }
 
-/** Left navigation listing Home and every component page. */
+/** Left navigation listing Home, every component page, and the theme switcher. */
 private fun FlowContent.sidebar(activePath: String) {
     aside(classes = "w-64 shrink-0 bg-base-200 p-4") {
         h1("text-xl font-bold px-2 pb-4") { +"Mosaik UI" }
@@ -66,6 +87,7 @@ private fun FlowContent.sidebar(activePath: String) {
             navLink(HOME, activePath)
             COMPONENTS.forEach { navLink(it, activePath) }
         }
+        themeSwitcher()
     }
 }
 
@@ -74,6 +96,112 @@ private fun UL.navLink(item: NavItem, activePath: String) {
         // DaisyUI marks the current menu entry with `menu-active`.
         val active = if (item.path == activePath) "menu-active" else ""
         a(href = item.path, classes = active) { +item.label }
+    }
+}
+
+/**
+ * A `<select>` in the sidebar that previews the page in any DaisyUI theme. On
+ * change it sets `data-theme` on `<html>` and persists the choice to
+ * localStorage; [themeRestoreScript] reapplies it on the next page load. This is
+ * docs-only JavaScript — components remain CSS-only (see PRD #10).
+ */
+private fun FlowContent.themeSwitcher() {
+    div("px-2 pt-6") {
+        label("label text-xs opacity-70") {
+            attributes["for"] = "theme-switcher"
+            +"Theme"
+        }
+        select(classes = "select select-sm select-bordered w-full mt-1") {
+            id = "theme-switcher"
+            attributes["onchange"] =
+                "document.documentElement.setAttribute('data-theme', this.value);" +
+                    "localStorage.setItem('mosaik-theme', this.value);"
+            THEMES.forEach { theme ->
+                option {
+                    value = theme
+                    +theme.replaceFirstChar { it.uppercase() }
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Reapplies the saved theme (if any) on load and syncs the [themeSwitcher] to the
+ * active theme, so the dropdown reflects the previewed theme across navigation.
+ */
+private fun FlowContent.themeRestoreScript() {
+    script {
+        unsafe {
+            +"""
+            (function () {
+              var saved = localStorage.getItem('mosaik-theme');
+              if (saved) { document.documentElement.setAttribute('data-theme', saved); }
+              var sel = document.getElementById('theme-switcher');
+              if (sel) { sel.value = document.documentElement.getAttribute('data-theme'); }
+            })();
+            """.trimIndent()
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Page template helpers — every component page is built from these sections so
+// the layout stays consistent (PRD #10, issue #11). Code examples are static
+// strings here; there is no build-time extraction from component sources.
+// ---------------------------------------------------------------------------
+
+/** A row in an [apiReference] table: one component parameter. */
+data class ApiParam(
+    val name: String,
+    val type: String,
+    val default: String,
+    val description: String,
+)
+
+/** The `./gradlew mosaikAdd` install command for [component]. */
+private fun FlowContent.installSection(component: String) {
+    h2 { +"Installation" }
+    codeBlock("./gradlew mosaikAdd --component=$component")
+}
+
+/** A minimal Kotlin usage snippet under a "Basic usage" heading. */
+private fun FlowContent.usageSection(code: String) {
+    h2 { +"Basic usage" }
+    codeBlock(code)
+}
+
+/** A fenced, monospaced code block. Text is escaped by kotlinx.html. */
+private fun FlowContent.codeBlock(code: String) {
+    pre("bg-base-200 rounded-box p-4 overflow-x-auto") {
+        code { +code }
+    }
+}
+
+/** The parameter reference table closing every component page. */
+private fun FlowContent.apiReference(params: List<ApiParam>) {
+    h2 { +"API reference" }
+    div("overflow-x-auto") {
+        table("table table-zebra") {
+            thead {
+                tr {
+                    th { +"Parameter" }
+                    th { +"Type" }
+                    th { +"Default" }
+                    th { +"Description" }
+                }
+            }
+            tbody {
+                params.forEach { p ->
+                    tr {
+                        td { code { +p.name } }
+                        td { code { +p.type } }
+                        td { code { +p.default } }
+                        td { +p.description }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -86,35 +214,126 @@ fun landingPage(): String = layout(HOME) {
         span("font-mono") { +"mosaik-components" }
         +" directly: if a page renders correctly, the component works."
     }
+    p { +"Use the theme switcher in the sidebar to preview components in any DaisyUI theme." }
 }
 
-/** Button page: every variant, every size, and the disabled state, each labelled. */
+/**
+ * Button page, following the five-section component template: title +
+ * description, installation, basic usage, a variants/sizes showcase paired with
+ * its Kotlin code, and the API reference table.
+ */
 fun buttonPage(): String = layout(BUTTON) {
     h1 { +"Button" }
-    p { +"A DaisyUI button rendered via mButton {}." }
+    p {
+        +"A button triggers an action or event — submitting a form, opening a dialog, "
+        +"or navigating. "
+        code { +"mButton" }
+        +" is a thin wrapper over DaisyUI's "
+        code { +"btn" }
+        +" classes that takes its colour role and size as parameters and hands you "
+        +"the raw kotlinx.html element, so any HTML attribute or library extension "
+        +"(e.g. htmx) works natively (ADR-0003)."
+    }
+
+    installSection("button")
+
+    usageSection(
+        """
+        import mosaik.ui.components.mButton
+        import mosaik.ui.components.Variant
+        import mosaik.ui.components.Size
+
+        mButton(Variant.Primary, Size.Md) {
+            +"Save"
+        }
+        """.trimIndent(),
+    )
 
     section {
         h2 { +"Variants" }
-        div("flex flex-wrap gap-2") {
+        p {
+            +"Every "
+            code { +"Variant" }
+            +" maps to a DaisyUI colour role."
+        }
+        div("flex flex-wrap gap-2 not-prose") {
             Variant.entries.forEach { v ->
                 mButton(variant = v) { +v.name }
             }
         }
+        codeBlock(
+            """
+            Variant.entries.forEach { v ->
+                mButton(variant = v) { +v.name }
+            }
+            """.trimIndent(),
+        )
     }
 
     section {
         h2 { +"Sizes" }
-        div("flex flex-wrap items-center gap-2") {
+        p {
+            +"Five "
+            code { +"Size" }
+            +" steps; "
+            code { +"Size.Md" }
+            +" is the unstyled baseline and renders no size class."
+        }
+        div("flex flex-wrap items-center gap-2 not-prose") {
             Size.entries.forEach { s ->
                 mButton(variant = Variant.Primary, size = s) { +s.name }
             }
         }
+        codeBlock(
+            """
+            Size.entries.forEach { s ->
+                mButton(variant = Variant.Primary, size = s) { +s.name }
+            }
+            """.trimIndent(),
+        )
     }
 
     section {
         h2 { +"Disabled" }
-        div("flex flex-wrap gap-2") {
+        div("flex flex-wrap gap-2 not-prose") {
             mButton(variant = Variant.Primary) { disabled = true; +"Disabled" }
         }
+        codeBlock(
+            """
+            mButton(variant = Variant.Primary) {
+                disabled = true
+                +"Disabled"
+            }
+            """.trimIndent(),
+        )
     }
+
+    apiReference(
+        listOf(
+            ApiParam(
+                "variant",
+                "Variant",
+                "Variant.Primary",
+                "DaisyUI colour role: Primary, Secondary, Accent, Ghost, Link, Error, Success, Warning.",
+            ),
+            ApiParam(
+                "size",
+                "Size",
+                "Size.Md",
+                "Size step: Xs, Sm, Md, Lg, Xl. Md is the baseline and adds no class.",
+            ),
+            ApiParam(
+                "classes",
+                "String?",
+                "null",
+                "Extra CSS classes appended after the generated btn classes.",
+            ),
+            ApiParam(
+                "block",
+                "BUTTON.() -> Unit",
+                "{}",
+                "Receiver block on the raw kotlinx.html BUTTON element — set text, attributes, or library extensions.",
+            ),
+        ),
+    )
 }
