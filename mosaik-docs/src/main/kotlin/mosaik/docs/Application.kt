@@ -18,8 +18,10 @@ fun Application.module() {
         // Compiled Tailwind/DaisyUI output, served from resources/static/output.css.
         staticResources("/static", "static")
 
-        get("/") { call.respondText(landingPage(), ContentType.Text.Html) }
-        get("/components/button") { call.respondText(buttonPage(), ContentType.Text.Html) }
+        // One route per nav item, so the sidebar and the routing table can't drift.
+        (listOf(HOME) + COMPONENTS).forEach { page ->
+            get(page.path) { call.respondText(page.render(), ContentType.Text.Html) }
+        }
     }
 }
 
