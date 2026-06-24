@@ -2,6 +2,7 @@ package mosaik.docs
 
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.string.shouldContain
+import mosaik.ui.components.AlertVariant
 import mosaik.ui.components.BadgeVariant
 import mosaik.ui.components.Size
 import mosaik.ui.components.Variant
@@ -129,5 +130,40 @@ class PagesTest : FunSpec({
         html shouldContain "BadgeVariant.Primary"
         // The block param documents the raw SPAN receiver (> is HTML-escaped in the cell).
         html shouldContain "SPAN.()"
+    }
+
+    test("the sidebar links the alert page and it carries the active marker") {
+        landingPage() shouldContain "href=\"/components/alert\""
+        alertPage() shouldContain "menu-active"
+    }
+
+    test("the alert page opens with a title and a description of what Alert is") {
+        val html = alertPage()
+        html shouldContain "<h1>Alert</h1>"
+        html shouldContain "mAlert"
+        html shouldContain "AlertVariant"
+        html shouldContain "DaisyUI"
+    }
+
+    test("the alert page shows the Gradle installation command and a usage block") {
+        val html = alertPage()
+        html shouldContain "./gradlew mosaikAdd --component=alert"
+        html shouldContain "Basic usage"
+        html shouldContain "mAlert(AlertVariant.Success)"
+    }
+
+    test("the alert page renders every AlertVariant as its DaisyUI class") {
+        val html = alertPage()
+        AlertVariant.entries.forEach { variant ->
+            html shouldContain "alert-${variant.token}"
+        }
+    }
+
+    test("the alert page includes an API reference table for every mAlert parameter") {
+        val html = alertPage()
+        html shouldContain "API reference"
+        html shouldContain "AlertVariant.Info"
+        // The block param documents the raw DIV receiver (> is HTML-escaped in the cell).
+        html shouldContain "DIV.()"
     }
 })
