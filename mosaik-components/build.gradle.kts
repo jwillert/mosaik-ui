@@ -1,5 +1,6 @@
 plugins {
     id("mosaik.vrt")
+    id("mosaik.css")
 }
 
 dependencies {
@@ -13,19 +14,14 @@ vrt {
     wrapperClasses.set(listOf("inline-block", "p-4"))
 }
 
-tasks.register<Exec>("installVrtCssDeps") {
-    group = "mosaik css"
-    description = "Install npm dependencies for VRT CSS compilation."
-    workingDir = projectDir
-    commandLine("npm", "install")
-    inputs.file("package.json")
-    outputs.dir("node_modules")
+tasks.named<Exec>("buildCss") {
+    setCommandLine("npx", "@tailwindcss/cli", "-i", "input.css", "-o", "output.css", "--minify")
 }
 
 tasks.register<Exec>("buildVrtCss") {
     group = "mosaik css"
-    description = "Compile Tailwind + DaisyUI CSS for VRT rendering."
-    dependsOn("installVrtCssDeps")
+    description = "Compile CSS for VRT rendering (into build dir)."
+    dependsOn("installTailwind")
     workingDir = projectDir
     commandLine(
         "npx", "@tailwindcss/cli",

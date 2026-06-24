@@ -1,5 +1,6 @@
 plugins {
     id("mosaik.ktor-app")
+    id("mosaik.css")
     application
 }
 
@@ -12,4 +13,17 @@ dependencies {
 
 application {
     mainClass = "mosaik.docs.ApplicationKt"
+}
+
+mosaikCss {
+    scanPaths.set(listOf("src", "../mosaik-components/src"))
+}
+
+tasks.named<Exec>("buildCss") {
+    setCommandLine("npx", "@tailwindcss/cli", "-i", "input.css", "-o", "src/main/resources/static/output.css", "--minify")
+    outputs.file("src/main/resources/static/output.css")
+}
+
+tasks.named("processResources") {
+    dependsOn("buildCss")
 }
