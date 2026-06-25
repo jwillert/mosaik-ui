@@ -10,28 +10,12 @@ css.minify.convention(true)
 
 val projectDir = layout.projectDirectory
 
-tasks.register<Exec>("generateTailwindConfig") {
+tasks.register<GenerateTailwindConfigTask>("generateTailwindConfig") {
     group = "mosaik css"
     description = "Generate input.css (only if missing)."
-    val inputCss = projectDir.file("input.css").asFile
-    onlyIf { !inputCss.exists() }
-    doFirst {
-        val themeList = css.themes.get().joinToString(", ").ifEmpty { "light" }
-        val sources = css.scanPaths.get().joinToString("\n") { "@source \"$it\";" }
-        inputCss.writeText(buildString {
-            appendLine("@import \"tailwindcss\";")
-            appendLine()
-            appendLine("@plugin \"daisyui\" {")
-            appendLine("  themes: $themeList;")
-            appendLine("}")
-            if (sources.isNotEmpty()) {
-                appendLine()
-                appendLine(sources)
-            }
-        })
-        logger.lifecycle("mosaik: generated input.css")
-    }
-    commandLine("true")
+    inputCss.set(projectDir.file("input.css"))
+    themes.convention(css.themes)
+    scanPaths.convention(css.scanPaths)
 }
 
 tasks.register<Exec>("installTailwind") {
@@ -54,13 +38,14 @@ tasks.register<Exec>("buildCss") {
     description = "Compile output.css from component sources with Tailwind/DaisyUI."
     dependsOn("installTailwind", "generateTailwindConfig")
     workingDir = projectDir.asFile
-    val args = mutableListOf(
+    commandLine(
         "npx", "@tailwindcss/cli",
         "-i", "input.css",
         "-o", "output.css",
     )
-    doFirst { if (css.minify.get()) args += "--minify" }
-    commandLine(args)
+    argumentProviders.add(objects.newInstance<CssMinifyArgumentProvider>().apply {
+        minify.convention(css.minify)
+    })
     inputs.file("input.css")
     outputs.file("output.css")
 }
