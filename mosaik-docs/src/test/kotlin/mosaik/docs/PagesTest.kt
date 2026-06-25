@@ -360,7 +360,8 @@ class PagesTest : FunSpec({
         htmlCodeOnly shouldContain "alpine only code"
         htmlCodeOnly shouldContain "datastar only code"
         // No mb-4 preview wrapper when previews are null.
-        htmlCodeOnly shouldContain "tab-content bg-base-200 rounded-box p-4\">"
+        htmlCodeOnly shouldContain "tab-content bg-base-200"
+        htmlCodeOnly shouldContain "<pre><code>htmx only code"
     }
 
     test("the interactivity page includes a Login form composed example section") {
