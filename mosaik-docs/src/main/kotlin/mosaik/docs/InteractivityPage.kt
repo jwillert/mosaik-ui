@@ -93,6 +93,158 @@ fun Application.module() {
         }
         interactivityTabs(
             id = "login-form",
+            htmxPreview = {
+                mCard("w-96 bg-base-100 shadow-xl") {
+                    form {
+                        attributes["hx-post"] = "/_examples/login"
+                        attributes["hx-target"] = "#login-result"
+                        attributes["hx-indicator"] = "#login-spinner"
+
+                        div("card-body") {
+                            h2("card-title") { +"Login" }
+
+                            label("form-control w-full") {
+                                div("label") {
+                                    span("label-text") { +"Email" }
+                                }
+                                input(type = InputType.email, name = "email", classes = "input input-bordered w-full") {
+                                    required = true
+                                }
+                            }
+
+                            label("form-control w-full") {
+                                div("label") {
+                                    span("label-text") { +"Password" }
+                                }
+                                input(type = InputType.password, name = "password", classes = "input input-bordered w-full") {
+                                    required = true
+                                }
+                            }
+
+                            div("mt-2") {
+                                id = "login-result"
+                                attributes["role"] = "region"
+                                attributes["aria-live"] = "polite"
+                            }
+
+                            div("card-actions justify-end") {
+                                mButton(Variant.Primary) {
+                                    span { +"Sign in" }
+                                    span("loading loading-spinner loading-sm htmx-indicator") {
+                                        id = "login-spinner"
+                                        attributes["style"] = "display:none;"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            alpinePreview = {
+                mCard("w-96 bg-base-100 shadow-xl") {
+                    form {
+                        attributes["x-data"] = "{ email: '', password: '', loading: false, error: '' }"
+                        attributes["x-on:submit.prevent"] = "loading = true; error = ''; " +
+                            "fetch('/_examples/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, " +
+                            "body: JSON.stringify({ email, password }) }).then(r => r.ok ? alert('Login successful!') : " +
+                            "r.text().then(t => error = t)).catch(e => error = 'Network error').finally(() => loading = false)"
+
+                        div("card-body") {
+                            h2("card-title") { +"Login" }
+
+                            label("form-control w-full") {
+                                div("label") {
+                                    span("label-text") { +"Email" }
+                                }
+                                input(type = InputType.email, name = "email", classes = "input input-bordered w-full") {
+                                    required = true
+                                    attributes["x-model"] = "email"
+                                }
+                            }
+
+                            label("form-control w-full") {
+                                div("label") {
+                                    span("label-text") { +"Password" }
+                                }
+                                input(type = InputType.password, name = "password", classes = "input input-bordered w-full") {
+                                    required = true
+                                    attributes["x-model"] = "password"
+                                }
+                            }
+
+                            div("mt-2 text-error text-sm") {
+                                attributes["x-show"] = "error"
+                                attributes["x-text"] = "error"
+                                attributes["role"] = "alert"
+                            }
+
+                            div("card-actions justify-end") {
+                                mButton(Variant.Primary) {
+                                    attributes["x-bind:disabled"] = "loading"
+                                    span {
+                                        attributes["x-show"] = "!loading"
+                                        +"Sign in"
+                                    }
+                                    span("loading loading-spinner loading-sm") {
+                                        attributes["x-show"] = "loading"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            datastarPreview = {
+                mCard("w-96 bg-base-100 shadow-xl") {
+                    form {
+                        attributes["data-on-submit"] = "\$\$post('/_examples/login')"
+                        attributes["data-store"] = "{ email: '', password: '', loading: false, error: '' }"
+
+                        div("card-body") {
+                            h2("card-title") { +"Login" }
+
+                            label("form-control w-full") {
+                                div("label") {
+                                    span("label-text") { +"Email" }
+                                }
+                                input(type = InputType.email, name = "email", classes = "input input-bordered w-full") {
+                                    required = true
+                                    attributes["data-model"] = "email"
+                                }
+                            }
+
+                            label("form-control w-full") {
+                                div("label") {
+                                    span("label-text") { +"Password" }
+                                }
+                                input(type = InputType.password, name = "password", classes = "input input-bordered w-full") {
+                                    required = true
+                                    attributes["data-model"] = "password"
+                                }
+                            }
+
+                            div("mt-2 text-error text-sm") {
+                                attributes["data-show"] = "\$error"
+                                attributes["data-text"] = "\$error"
+                                attributes["role"] = "alert"
+                            }
+
+                            div("card-actions justify-end") {
+                                mButton(Variant.Primary) {
+                                    attributes["data-bind-disabled"] = "\$loading"
+                                    span {
+                                        attributes["data-show"] = "!\$loading"
+                                        +"Sign in"
+                                    }
+                                    span("loading loading-spinner loading-sm") {
+                                        attributes["data-show"] = "\$loading"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             htmxCode = """
 mCard("w-96 bg-base-100 shadow-xl") {
     form {

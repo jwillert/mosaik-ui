@@ -394,6 +394,21 @@ class PagesTest : FunSpec({
         html shouldContain "data-on-submit"
     }
 
+    test("the interactivity page Login form shows working previews per style") {
+        val html = interactivityPage()
+        // Preview wrapper with mb-4 not-prose class.
+        html shouldContain "class=\"mb-4 not-prose\""
+        // All three previews render the login form card.
+        html shouldContain "Login"
+        // Form inputs are present in previews.
+        html shouldContain "type=\"email\" name=\"email\""
+        html shouldContain "type=\"password\" name=\"password\""
+        // Submit button is present.
+        html shouldContain "Sign in"
+        // Result/error display elements are present.
+        html shouldContain "login-result"
+    }
+
     test("the interactivity page Register form shows all three library implementations") {
         val html = interactivityPage()
         // Register form tabs exist with unique IDs.

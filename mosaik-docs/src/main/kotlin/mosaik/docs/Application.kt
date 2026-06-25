@@ -32,6 +32,9 @@ fun Application.module() {
         get("/_examples/card/content") {
             call.respondText("Loaded content from server", status = HttpStatusCode.OK)
         }
+        post("/_examples/login") {
+            call.respondText("Login successful!", status = HttpStatusCode.OK)
+        }
         post("/_examples/register") {
             call.respondText("Registration successful!", status = HttpStatusCode.OK)
         }
