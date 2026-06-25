@@ -348,7 +348,7 @@ mCard("w-96 bg-base-100 shadow-xl") {
             datastarCode = """
 mCard("w-96 bg-base-100 shadow-xl") {
     form {
-        attributes["data-on-submit"] = "${'$'}${'$'}post('/api/register')"
+        attributes["data-on-submit"] = "if (${'$'}password !== ${'$'}confirmPassword) { ${'$'}error = 'Passwords do not match'; return; } ${'$'}${'$'}post('/api/register')"
         attributes["data-store"] = "{ name: '', email: '', password: '', confirmPassword: '', loading: false, error: '' }"
 
         mCardBody {
