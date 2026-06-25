@@ -32,9 +32,11 @@ functions are created for htmx, Alpine.js, or Datastar.
 The docs show three levels of examples:
 
 - **Per-component sections** — small, focused examples on each component's page (e.g.
-  "Button: form submit with loading state") shown in a tabbed code switcher.
+  "Button: form submit with loading state") shown in a tabbed code switcher with a
+  matching working preview for each implementation style.
 - **Composed examples** — full-page examples (login form, register form) on a standalone
-  Interactivity guide page, showing how multiple components compose with each library.
+  Interactivity guide page, showing how multiple components compose with each library and
+  including a matching working preview for each implementation style.
 - **Building blocks overview** — a comparison of each library's primitives, best-fit use
   cases, and limitations.
 
@@ -50,6 +52,8 @@ The docs show three levels of examples:
   building new components.
 - Live documentation demos that issue network requests must be backed by real docs-app
   Ktor routes; see ADR-0007.
+- Interactivity examples must include matching working previews for each implementation
+  style; see ADR-0008.
 - Users who want a ready-made interactive component must copy the code example and adapt
   it — there is no `mosaikAdd --component=button-htmx`. This is intentional: the ShadCN
   model means the user owns and customises the code.

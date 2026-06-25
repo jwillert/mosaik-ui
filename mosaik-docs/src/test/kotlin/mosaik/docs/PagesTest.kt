@@ -359,5 +359,60 @@ class PagesTest : FunSpec({
         html shouldContain "navbar-interactive-datastar"
         // Active link example mentions hx-boost for htmx.
         html shouldContain "hx-boost"
+    test("the interactivity page contains building blocks sections for all three libraries") {
+        val html = interactivityPage()
+        html shouldContain "Building blocks"
+        html shouldContain "htmx"
+        html shouldContain "Alpine.js"
+        html shouldContain "Datastar"
+    }
+
+    test("the htmx building blocks section documents core primitives and uses attributes syntax") {
+        val html = interactivityPage()
+        html shouldContain "hx-get"
+        html shouldContain "hx-post"
+        html shouldContain "hx-target"
+        html shouldContain "hx-swap"
+        html shouldContain "hx-trigger"
+        html shouldContain "attributes"
+        html shouldContain "Ktor 3.2"
+    }
+
+    test("the Alpine.js building blocks section documents core primitives") {
+        val html = interactivityPage()
+        html shouldContain "x-data"
+        html shouldContain "x-show"
+        html shouldContain "x-on"
+        html shouldContain "x-bind"
+        html shouldContain "x-model"
+    }
+
+    test("the Datastar building blocks section documents core primitives and notes SSE requirement") {
+        val html = interactivityPage()
+        html shouldContain "data-store"
+        html shouldContain "data-on"
+        html shouldContain "SSE"
+        html shouldContain "Server-Sent Events"
+    }
+
+    test("the interactivity page contains a comparison table") {
+        val html = interactivityPage()
+        html shouldContain "Comparison"
+        html shouldContain "table"
+        html shouldContain "Paradigm"
+        html shouldContain "Server requirement"
+        html shouldContain "Script size"
+    }
+
+    test("the comparison table includes all three libraries and their paradigms") {
+        val html = interactivityPage()
+        // Check that all three libraries appear in the table
+        html shouldContain "htmx"
+        html shouldContain "Alpine.js"
+        html shouldContain "Datastar"
+        // Check for paradigm values that distinguish the libraries
+        html shouldContain "Server-driven"
+        html shouldContain "Client-side"
+        html shouldContain "Hybrid"
     }
 })
