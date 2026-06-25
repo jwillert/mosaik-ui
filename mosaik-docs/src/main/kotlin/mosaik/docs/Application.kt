@@ -19,7 +19,7 @@ fun Application.module() {
         staticResources("/static", "static")
 
         // One route per nav item, so the sidebar and the routing table can't drift.
-        (listOf(HOME) + COMPONENTS).forEach { page ->
+        (listOf(HOME) + COMPONENTS + GUIDES).forEach { page ->
             get(page.path) { call.respondText(page.render(), ContentType.Text.Html) }
         }
     }

@@ -274,4 +274,44 @@ class PagesTest : FunSpec({
         // The block param documents the raw DIV receiver (> is HTML-escaped in the cell).
         html shouldContain "DIV.()"
     }
+
+    test("the sidebar renders menu-title headers for Components and Guides sections") {
+        val html = landingPage()
+        html shouldContain "menu-title\">Components"
+        html shouldContain "menu-title\">Guides"
+    }
+
+    test("the sidebar Guides section contains a link to the interactivity page") {
+        val html = landingPage()
+        html shouldContain "href=\"/guides/interactivity\""
+        html shouldContain ">Interactivity"
+    }
+
+    test("the interactivity page is reachable and renders title and intro") {
+        val html = interactivityPage()
+        html shouldContain "<h1>Interactivity</h1>"
+        html shouldContain "htmx"
+        html shouldContain "Alpine.js"
+        html shouldContain "Datastar"
+    }
+
+    test("the sidebar links the interactivity page and it carries the active marker") {
+        interactivityPage() shouldContain "menu-active"
+    }
+
+    test("interactivityTabs renders DaisyUI radio tabs with unique name attributes") {
+        val html = interactivityTabsTestPage()
+        // Wrapper with not-prose class to prevent Tailwind Typography interference.
+        html shouldContain "class=\"tabs tabs-lifted not-prose\""
+        // Radio inputs with the unique name attribute (id parameter).
+        html shouldContain "type=\"radio\" name=\"test-tabs\""
+        // Three tabs: htmx, Alpine.js, Datastar.
+        html shouldContain "htmx-tab"
+        html shouldContain "alpine-tab"
+        html shouldContain "datastar-tab"
+        // htmx tab is checked by default.
+        html shouldContain "checked=\"checked\""
+        // Tab content panels.
+        html shouldContain "class=\"tab-content"
+    }
 })
