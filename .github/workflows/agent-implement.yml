@@ -93,7 +93,10 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
-          cache: gradle
+
+      - name: Setup Gradle
+        if: steps.preflight.outputs.refused != 'true'
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Setup Node.js
         if: steps.preflight.outputs.refused != 'true'
