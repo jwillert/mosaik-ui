@@ -555,8 +555,8 @@ mCard("w-96 bg-base-100 shadow-xl") {
         attributes["hx-target"] = "#register-result"
         attributes["hx-indicator"] = "#register-spinner"
 
-        mCardBody {
-            mCardTitle { +"Create account" }
+        div("card-body") {
+            h2("card-title") { +"Create account" }
 
             label("form-control w-full") {
                 div("label") {
@@ -601,7 +601,7 @@ mCard("w-96 bg-base-100 shadow-xl") {
                 attributes["aria-live"] = "polite"
             }
 
-            mCardActions("justify-end") {
+            div("card-actions justify-end") {
                 mButton(Variant.Primary) {
                     span { +"Sign up" }
                     span("loading loading-spinner loading-sm htmx-indicator") {
@@ -624,8 +624,8 @@ mCard("w-96 bg-base-100 shadow-xl") {
             "body: JSON.stringify({ name, email, password }) }).then(r => r.ok ? location.href = '/welcome' : " +
             "r.text().then(t => error = t)).catch(e => error = 'Network error').finally(() => loading = false)"
 
-        mCardBody {
-            mCardTitle { +"Create account" }
+        div("card-body") {
+            h2("card-title") { +"Create account" }
 
             label("form-control w-full") {
                 div("label") {
@@ -674,7 +674,7 @@ mCard("w-96 bg-base-100 shadow-xl") {
                 attributes["role"] = "alert"
             }
 
-            mCardActions("justify-end") {
+            div("card-actions justify-end") {
                 mButton(Variant.Primary) {
                     attributes["x-bind:disabled"] = "loading"
                     span {
@@ -696,8 +696,8 @@ mCard("w-96 bg-base-100 shadow-xl") {
         attributes["data-on-submit"] = "if (${'$'}password !== ${'$'}confirmPassword) { ${'$'}error = 'Passwords do not match'; return; } ${'$'}${'$'}post('/api/register')"
         attributes["data-store"] = "{ name: '', email: '', password: '', confirmPassword: '', loading: false, error: '' }"
 
-        mCardBody {
-            mCardTitle { +"Create account" }
+        div("card-body") {
+            h2("card-title") { +"Create account" }
 
             label("form-control w-full") {
                 div("label") {
@@ -746,7 +746,7 @@ mCard("w-96 bg-base-100 shadow-xl") {
                 attributes["role"] = "alert"
             }
 
-            mCardActions("justify-end") {
+            div("card-actions justify-end") {
                 mButton(Variant.Primary) {
                     attributes["data-bind-disabled"] = "${'$'}loading"
                     span {
