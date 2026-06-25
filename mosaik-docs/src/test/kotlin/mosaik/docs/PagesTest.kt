@@ -90,6 +90,42 @@ class PagesTest : FunSpec({
         html shouldContain "Size.Md"
     }
 
+    test("the sidebar links the card page and it carries the active marker") {
+        landingPage() shouldContain "href=\"/components/card\""
+        cardPage() shouldContain "menu-active"
+    }
+
+    test("the card page opens with a title and a description of what Card is") {
+        val html = cardPage()
+        html shouldContain "<h1>Card</h1>"
+        html shouldContain "mCard"
+        html shouldContain "DaisyUI"
+    }
+
+    test("the card page shows the Gradle installation command and a usage block") {
+        val html = cardPage()
+        html shouldContain "./gradlew mosaikAdd --component=card"
+        html shouldContain "Basic usage"
+        html shouldContain "mCardBody"
+    }
+
+    test("the card page renders the card and every sub-component DaisyUI class") {
+        val html = cardPage()
+        listOf("card", "card-body", "card-title", "card-actions").forEach { css ->
+            html shouldContain "class=\"$css"
+        }
+    }
+
+    test("the card page documents the card and its sub-components in the API reference") {
+        val html = cardPage()
+        html shouldContain "API reference"
+        // The block param documents the raw DIV receiver (> is HTML-escaped in the cell).
+        html shouldContain "DIV.()"
+        listOf("mCardBody", "mCardTitle", "mCardActions").forEach { fn ->
+            html shouldContain fn
+        }
+    }
+
     test("the sidebar links the badge page and it carries the active marker") {
         landingPage() shouldContain "href=\"/components/badge\""
         badgePage() shouldContain "menu-active"

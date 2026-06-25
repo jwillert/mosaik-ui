@@ -9,6 +9,10 @@ import mosaik.ui.components.Variant
 import mosaik.ui.components.mAlert
 import mosaik.ui.components.mBadge
 import mosaik.ui.components.mButton
+import mosaik.ui.components.mCard
+import mosaik.ui.components.mCardActions
+import mosaik.ui.components.mCardBody
+import mosaik.ui.components.mCardTitle
 
 /** A documentation page: the route it lives at, its sidebar label, and how it renders. */
 data class NavItem(val path: String, val label: String, val render: () -> String)
@@ -18,6 +22,9 @@ val HOME = NavItem("/", "Home", ::landingPage)
 
 /** The Button documentation page. */
 val BUTTON = NavItem("/components/button", "Button", ::buttonPage)
+
+/** The Card documentation page. */
+val CARD = NavItem("/components/card", "Card", ::cardPage)
 
 /** The Badge documentation page. */
 val BADGE = NavItem("/components/badge", "Badge", ::badgePage)
@@ -31,7 +38,7 @@ val ALERT = NavItem("/components/alert", "Alert", ::alertPage)
  * [mosaik.docs.module]), so adding a component page is one [NavItem] plus its
  * renderer.
  */
-val COMPONENTS = listOf(BUTTON, BADGE, ALERT)
+val COMPONENTS = listOf(BUTTON, CARD, BADGE, ALERT)
 
 /**
  * The theme the server renders before any client-side preference is applied. The
@@ -346,6 +353,225 @@ fun buttonPage(): String = layout(BUTTON) {
             ),
         ),
     )
+}
+
+/**
+ * Card page, following the five-section component template: title +
+ * description, installation, basic usage showing the sub-component nesting,
+ * a showcase of card compositions (plain, with actions, with image) paired with
+ * their Kotlin code, and an API reference covering the card and its
+ * sub-components. Card has no variants or sizes — it is a layout container.
+ */
+fun cardPage(): String = layout(CARD) {
+    h1 { +"Card" }
+    p {
+        +"A card groups related content and actions into a single surface — an "
+        +"image, a title, body text, and a row of buttons. "
+        code { +"mCard" }
+        +" wraps DaisyUI's "
+        code { +"card" }
+        +" classes and, unlike Button or Badge, takes no colour role or size: it "
+        +"is a layout container styled by the utility classes you pass (e.g. "
+        code { +"bg-base-100 shadow-sm" }
+        +"). It hands you the raw kotlinx.html element, so any HTML attribute or "
+        +"library extension (e.g. htmx) works natively (ADR-0003)."
+    }
+    p {
+        +"A card composes from sub-components scoped to its receiver: "
+        code { +"mCardBody" }
+        +" for the padded "
+        code { +"card-body" }
+        +" container, and inside it "
+        code { +"mCardTitle" }
+        +" (an "
+        code { +"<h2>" }
+        +" with "
+        code { +"card-title" }
+        +") and "
+        code { +"mCardActions" }
+        +" for a "
+        code { +"card-actions" }
+        +" button row. An image is a plain "
+        code { +"figure" }
+        +" — no wrapper needed."
+    }
+
+    installSection("card")
+
+    usageSection(
+        """
+        import mosaik.ui.components.mCard
+        import mosaik.ui.components.mCardBody
+        import mosaik.ui.components.mCardTitle
+        import mosaik.ui.components.mCardActions
+        import mosaik.ui.components.mButton
+        import mosaik.ui.components.Variant
+
+        mCard("w-96 bg-base-100 shadow-sm") {
+            mCardBody {
+                mCardTitle { +"Shoes!" }
+                p { +"If a dog chews shoes whose shoes does he choose?" }
+                mCardActions("justify-end") {
+                    mButton(Variant.Primary) { +"Buy Now" }
+                }
+            }
+        }
+        """.trimIndent(),
+    )
+
+    section {
+        h2 { +"Basic card" }
+        p { +"A card with a title and body text." }
+        div("not-prose") {
+            mCard("w-96 bg-base-100 shadow-sm") {
+                mCardBody {
+                    mCardTitle { +"Card title" }
+                    p { +"A card with a title and a short description below it." }
+                }
+            }
+        }
+        codeBlock(
+            """
+            mCard("w-96 bg-base-100 shadow-sm") {
+                mCardBody {
+                    mCardTitle { +"Card title" }
+                    p { +"A card with a title and a short description below it." }
+                }
+            }
+            """.trimIndent(),
+        )
+    }
+
+    section {
+        h2 { +"With actions" }
+        p {
+            +"A "
+            code { +"card-actions" }
+            +" row holds buttons or controls, usually right-aligned with "
+            code { +"justify-end" }
+            +"."
+        }
+        div("not-prose") {
+            mCard("w-96 bg-base-100 shadow-sm") {
+                mCardBody {
+                    mCardTitle { +"Buy these shoes" }
+                    p { +"If a dog chews shoes whose shoes does he choose?" }
+                    mCardActions("justify-end") {
+                        mButton(Variant.Primary) { +"Buy Now" }
+                    }
+                }
+            }
+        }
+        codeBlock(
+            """
+            mCard("w-96 bg-base-100 shadow-sm") {
+                mCardBody {
+                    mCardTitle { +"Buy these shoes" }
+                    p { +"If a dog chews shoes whose shoes does he choose?" }
+                    mCardActions("justify-end") {
+                        mButton(Variant.Primary) { +"Buy Now" }
+                    }
+                }
+            }
+            """.trimIndent(),
+        )
+    }
+
+    section {
+        h2 { +"With image" }
+        p {
+            +"Place a "
+            code { +"figure" }
+            +" before the body for DaisyUI's image card layout."
+        }
+        div("not-prose") {
+            mCard("w-96 bg-base-100 shadow-sm") {
+                figure {
+                    img(src = "https://placehold.co/384x192", alt = "Placeholder")
+                }
+                mCardBody {
+                    mCardTitle { +"Image card" }
+                    p { +"An image sits in a figure above the body." }
+                }
+            }
+        }
+        codeBlock(
+            """
+            mCard("w-96 bg-base-100 shadow-sm") {
+                figure {
+                    img(src = "/shoes.jpg", alt = "Shoes")
+                }
+                mCardBody {
+                    mCardTitle { +"Image card" }
+                    p { +"An image sits in a figure above the body." }
+                }
+            }
+            """.trimIndent(),
+        )
+    }
+
+    apiReference(
+        listOf(
+            ApiParam(
+                "classes",
+                "String?",
+                "null",
+                "Extra CSS classes appended after the generated card classes (e.g. bg-base-100 shadow-sm w-96).",
+            ),
+            ApiParam(
+                "block",
+                "DIV.() -> Unit",
+                "{}",
+                "Receiver block on the raw kotlinx.html DIV element — nest mCardBody, a figure, attributes, or library extensions.",
+            ),
+        ),
+    )
+
+    section {
+        h2 { +"Sub-components" }
+        p {
+            +"Each sub-component is an extension on the card's "
+            code { +"DIV" }
+            +" receiver, so it autocompletes inside the card block. All take the "
+            +"same optional "
+            code { +"classes" }
+            +" parameter and live in "
+            code { +"Card.kt" }
+            +"."
+        }
+        div("overflow-x-auto") {
+            table("table table-zebra") {
+                thead {
+                    tr {
+                        th { +"Function" }
+                        th { +"Element" }
+                        th { +"Class" }
+                        th { +"Description" }
+                    }
+                }
+                tbody {
+                    tr {
+                        td { code { +"mCardBody" } }
+                        td { code { +"DIV" } }
+                        td { code { +"card-body" } }
+                        td { +"The padded container for the title, text, and actions." }
+                    }
+                    tr {
+                        td { code { +"mCardTitle" } }
+                        td { code { +"H2" } }
+                        td { code { +"card-title" } }
+                        td { +"The card heading, rendered as an h2. Called inside mCardBody." }
+                    }
+                    tr {
+                        td { code { +"mCardActions" } }
+                        td { code { +"DIV" } }
+                        td { code { +"card-actions" } }
+                        td { +"A row for buttons or controls, usually with justify-end. Called inside mCardBody." }
+                    }
+                }
+            }
+        }
+    }
 }
 
 /**

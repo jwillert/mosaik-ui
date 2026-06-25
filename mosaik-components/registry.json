@@ -13,6 +13,12 @@
       "dependencies": ["theme"]
     },
     {
+      "name": "card",
+      "description": "DaisyUI card container with no variant or size, plus the mCardBody, mCardTitle, and mCardActions sub-components (all in Card.kt) mirroring card-body/card-title/card-actions.",
+      "files": ["Card.kt"],
+      "dependencies": ["theme"]
+    },
+    {
       "name": "badge",
       "description": "DaisyUI badge with its own BadgeVariant palette (primary, secondary, accent, ghost, info, success, warning, error, neutral, outline), size, and custom classes.",
       "files": ["Badge.kt"],
