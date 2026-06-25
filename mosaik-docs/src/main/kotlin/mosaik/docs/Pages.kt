@@ -690,7 +690,8 @@ fun cardPage(): String = layout(CARD) {
             datastarPreview = {
                 mCard("w-96 bg-base-100 shadow-sm") {
                     attributes["data-store"] = "{ content: 'Loading...' }"
-                    attributes["data-on-load"] = "fetch('/_examples/card/content').then(r => r.text()).then(t => \$content = t)"
+                    attributes["data-intersects"] = "once"
+                    attributes["data-get"] = "/_examples/card/content"
                     mCardBody {
                         mCardTitle { +"Lazy Card" }
                         div {
@@ -725,7 +726,7 @@ fun cardPage(): String = layout(CARD) {
             """.trimIndent(),
             datastarCode = """
                 mCard("w-96 bg-base-100 shadow-sm") {
-                    attributes["data-signals"] = "{ content: 'Loading...' }"
+                    attributes["data-store"] = "{ content: 'Loading...' }"
                     attributes["data-intersects"] = "once"
                     attributes["data-get"] = "/card-content"
                     mCardBody {
