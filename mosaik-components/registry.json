@@ -25,6 +25,12 @@
       "dependencies": ["theme"]
     },
     {
+      "name": "footer",
+      "description": "DaisyUI footer container with no variant, size, or sub-components — a simple wrapper around the footer classes, styled by the utility classes the caller passes.",
+      "files": ["Footer.kt"],
+      "dependencies": ["theme"]
+    },
+    {
       "name": "badge",
       "description": "DaisyUI badge with its own BadgeVariant palette (primary, secondary, accent, ghost, info, success, warning, error, neutral, outline), size, and custom classes.",
       "files": ["Badge.kt"],

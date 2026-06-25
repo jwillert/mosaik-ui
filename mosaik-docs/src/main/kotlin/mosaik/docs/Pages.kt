@@ -13,6 +13,7 @@ import mosaik.ui.components.mCard
 import mosaik.ui.components.mCardActions
 import mosaik.ui.components.mCardBody
 import mosaik.ui.components.mCardTitle
+import mosaik.ui.components.mFooter
 import mosaik.ui.components.mNavbar
 import mosaik.ui.components.mNavbarCenter
 import mosaik.ui.components.mNavbarEnd
@@ -33,6 +34,9 @@ val CARD = NavItem("/components/card", "Card", ::cardPage)
 /** The Navbar documentation page. */
 val NAVBAR = NavItem("/components/navbar", "Navbar", ::navbarPage)
 
+/** The Footer documentation page. */
+val FOOTER = NavItem("/components/footer", "Footer", ::footerPage)
+
 /** The Badge documentation page. */
 val BADGE = NavItem("/components/badge", "Badge", ::badgePage)
 
@@ -45,7 +49,7 @@ val ALERT = NavItem("/components/alert", "Alert", ::alertPage)
  * [mosaik.docs.module]), so adding a component page is one [NavItem] plus its
  * renderer.
  */
-val COMPONENTS = listOf(BUTTON, CARD, NAVBAR, BADGE, ALERT)
+val COMPONENTS = listOf(BUTTON, CARD, NAVBAR, FOOTER, BADGE, ALERT)
 
 /**
  * The theme the server renders before any client-side preference is applied. The
@@ -796,6 +800,133 @@ fun navbarPage(): String = layout(NAVBAR) {
             }
         }
     }
+}
+
+/**
+ * Footer page, following the five-section component template: title +
+ * description, installation, basic usage, a showcase of footer content
+ * arrangements (centred copyright, titled link columns) paired with their Kotlin
+ * code, and the API reference table. Footer has no variants, sizes, or
+ * sub-components — it is the simplest layout container.
+ */
+fun footerPage(): String = layout(FOOTER) {
+    h1 { +"Footer" }
+    p {
+        +"A footer sits at the bottom of a page and holds copyright, navigation "
+        +"columns, social links, or a logo. "
+        code { +"mFooter" }
+        +" wraps DaisyUI's "
+        code { +"footer" }
+        +" classes and, like Card and Navbar, takes no colour role or size: it is "
+        +"a layout container styled by the utility classes you pass (e.g. "
+        code { +"footer-center bg-base-200 p-4" }
+        +"). It hands you the raw kotlinx.html element, so any HTML attribute or "
+        +"library extension (e.g. htmx) works natively (ADR-0003)."
+    }
+    p {
+        +"Footer has no sub-components: its content is plain kotlinx.html. DaisyUI's "
+        code { +"footer-title" }
+        +" is just a utility class applied to a heading inside a "
+        code { +"nav" }
+        +" column — there is no wrapper to learn."
+    }
+
+    installSection("footer")
+
+    usageSection(
+        """
+        import mosaik.ui.components.mFooter
+
+        mFooter("footer-center bg-base-200 text-base-content p-4") {
+            aside {
+                p { +"© 2026 Mosaik UI — built with Kotlin, Ktor and DaisyUI." }
+            }
+        }
+        """.trimIndent(),
+    )
+
+    section {
+        h2 { +"Centred footer" }
+        p {
+            +"The "
+            code { +"footer-center" }
+            +" utility centres a single line of content — the simplest footer."
+        }
+        div("not-prose") {
+            mFooter("footer-center bg-base-200 text-base-content p-4 rounded-box") {
+                aside {
+                    p { +"© 2026 Mosaik UI — built with Kotlin, Ktor and DaisyUI." }
+                }
+            }
+        }
+        codeBlock(
+            """
+            mFooter("footer-center bg-base-200 text-base-content p-4") {
+                aside {
+                    p { +"© 2026 Mosaik UI — built with Kotlin, Ktor and DaisyUI." }
+                }
+            }
+            """.trimIndent(),
+        )
+    }
+
+    section {
+        h2 { +"Link columns" }
+        p {
+            +"Group links into "
+            code { +"nav" }
+            +" columns, each headed by a "
+            code { +"footer-title" }
+            +" — DaisyUI's sitemap footer."
+        }
+        div("not-prose") {
+            mFooter("bg-base-200 text-base-content p-10 rounded-box") {
+                nav {
+                    h6("footer-title") { +"Services" }
+                    a(href = "#", classes = "link link-hover") { +"Branding" }
+                    a(href = "#", classes = "link link-hover") { +"Design" }
+                }
+                nav {
+                    h6("footer-title") { +"Company" }
+                    a(href = "#", classes = "link link-hover") { +"About us" }
+                    a(href = "#", classes = "link link-hover") { +"Contact" }
+                }
+            }
+        }
+        codeBlock(
+            """
+            mFooter("bg-base-200 text-base-content p-10") {
+                nav {
+                    h6("footer-title") { +"Services" }
+                    a(href = "#", classes = "link link-hover") { +"Branding" }
+                    a(href = "#", classes = "link link-hover") { +"Design" }
+                }
+                nav {
+                    h6("footer-title") { +"Company" }
+                    a(href = "#", classes = "link link-hover") { +"About us" }
+                    a(href = "#", classes = "link link-hover") { +"Contact" }
+                }
+            }
+            """.trimIndent(),
+        )
+    }
+
+    apiReference(
+        listOf(
+            ApiParam(
+                "classes",
+                "String?",
+                "null",
+                "Extra CSS classes appended after the generated footer classes (e.g. footer-center bg-base-200 p-4).",
+            ),
+            ApiParam(
+                "block",
+                "FOOTER.() -> Unit",
+                "{}",
+                "Receiver block on the raw kotlinx.html FOOTER element — nest nav columns, an aside, attributes, or library extensions.",
+            ),
+        ),
+    )
 }
 
 /**

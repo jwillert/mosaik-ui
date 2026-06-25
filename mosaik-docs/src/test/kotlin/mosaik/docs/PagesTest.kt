@@ -162,6 +162,42 @@ class PagesTest : FunSpec({
         }
     }
 
+    test("the sidebar links the footer page and it carries the active marker") {
+        landingPage() shouldContain "href=\"/components/footer\""
+        footerPage() shouldContain "menu-active"
+    }
+
+    test("the footer page opens with a title and a description of what Footer is") {
+        val html = footerPage()
+        html shouldContain "<h1>Footer</h1>"
+        html shouldContain "mFooter"
+        html shouldContain "DaisyUI"
+    }
+
+    test("the footer page shows the Gradle installation command and a usage block") {
+        val html = footerPage()
+        html shouldContain "./gradlew mosaikAdd --component=footer"
+        html shouldContain "Basic usage"
+        html shouldContain "mFooter("
+    }
+
+    test("the footer page renders the footer DaisyUI classes across its showcases") {
+        val html = footerPage()
+        html shouldContain "class=\"footer"
+        html shouldContain "footer-center"
+        html shouldContain "footer-title"
+    }
+
+    test("the footer page includes an API reference table for every mFooter parameter") {
+        val html = footerPage()
+        html shouldContain "API reference"
+        // The block param documents the raw FOOTER receiver (> is HTML-escaped in the cell).
+        html shouldContain "FOOTER.()"
+        listOf("classes", "block").forEach { param ->
+            html shouldContain param
+        }
+    }
+
     test("the sidebar links the badge page and it carries the active marker") {
         landingPage() shouldContain "href=\"/components/badge\""
         badgePage() shouldContain "menu-active"
