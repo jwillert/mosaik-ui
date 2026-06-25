@@ -20,8 +20,8 @@ fun interactivityPage(): String = layout(INTERACTIVITY) {
 
     h2 { +"Building blocks" }
     p {
-        +"Before diving into examples, here are the core primitives of each library, "
-        +"their best-fit use cases, and their limitations."
+        +"Before diving into examples, here's an overview of each library's core primitives, "
+        +"best-fit use cases, and limitations."
     }
 
     h3 { +"htmx" }

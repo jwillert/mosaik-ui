@@ -340,6 +340,7 @@ class PagesTest : FunSpec({
         html shouldContain "x-show"
         html shouldContain "x-on"
         html shouldContain "x-bind"
+        html shouldContain "x-model"
     }
 
     test("the Datastar building blocks section documents core primitives and notes SSE requirement") {
@@ -359,14 +360,15 @@ class PagesTest : FunSpec({
         html shouldContain "Script size"
     }
 
-    test("the comparison table compares all three libraries across key dimensions") {
+    test("the comparison table includes all three libraries and their paradigms") {
         val html = interactivityPage()
         // Check that all three libraries appear in the table
         html shouldContain "htmx"
         html shouldContain "Alpine.js"
         html shouldContain "Datastar"
-        // Check for key comparison dimensions
-        html shouldContain "server-driven"
-        html shouldContain "client-side"
+        // Check for paradigm values that distinguish the libraries
+        html shouldContain "Server-driven"
+        html shouldContain "Client-side"
+        html shouldContain "Hybrid"
     }
 })
