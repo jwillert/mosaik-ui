@@ -314,4 +314,48 @@ class PagesTest : FunSpec({
         // Tab content panels.
         html shouldContain "class=\"tab-content"
     }
+
+    test("the interactivity page includes a Login form composed example section") {
+        val html = interactivityPage()
+        html shouldContain "Login form"
+        // The example describes the composition pattern.
+        html shouldContain "mCard"
+        html shouldContain "mButton"
+    }
+
+    test("the interactivity page includes a Register form composed example section") {
+        val html = interactivityPage()
+        html shouldContain "Register form"
+        // The example describes the composition pattern.
+        html shouldContain "mCard"
+        html shouldContain "mButton"
+    }
+
+    test("the interactivity page Login form shows all three library implementations") {
+        val html = interactivityPage()
+        // Login form tabs exist with unique IDs.
+        html shouldContain "login-form-htmx"
+        html shouldContain "login-form-alpine"
+        html shouldContain "login-form-datastar"
+        // htmx implementation uses hx-post.
+        html shouldContain "hx-post"
+        // Alpine.js implementation uses x-data.
+        html shouldContain "x-data"
+        // Datastar implementation uses data-on-submit.
+        html shouldContain "data-on-submit"
+    }
+
+    test("the interactivity page Register form shows all three library implementations") {
+        val html = interactivityPage()
+        // Register form tabs exist with unique IDs.
+        html shouldContain "register-form-htmx"
+        html shouldContain "register-form-alpine"
+        html shouldContain "register-form-datastar"
+        // htmx implementation uses hx-post.
+        html shouldContain "hx-post"
+        // Alpine.js implementation uses x-data.
+        html shouldContain "x-data"
+        // Datastar implementation uses data-on-submit.
+        html shouldContain "data-on-submit"
+    }
 })
