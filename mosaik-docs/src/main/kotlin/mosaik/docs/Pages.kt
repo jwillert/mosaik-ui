@@ -864,7 +864,7 @@ fun navbarPage(): String = layout(NAVBAR) {
         interactivityTabs(
             id = "navbar-interactive",
             htmxPreview = {
-                mNavbar("bg-base-100 shadow-sm rounded-box") {
+                mNavbar("bg-base-100 shadow-sm") {
                     attributes["hx-boost"] = "true"
                     mNavbarStart {
                         a(href = "#", classes = "btn btn-ghost") {
@@ -879,7 +879,7 @@ fun navbarPage(): String = layout(NAVBAR) {
                 }
             },
             alpinePreview = {
-                mNavbar("bg-base-100 shadow-sm rounded-box") {
+                mNavbar("bg-base-100 shadow-sm") {
                     attributes["x-data"] = "{ active: '/' }"
                     mNavbarStart {
                         a(href = "#", classes = "btn btn-ghost") {
@@ -896,7 +896,7 @@ fun navbarPage(): String = layout(NAVBAR) {
                 }
             },
             datastarPreview = {
-                mNavbar("bg-base-100 shadow-sm rounded-box") {
+                mNavbar("bg-base-100 shadow-sm") {
                     attributes["data-signals"] = "{ active: '/' }"
                     mNavbarStart {
                         a(href = "#", classes = "btn btn-ghost") {
