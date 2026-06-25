@@ -6,6 +6,7 @@ import mosaik.ui.components.AlertVariant
 import mosaik.ui.components.BadgeVariant
 import mosaik.ui.components.Size
 import mosaik.ui.components.Variant
+import mosaik.ui.components.mButton
 
 /**
  * The docs app is not a behavioural test seam (it is validated as the VRT render
@@ -313,6 +314,53 @@ class PagesTest : FunSpec({
         html shouldContain "checked=\"checked\""
         // Tab content panels.
         html shouldContain "class=\"tab-content"
+    }
+
+    test("interactivityTabs supports per-style preview content above code blocks") {
+        val htmlWithPreviews = layout(INTERACTIVITY) {
+            interactivityTabs(
+                id = "preview-test",
+                htmxCode = "htmx code",
+                alpineCode = "alpine code",
+                datastarCode = "datastar code",
+                htmxPreview = {
+                    mButton(Variant.Primary) { +"htmx preview content" }
+                },
+                alpinePreview = {
+                    mButton(Variant.Secondary) { +"alpine preview content" }
+                },
+                datastarPreview = {
+                    mButton(Variant.Accent) { +"datastar preview content" }
+                },
+            )
+        }
+        // Preview content appears before code blocks.
+        htmlWithPreviews shouldContain "htmx preview content"
+        htmlWithPreviews shouldContain "alpine preview content"
+        htmlWithPreviews shouldContain "datastar preview content"
+        // Preview wrappers have not-prose class and mb-4 spacing.
+        htmlWithPreviews shouldContain "class=\"mb-4 not-prose\""
+        // Code blocks still render.
+        htmlWithPreviews shouldContain "htmx code"
+        htmlWithPreviews shouldContain "alpine code"
+        htmlWithPreviews shouldContain "datastar code"
+    }
+
+    test("interactivityTabs renders code-only tabs when no previews are provided") {
+        val htmlCodeOnly = layout(INTERACTIVITY) {
+            interactivityTabs(
+                id = "code-only-test",
+                htmxCode = "htmx only code",
+                alpineCode = "alpine only code",
+                datastarCode = "datastar only code",
+            )
+        }
+        // Code blocks render without previews.
+        htmlCodeOnly shouldContain "htmx only code"
+        htmlCodeOnly shouldContain "alpine only code"
+        htmlCodeOnly shouldContain "datastar only code"
+        // No mb-4 preview wrapper when previews are null.
+        htmlCodeOnly shouldContain "tab-content bg-base-200 rounded-box p-4\">"
     }
 
     test("the interactivity page includes a Login form composed example section") {
