@@ -126,6 +126,42 @@ class PagesTest : FunSpec({
         }
     }
 
+    test("the sidebar links the navbar page and it carries the active marker") {
+        landingPage() shouldContain "href=\"/components/navbar\""
+        navbarPage() shouldContain "menu-active"
+    }
+
+    test("the navbar page opens with a title and a description of what Navbar is") {
+        val html = navbarPage()
+        html shouldContain "<h1>Navbar</h1>"
+        html shouldContain "mNavbar"
+        html shouldContain "DaisyUI"
+    }
+
+    test("the navbar page shows the Gradle installation command and a usage block") {
+        val html = navbarPage()
+        html shouldContain "./gradlew mosaikAdd --component=navbar"
+        html shouldContain "Basic usage"
+        html shouldContain "mNavbarStart"
+    }
+
+    test("the navbar page renders the navbar and every slot sub-component DaisyUI class") {
+        val html = navbarPage()
+        listOf("navbar", "navbar-start", "navbar-center", "navbar-end").forEach { css ->
+            html shouldContain "class=\"$css"
+        }
+    }
+
+    test("the navbar page documents the navbar and its sub-components in the API reference") {
+        val html = navbarPage()
+        html shouldContain "API reference"
+        // The block param documents the raw DIV receiver (> is HTML-escaped in the cell).
+        html shouldContain "DIV.()"
+        listOf("mNavbarStart", "mNavbarCenter", "mNavbarEnd").forEach { fn ->
+            html shouldContain fn
+        }
+    }
+
     test("the sidebar links the badge page and it carries the active marker") {
         landingPage() shouldContain "href=\"/components/badge\""
         badgePage() shouldContain "menu-active"
