@@ -43,13 +43,22 @@ val BADGE = NavItem("/components/badge", "Badge", ::badgePage)
 /** The Alert documentation page. */
 val ALERT = NavItem("/components/alert", "Alert", ::alertPage)
 
+/** The Interactivity guide page. */
+val INTERACTIVITY = NavItem("/guides/interactivity", "Interactivity", ::interactivityPage)
+
 /**
- * Every component documentation page. Together with [HOME] this is the single
- * source of truth for the sidebar links and the routing table (see
+ * Every component documentation page. Together with [HOME] and [GUIDES] this is
+ * the single source of truth for the sidebar links and the routing table (see
  * [mosaik.docs.module]), so adding a component page is one [NavItem] plus its
  * renderer.
  */
 val COMPONENTS = listOf(BUTTON, CARD, NAVBAR, FOOTER, BADGE, ALERT)
+
+/**
+ * Every guide documentation page. Together with [HOME] and [COMPONENTS] this is
+ * the single source of truth for the sidebar links and the routing table.
+ */
+val GUIDES = listOf(INTERACTIVITY)
 
 /**
  * The theme the server renders before any client-side preference is applied. The
@@ -107,13 +116,16 @@ fun layout(active: NavItem, content: FlowContent.() -> Unit): String =
         }
     }
 
-/** Left navigation listing Home, every component page, and the theme switcher. */
+/** Left navigation listing Home, component pages, guide pages, and the theme switcher. */
 private fun FlowContent.sidebar(activePath: String) {
     aside(classes = "w-64 shrink-0 bg-base-200 p-4") {
         h1("text-xl font-bold px-2 pb-4") { +"Mosaik UI" }
         ul("menu w-full") {
             navLink(HOME, activePath)
+            li("menu-title") { +"Components" }
             COMPONENTS.forEach { navLink(it, activePath) }
+            li("menu-title") { +"Guides" }
+            GUIDES.forEach { navLink(it, activePath) }
         }
         themeSwitcher()
     }
