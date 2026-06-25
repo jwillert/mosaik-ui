@@ -357,6 +357,8 @@ class PagesTest : FunSpec({
         html shouldContain "x-data"
         // Datastar implementation uses data-on-submit.
         html shouldContain "data-on-submit"
+
+    }
     test("the button page has an Interactive usage section with interactivityTabs") {
         val html = buttonPage()
         html shouldContain "<h2>Interactive usage</h2>"
@@ -401,6 +403,9 @@ class PagesTest : FunSpec({
         html shouldContain "navbar-interactive-datastar"
         // Active link example mentions hx-boost for htmx.
         html shouldContain "hx-boost"
+
+    }
+
     test("the interactivity page contains building blocks sections for all three libraries") {
         val html = interactivityPage()
         html shouldContain "Building blocks"
