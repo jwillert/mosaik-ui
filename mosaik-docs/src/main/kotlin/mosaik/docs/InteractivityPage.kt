@@ -334,6 +334,220 @@ fun Application.module() {
         }
         interactivityTabs(
             id = "register-form",
+            htmxPreview = {
+                mCard("w-96 bg-base-100 shadow-xl") {
+                    form {
+                        attributes["hx-post"] = "/_examples/register"
+                        attributes["hx-target"] = "#register-result"
+                        attributes["hx-indicator"] = "#register-spinner"
+
+                        div("card-body") {
+                            h2("card-title") { +"Create account" }
+
+                            label("form-control w-full") {
+                                div("label") {
+                                    span("label-text") { +"Name" }
+                                }
+                                input(type = InputType.text, name = "name", classes = "input input-bordered w-full") {
+                                    required = true
+                                }
+                            }
+
+                            label("form-control w-full") {
+                                div("label") {
+                                    span("label-text") { +"Email" }
+                                }
+                                input(type = InputType.email, name = "email", classes = "input input-bordered w-full") {
+                                    required = true
+                                }
+                            }
+
+                            label("form-control w-full") {
+                                div("label") {
+                                    span("label-text") { +"Password" }
+                                }
+                                input(type = InputType.password, name = "password", classes = "input input-bordered w-full") {
+                                    required = true
+                                    attributes["minlength"] = "8"
+                                }
+                            }
+
+                            label("form-control w-full") {
+                                div("label") {
+                                    span("label-text") { +"Confirm password" }
+                                }
+                                input(type = InputType.password, name = "confirm_password", classes = "input input-bordered w-full") {
+                                    required = true
+                                }
+                            }
+
+                            div("mt-2") {
+                                id = "register-result"
+                                attributes["role"] = "region"
+                                attributes["aria-live"] = "polite"
+                            }
+
+                            div("card-actions justify-end") {
+                                mButton(Variant.Primary) {
+                                    span { +"Sign up" }
+                                    span("loading loading-spinner loading-sm htmx-indicator") {
+                                        id = "register-spinner"
+                                        attributes["style"] = "display:none;"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            alpinePreview = {
+                mCard("w-96 bg-base-100 shadow-xl") {
+                    form {
+                        attributes["x-data"] = "{ name: '', email: '', password: '', confirmPassword: '', loading: false, error: '' }"
+                        attributes["x-on:submit.prevent"] = "if (password !== confirmPassword) { error = 'Passwords do not match'; return; } " +
+                            "loading = true; error = ''; " +
+                            "fetch('/_examples/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, " +
+                            "body: JSON.stringify({ name, email, password }) }).then(r => r.ok ? alert('Registration successful!') : " +
+                            "r.text().then(t => error = t)).catch(e => error = 'Network error').finally(() => loading = false)"
+
+                        div("card-body") {
+                            h2("card-title") { +"Create account" }
+
+                            label("form-control w-full") {
+                                div("label") {
+                                    span("label-text") { +"Name" }
+                                }
+                                input(type = InputType.text, name = "name", classes = "input input-bordered w-full") {
+                                    required = true
+                                    attributes["x-model"] = "name"
+                                }
+                            }
+
+                            label("form-control w-full") {
+                                div("label") {
+                                    span("label-text") { +"Email" }
+                                }
+                                input(type = InputType.email, name = "email", classes = "input input-bordered w-full") {
+                                    required = true
+                                    attributes["x-model"] = "email"
+                                }
+                            }
+
+                            label("form-control w-full") {
+                                div("label") {
+                                    span("label-text") { +"Password" }
+                                }
+                                input(type = InputType.password, name = "password", classes = "input input-bordered w-full") {
+                                    required = true
+                                    attributes["minlength"] = "8"
+                                    attributes["x-model"] = "password"
+                                }
+                            }
+
+                            label("form-control w-full") {
+                                div("label") {
+                                    span("label-text") { +"Confirm password" }
+                                }
+                                input(type = InputType.password, name = "confirm_password", classes = "input input-bordered w-full") {
+                                    required = true
+                                    attributes["x-model"] = "confirmPassword"
+                                }
+                            }
+
+                            div("mt-2 text-error text-sm") {
+                                attributes["x-show"] = "error"
+                                attributes["x-text"] = "error"
+                                attributes["role"] = "alert"
+                            }
+
+                            div("card-actions justify-end") {
+                                mButton(Variant.Primary) {
+                                    attributes["x-bind:disabled"] = "loading"
+                                    span {
+                                        attributes["x-show"] = "!loading"
+                                        +"Sign up"
+                                    }
+                                    span("loading loading-spinner loading-sm") {
+                                        attributes["x-show"] = "loading"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            datastarPreview = {
+                mCard("w-96 bg-base-100 shadow-xl") {
+                    form {
+                        attributes["data-on-submit"] = "if (\$password !== \$confirmPassword) { \$error = 'Passwords do not match'; return; } \$\$post('/_examples/register')"
+                        attributes["data-store"] = "{ name: '', email: '', password: '', confirmPassword: '', loading: false, error: '' }"
+
+                        div("card-body") {
+                            h2("card-title") { +"Create account" }
+
+                            label("form-control w-full") {
+                                div("label") {
+                                    span("label-text") { +"Name" }
+                                }
+                                input(type = InputType.text, name = "name", classes = "input input-bordered w-full") {
+                                    required = true
+                                    attributes["data-model"] = "name"
+                                }
+                            }
+
+                            label("form-control w-full") {
+                                div("label") {
+                                    span("label-text") { +"Email" }
+                                }
+                                input(type = InputType.email, name = "email", classes = "input input-bordered w-full") {
+                                    required = true
+                                    attributes["data-model"] = "email"
+                                }
+                            }
+
+                            label("form-control w-full") {
+                                div("label") {
+                                    span("label-text") { +"Password" }
+                                }
+                                input(type = InputType.password, name = "password", classes = "input input-bordered w-full") {
+                                    required = true
+                                    attributes["minlength"] = "8"
+                                    attributes["data-model"] = "password"
+                                }
+                            }
+
+                            label("form-control w-full") {
+                                div("label") {
+                                    span("label-text") { +"Confirm password" }
+                                }
+                                input(type = InputType.password, name = "confirm_password", classes = "input input-bordered w-full") {
+                                    required = true
+                                    attributes["data-model"] = "confirmPassword"
+                                }
+                            }
+
+                            div("mt-2 text-error text-sm") {
+                                attributes["data-show"] = "\$error"
+                                attributes["data-text"] = "\$error"
+                                attributes["role"] = "alert"
+                            }
+
+                            div("card-actions justify-end") {
+                                mButton(Variant.Primary) {
+                                    attributes["data-bind-disabled"] = "\$loading"
+                                    span {
+                                        attributes["data-show"] = "!\$loading"
+                                        +"Sign up"
+                                    }
+                                    span("loading loading-spinner loading-sm") {
+                                        attributes["data-show"] = "\$loading"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             htmxCode = """
 mCard("w-96 bg-base-100 shadow-xl") {
     form {
@@ -341,8 +555,8 @@ mCard("w-96 bg-base-100 shadow-xl") {
         attributes["hx-target"] = "#register-result"
         attributes["hx-indicator"] = "#register-spinner"
 
-        mCardBody {
-            mCardTitle { +"Create account" }
+        div("card-body") {
+            h2("card-title") { +"Create account" }
 
             label("form-control w-full") {
                 div("label") {
@@ -387,7 +601,7 @@ mCard("w-96 bg-base-100 shadow-xl") {
                 attributes["aria-live"] = "polite"
             }
 
-            mCardActions("justify-end") {
+            div("card-actions justify-end") {
                 mButton(Variant.Primary) {
                     span { +"Sign up" }
                     span("loading loading-spinner loading-sm htmx-indicator") {
@@ -410,8 +624,8 @@ mCard("w-96 bg-base-100 shadow-xl") {
             "body: JSON.stringify({ name, email, password }) }).then(r => r.ok ? location.href = '/welcome' : " +
             "r.text().then(t => error = t)).catch(e => error = 'Network error').finally(() => loading = false)"
 
-        mCardBody {
-            mCardTitle { +"Create account" }
+        div("card-body") {
+            h2("card-title") { +"Create account" }
 
             label("form-control w-full") {
                 div("label") {
@@ -460,7 +674,7 @@ mCard("w-96 bg-base-100 shadow-xl") {
                 attributes["role"] = "alert"
             }
 
-            mCardActions("justify-end") {
+            div("card-actions justify-end") {
                 mButton(Variant.Primary) {
                     attributes["x-bind:disabled"] = "loading"
                     span {
@@ -482,8 +696,8 @@ mCard("w-96 bg-base-100 shadow-xl") {
         attributes["data-on-submit"] = "if (${'$'}password !== ${'$'}confirmPassword) { ${'$'}error = 'Passwords do not match'; return; } ${'$'}${'$'}post('/api/register')"
         attributes["data-store"] = "{ name: '', email: '', password: '', confirmPassword: '', loading: false, error: '' }"
 
-        mCardBody {
-            mCardTitle { +"Create account" }
+        div("card-body") {
+            h2("card-title") { +"Create account" }
 
             label("form-control w-full") {
                 div("label") {
@@ -532,7 +746,7 @@ mCard("w-96 bg-base-100 shadow-xl") {
                 attributes["role"] = "alert"
             }
 
-            mCardActions("justify-end") {
+            div("card-actions justify-end") {
                 mButton(Variant.Primary) {
                     attributes["data-bind-disabled"] = "${'$'}loading"
                     span {
