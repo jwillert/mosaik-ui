@@ -252,8 +252,8 @@ mCard("w-96 bg-base-100 shadow-xl") {
         attributes["hx-target"] = "#login-result"
         attributes["hx-indicator"] = "#login-spinner"
 
-        mCardBody {
-            mCardTitle { +"Login" }
+        div("card-body") {
+            h2("card-title") { +"Login" }
 
             label("form-control w-full") {
                 div("label") {
@@ -279,7 +279,7 @@ mCard("w-96 bg-base-100 shadow-xl") {
                 attributes["aria-live"] = "polite"
             }
 
-            mCardActions("justify-end") {
+            div("card-actions justify-end") {
                 mButton(Variant.Primary) {
                     span { +"Sign in" }
                     span("loading loading-spinner loading-sm htmx-indicator") {
@@ -301,8 +301,8 @@ mCard("w-96 bg-base-100 shadow-xl") {
             "body: JSON.stringify({ email, password }) }).then(r => r.ok ? location.href = '/dashboard' : " +
             "r.text().then(t => error = t)).catch(e => error = 'Network error').finally(() => loading = false)"
 
-        mCardBody {
-            mCardTitle { +"Login" }
+        div("card-body") {
+            h2("card-title") { +"Login" }
 
             label("form-control w-full") {
                 div("label") {
@@ -330,7 +330,7 @@ mCard("w-96 bg-base-100 shadow-xl") {
                 attributes["role"] = "alert"
             }
 
-            mCardActions("justify-end") {
+            div("card-actions justify-end") {
                 mButton(Variant.Primary) {
                     attributes["x-bind:disabled"] = "loading"
                     span {
@@ -352,8 +352,8 @@ mCard("w-96 bg-base-100 shadow-xl") {
         attributes["data-on-submit"] = "${'$'}${'$'}post('/api/login')"
         attributes["data-store"] = "{ loading: false, error: '' }"
 
-        mCardBody {
-            mCardTitle { +"Login" }
+        div("card-body") {
+            h2("card-title") { +"Login" }
 
             label("form-control w-full") {
                 div("label") {
@@ -381,7 +381,7 @@ mCard("w-96 bg-base-100 shadow-xl") {
                 attributes["role"] = "alert"
             }
 
-            mCardActions("justify-end") {
+            div("card-actions justify-end") {
                 mButton(Variant.Primary) {
                     attributes["data-bind-disabled"] = "${'$'}loading"
                     span {
