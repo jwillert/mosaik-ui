@@ -348,6 +348,60 @@ fun buttonPage(): String = layout(BUTTON) {
         )
     }
 
+    section {
+        h2 { +"Interactive usage" }
+        p {
+            +"Form submit with loading state — htmx posts on click and shows a spinner; "
+            +"Alpine.js tracks a loading boolean; Datastar sends a signal and listens for SSE. "
+            +"The route path (e.g. "
+            code { +"/submit" }
+            +") is application-specific and must match your Ktor route definition."
+        }
+        interactivityTabs(
+            id = "button-interactive",
+            htmxCode = """
+                mButton(Variant.Primary) {
+                    attributes["hx-post"] = "/submit"
+                    attributes["hx-indicator"] = "#spinner"
+                    +"Submit"
+                }
+                span {
+                    id = "spinner"
+                    classes = setOf("loading", "loading-spinner", "htmx-indicator")
+                }
+            """.trimIndent(),
+            alpineCode = """
+                div {
+                    attributes["x-data"] = "{ loading: false }"
+                    mButton(Variant.Primary) {
+                        attributes["x-on:click"] = "loading = true; fetch('/submit', {method: 'POST'}).finally(() => loading = false)"
+                        attributes["x-bind:disabled"] = "loading"
+                        +"Submit"
+                    }
+                    span {
+                        attributes["x-show"] = "loading"
+                        classes = setOf("loading", "loading-spinner")
+                    }
+                }
+            """.trimIndent(),
+            datastarCode = """
+                div {
+                    attributes["data-signals"] = "{ loading: false }"
+                    mButton(Variant.Primary) {
+                        attributes["data-on-click"] = "${'$'}loading=true"
+                        attributes["data-post"] = "/submit"
+                        attributes["data-bind-disabled"] = "${'$'}loading"
+                        +"Submit"
+                    }
+                    span {
+                        attributes["data-show"] = "${'$'}loading"
+                        classes = setOf("loading", "loading-spinner")
+                    }
+                }
+            """.trimIndent(),
+        )
+    }
+
     apiReference(
         listOf(
             ApiParam(
@@ -529,6 +583,57 @@ fun cardPage(): String = layout(CARD) {
                     p { +"An image sits in a figure above the body." }
                 }
             }
+            """.trimIndent(),
+        )
+    }
+
+    section {
+        h2 { +"Interactive usage" }
+        p {
+            +"Lazy-load card content — htmx fetches on scroll reveal; Alpine.js watches "
+            +"intersection; Datastar merges SSE fragments. "
+            +"The route path (e.g. "
+            code { +"/card-content" }
+            +") is application-specific and must match your Ktor route definition."
+        }
+        interactivityTabs(
+            id = "card-interactive",
+            htmxCode = """
+                mCard("w-96 bg-base-100 shadow-sm") {
+                    mCardBody {
+                        mCardTitle { +"Lazy Card" }
+                        div {
+                            attributes["hx-get"] = "/card-content"
+                            attributes["hx-trigger"] = "revealed"
+                            +"Loading..."
+                        }
+                    }
+                }
+            """.trimIndent(),
+            alpineCode = """
+                mCard("w-96 bg-base-100 shadow-sm") {
+                    attributes["x-data"] = "{ content: 'Loading...', loaded: false }"
+                    attributes["x-intersect"] = "if (!loaded) { fetch('/card-content').then(r => r.text()).then(t => { content = t; loaded = true; }) }"
+                    mCardBody {
+                        mCardTitle { +"Lazy Card" }
+                        div {
+                            attributes["x-text"] = "content"
+                        }
+                    }
+                }
+            """.trimIndent(),
+            datastarCode = """
+                mCard("w-96 bg-base-100 shadow-sm") {
+                    attributes["data-signals"] = "{ content: 'Loading...' }"
+                    attributes["data-intersects"] = "once"
+                    attributes["data-get"] = "/card-content"
+                    mCardBody {
+                        mCardTitle { +"Lazy Card" }
+                        div {
+                            attributes["data-text"] = "${'$'}content"
+                        }
+                    }
+                }
             """.trimIndent(),
         )
     }
@@ -746,6 +851,66 @@ fun navbarPage(): String = layout(NAVBAR) {
                     mButton(Variant.Primary) { +"Sign up" }
                 }
             }
+            """.trimIndent(),
+        )
+    }
+
+    section {
+        h2 { +"Interactive usage" }
+        p {
+            +"Active link from server — htmx boosts navigation with history push; Alpine.js "
+            +"binds classes from state; Datastar drives classes via signals."
+        }
+        interactivityTabs(
+            id = "navbar-interactive",
+            htmxCode = """
+                mNavbar("bg-base-100 shadow-sm") {
+                    attributes["hx-boost"] = "true"
+                    mNavbarStart {
+                        a(href = "/", classes = "btn btn-ghost") {
+                            attributes["hx-push-url"] = "true"
+                            +"Home"
+                        }
+                        a(href = "/docs", classes = "btn btn-ghost") {
+                            attributes["hx-push-url"] = "true"
+                            +"Docs"
+                        }
+                    }
+                }
+            """.trimIndent(),
+            alpineCode = """
+                mNavbar("bg-base-100 shadow-sm") {
+                    attributes["x-data"] = "{ active: '/' }"
+                    mNavbarStart {
+                        a(href = "/", classes = "btn btn-ghost") {
+                            attributes["x-bind:class"] = "active === '/' ? 'btn-active' : ''"
+                            attributes["x-on:click"] = "active = '/'"
+                            +"Home"
+                        }
+                        a(href = "/docs", classes = "btn btn-ghost") {
+                            attributes["x-bind:class"] = "active === '/docs' ? 'btn-active' : ''"
+                            attributes["x-on:click"] = "active = '/docs'"
+                            +"Docs"
+                        }
+                    }
+                }
+            """.trimIndent(),
+            datastarCode = """
+                mNavbar("bg-base-100 shadow-sm") {
+                    attributes["data-signals"] = "{ active: '/' }"
+                    mNavbarStart {
+                        a(href = "/", classes = "btn btn-ghost") {
+                            attributes["data-bind-class-btn-active"] = "${'$'}active === '/'"
+                            attributes["data-on-click"] = "${'$'}active='/'"
+                            +"Home"
+                        }
+                        a(href = "/docs", classes = "btn btn-ghost") {
+                            attributes["data-bind-class-btn-active"] = "${'$'}active === '/docs'"
+                            attributes["data-on-click"] = "${'$'}active='/docs'"
+                            +"Docs"
+                        }
+                    }
+                }
             """.trimIndent(),
         )
     }
@@ -1126,6 +1291,52 @@ fun alertPage(): String = layout(ALERT) {
             AlertVariant.entries.forEach { v ->
                 mAlert(variant = v) { +v.name }
             }
+            """.trimIndent(),
+        )
+    }
+
+    section {
+        h2 { +"Interactive usage" }
+        p {
+            +"Dismissible alert — htmx removes the element after animation; Alpine.js "
+            +"toggles visibility with x-show; Datastar toggles via signal."
+        }
+        interactivityTabs(
+            id = "alert-interactive",
+            htmxCode = """
+                mAlert(AlertVariant.Success) {
+                    +"Your changes have been saved."
+                    button(classes = "btn btn-sm btn-ghost") {
+                        attributes["hx-on:click"] = "this.closest('.alert').remove()"
+                        +"Dismiss"
+                    }
+                }
+            """.trimIndent(),
+            alpineCode = """
+                div {
+                    attributes["x-data"] = "{ show: true }"
+                    mAlert(AlertVariant.Success) {
+                        attributes["x-show"] = "show"
+                        +"Your changes have been saved."
+                        button(classes = "btn btn-sm btn-ghost") {
+                            attributes["x-on:click"] = "show = false"
+                            +"Dismiss"
+                        }
+                    }
+                }
+            """.trimIndent(),
+            datastarCode = """
+                div {
+                    attributes["data-signals"] = "{ show: true }"
+                    mAlert(AlertVariant.Success) {
+                        attributes["data-show"] = "${'$'}show"
+                        +"Your changes have been saved."
+                        button(classes = "btn btn-sm btn-ghost") {
+                            attributes["data-on-click"] = "${'$'}show=false"
+                            +"Dismiss"
+                        }
+                    }
+                }
             """.trimIndent(),
         )
     }

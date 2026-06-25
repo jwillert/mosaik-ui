@@ -357,5 +357,104 @@ class PagesTest : FunSpec({
         html shouldContain "x-data"
         // Datastar implementation uses data-on-submit.
         html shouldContain "data-on-submit"
+    test("the button page has an Interactive usage section with interactivityTabs") {
+        val html = buttonPage()
+        html shouldContain "<h2>Interactive usage</h2>"
+        // The tab structure uses the button-interactive id.
+        html shouldContain "name=\"button-interactive\""
+        html shouldContain "button-interactive-htmx"
+        html shouldContain "button-interactive-alpine"
+        html shouldContain "button-interactive-datastar"
+        // Form submit example mentions hx-post for htmx.
+        html shouldContain "hx-post"
+    }
+
+    test("the card page has an Interactive usage section with interactivityTabs") {
+        val html = cardPage()
+        html shouldContain "<h2>Interactive usage</h2>"
+        // The tab structure uses the card-interactive id.
+        html shouldContain "name=\"card-interactive\""
+        html shouldContain "card-interactive-htmx"
+        html shouldContain "card-interactive-alpine"
+        html shouldContain "card-interactive-datastar"
+        // Lazy-load example mentions hx-get for htmx.
+        html shouldContain "hx-get"
+    }
+
+    test("the alert page has an Interactive usage section with interactivityTabs") {
+        val html = alertPage()
+        html shouldContain "<h2>Interactive usage</h2>"
+        // The tab structure uses the alert-interactive id.
+        html shouldContain "name=\"alert-interactive\""
+        html shouldContain "alert-interactive-htmx"
+        html shouldContain "alert-interactive-alpine"
+        html shouldContain "alert-interactive-datastar"
+    }
+
+    test("the navbar page has an Interactive usage section with interactivityTabs") {
+        val html = navbarPage()
+        html shouldContain "<h2>Interactive usage</h2>"
+        // The tab structure uses the navbar-interactive id.
+        html shouldContain "name=\"navbar-interactive\""
+        html shouldContain "navbar-interactive-htmx"
+        html shouldContain "navbar-interactive-alpine"
+        html shouldContain "navbar-interactive-datastar"
+        // Active link example mentions hx-boost for htmx.
+        html shouldContain "hx-boost"
+    test("the interactivity page contains building blocks sections for all three libraries") {
+        val html = interactivityPage()
+        html shouldContain "Building blocks"
+        html shouldContain "htmx"
+        html shouldContain "Alpine.js"
+        html shouldContain "Datastar"
+    }
+
+    test("the htmx building blocks section documents core primitives and uses attributes syntax") {
+        val html = interactivityPage()
+        html shouldContain "hx-get"
+        html shouldContain "hx-post"
+        html shouldContain "hx-target"
+        html shouldContain "hx-swap"
+        html shouldContain "hx-trigger"
+        html shouldContain "attributes"
+        html shouldContain "Ktor 3.2"
+    }
+
+    test("the Alpine.js building blocks section documents core primitives") {
+        val html = interactivityPage()
+        html shouldContain "x-data"
+        html shouldContain "x-show"
+        html shouldContain "x-on"
+        html shouldContain "x-bind"
+        html shouldContain "x-model"
+    }
+
+    test("the Datastar building blocks section documents core primitives and notes SSE requirement") {
+        val html = interactivityPage()
+        html shouldContain "data-store"
+        html shouldContain "data-on"
+        html shouldContain "SSE"
+        html shouldContain "Server-Sent Events"
+    }
+
+    test("the interactivity page contains a comparison table") {
+        val html = interactivityPage()
+        html shouldContain "Comparison"
+        html shouldContain "table"
+        html shouldContain "Paradigm"
+        html shouldContain "Server requirement"
+        html shouldContain "Script size"
+    }
+
+    test("the comparison table includes all three libraries and their paradigms") {
+        val html = interactivityPage()
+        // Check that all three libraries appear in the table
+        html shouldContain "htmx"
+        html shouldContain "Alpine.js"
+        html shouldContain "Datastar"
+        // Check for paradigm values that distinguish the libraries
+        html shouldContain "Server-driven"
+        html shouldContain "Client-side"
+        html shouldContain "Hybrid"
     }
 })
