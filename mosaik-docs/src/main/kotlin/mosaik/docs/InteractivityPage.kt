@@ -716,12 +716,19 @@ mCard("w-96 bg-base-100 shadow-xl") {
  * groups on the same page. The htmx tab is checked by default. The wrapper
  * carries the `not-prose` class to prevent Tailwind Typography from
  * overriding DaisyUI's tab styling (ADR-0006).
+ *
+ * Each tab can optionally show a rendered Preview above the code snippet
+ * (ADR-0008). The preview content is provided as a lambda that receives a
+ * FlowContent receiver, allowing each style to render its own working example.
  */
 fun FlowContent.interactivityTabs(
     id: String,
     htmxCode: String,
     alpineCode: String,
     datastarCode: String,
+    htmxPreview: (FlowContent.() -> Unit)? = null,
+    alpinePreview: (FlowContent.() -> Unit)? = null,
+    datastarPreview: (FlowContent.() -> Unit)? = null,
 ) {
     div("tabs tabs-lifted not-prose") {
         attributes["role"] = "tablist"
@@ -733,6 +740,11 @@ fun FlowContent.interactivityTabs(
             attributes["aria-label"] = "htmx"
         }
         div("tab-content bg-base-200 rounded-box p-4") {
+            if (htmxPreview != null) {
+                div("mb-4 not-prose") {
+                    htmxPreview()
+                }
+            }
             pre {
                 code { +htmxCode }
             }
@@ -744,6 +756,11 @@ fun FlowContent.interactivityTabs(
             attributes["aria-label"] = "Alpine.js"
         }
         div("tab-content bg-base-200 rounded-box p-4") {
+            if (alpinePreview != null) {
+                div("mb-4 not-prose") {
+                    alpinePreview()
+                }
+            }
             pre {
                 code { +alpineCode }
             }
@@ -755,6 +772,11 @@ fun FlowContent.interactivityTabs(
             attributes["aria-label"] = "Datastar"
         }
         div("tab-content bg-base-200 rounded-box p-4") {
+            if (datastarPreview != null) {
+                div("mb-4 not-prose") {
+                    datastarPreview()
+                }
+            }
             pre {
                 code { +datastarCode }
             }
