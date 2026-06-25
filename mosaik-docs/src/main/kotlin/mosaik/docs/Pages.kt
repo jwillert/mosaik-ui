@@ -1301,7 +1301,7 @@ fun alertPage(): String = layout(ALERT) {
                 mAlert(AlertVariant.Success) {
                     +"Your changes have been saved."
                     button(classes = "btn btn-sm btn-ghost") {
-                        attributes["hx-on::after-settle"] = "this.closest('.alert').remove()"
+                        attributes["hx-on:click"] = "this.closest('.alert').remove()"
                         +"Dismiss"
                     }
                 }
