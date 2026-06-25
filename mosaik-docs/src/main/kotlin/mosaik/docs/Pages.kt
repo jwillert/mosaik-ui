@@ -352,7 +352,10 @@ fun buttonPage(): String = layout(BUTTON) {
         h2 { +"Interactive usage" }
         p {
             +"Form submit with loading state — htmx posts on click and shows a spinner; "
-            +"Alpine.js tracks a loading boolean; Datastar sends a signal and listens for SSE."
+            +"Alpine.js tracks a loading boolean; Datastar sends a signal and listens for SSE. "
+            +"The route path (e.g. "
+            code { +"/submit" }
+            +") is application-specific and must match your Ktor route definition."
         }
         interactivityTabs(
             id = "button-interactive",
@@ -588,7 +591,10 @@ fun cardPage(): String = layout(CARD) {
         h2 { +"Interactive usage" }
         p {
             +"Lazy-load card content — htmx fetches on scroll reveal; Alpine.js watches "
-            +"intersection; Datastar merges SSE fragments."
+            +"intersection; Datastar merges SSE fragments. "
+            +"The route path (e.g. "
+            code { +"/card-content" }
+            +") is application-specific and must match your Ktor route definition."
         }
         interactivityTabs(
             id = "card-interactive",
