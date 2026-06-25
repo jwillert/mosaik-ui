@@ -315,6 +315,50 @@ class PagesTest : FunSpec({
         html shouldContain "class=\"tab-content"
     }
 
+    test("the button page has an Interactive usage section with interactivityTabs") {
+        val html = buttonPage()
+        html shouldContain "<h2>Interactive usage</h2>"
+        // The tab structure uses the button-interactive id.
+        html shouldContain "name=\"button-interactive\""
+        html shouldContain "button-interactive-htmx"
+        html shouldContain "button-interactive-alpine"
+        html shouldContain "button-interactive-datastar"
+        // Form submit example mentions hx-post for htmx.
+        html shouldContain "hx-post"
+    }
+
+    test("the card page has an Interactive usage section with interactivityTabs") {
+        val html = cardPage()
+        html shouldContain "<h2>Interactive usage</h2>"
+        // The tab structure uses the card-interactive id.
+        html shouldContain "name=\"card-interactive\""
+        html shouldContain "card-interactive-htmx"
+        html shouldContain "card-interactive-alpine"
+        html shouldContain "card-interactive-datastar"
+        // Lazy-load example mentions hx-get for htmx.
+        html shouldContain "hx-get"
+    }
+
+    test("the alert page has an Interactive usage section with interactivityTabs") {
+        val html = alertPage()
+        html shouldContain "<h2>Interactive usage</h2>"
+        // The tab structure uses the alert-interactive id.
+        html shouldContain "name=\"alert-interactive\""
+        html shouldContain "alert-interactive-htmx"
+        html shouldContain "alert-interactive-alpine"
+        html shouldContain "alert-interactive-datastar"
+    }
+
+    test("the navbar page has an Interactive usage section with interactivityTabs") {
+        val html = navbarPage()
+        html shouldContain "<h2>Interactive usage</h2>"
+        // The tab structure uses the navbar-interactive id.
+        html shouldContain "name=\"navbar-interactive\""
+        html shouldContain "navbar-interactive-htmx"
+        html shouldContain "navbar-interactive-alpine"
+        html shouldContain "navbar-interactive-datastar"
+        // Active link example mentions hx-boost for htmx.
+        html shouldContain "hx-boost"
     test("the interactivity page contains building blocks sections for all three libraries") {
         val html = interactivityPage()
         html shouldContain "Building blocks"
