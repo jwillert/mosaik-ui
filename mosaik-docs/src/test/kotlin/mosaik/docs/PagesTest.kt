@@ -452,6 +452,18 @@ class PagesTest : FunSpec({
         html shouldContain "hx-post"
     }
 
+    test("the button page Interactive section has working previews per style") {
+        val html = buttonPage()
+        // Preview wrapper with mb-4 not-prose class.
+        html shouldContain "class=\"mb-4 not-prose\""
+        // All three previews render the submit button.
+        html shouldContain "Submit"
+        // Preview uses /_examples/button/submit route.
+        html shouldContain "/_examples/button/submit"
+        // Loading spinner is present in previews.
+        html shouldContain "loading-spinner"
+    }
+
     test("the card page has an Interactive usage section with interactivityTabs") {
         val html = cardPage()
         html shouldContain "<h2>Interactive usage</h2>"
@@ -464,6 +476,18 @@ class PagesTest : FunSpec({
         html shouldContain "hx-get"
     }
 
+    test("the card page Interactive section has working previews per style") {
+        val html = cardPage()
+        // Preview wrapper with mb-4 not-prose class.
+        html shouldContain "class=\"mb-4 not-prose\""
+        // All three previews render the lazy card.
+        html shouldContain "Lazy Card"
+        // Preview uses /_examples/card/content route.
+        html shouldContain "/_examples/card/content"
+        // Loading placeholder is present in htmx preview.
+        html shouldContain "Loading..."
+    }
+
     test("the alert page has an Interactive usage section with interactivityTabs") {
         val html = alertPage()
         html shouldContain "<h2>Interactive usage</h2>"
@@ -472,6 +496,16 @@ class PagesTest : FunSpec({
         html shouldContain "alert-interactive-htmx"
         html shouldContain "alert-interactive-alpine"
         html shouldContain "alert-interactive-datastar"
+    }
+
+    test("the alert page Interactive section has working previews per style") {
+        val html = alertPage()
+        // Preview wrapper with mb-4 not-prose class.
+        html shouldContain "class=\"mb-4 not-prose\""
+        // All three previews render the dismissible alert.
+        html shouldContain "Your changes have been saved"
+        html shouldContain "Dismiss"
+        // Client-side only, no server endpoints needed.
     }
 
     test("the navbar page has an Interactive usage section with interactivityTabs") {
@@ -485,6 +519,16 @@ class PagesTest : FunSpec({
         // Active link example mentions hx-boost for htmx.
         html shouldContain "hx-boost"
 
+    }
+
+    test("the navbar page Interactive section has working previews per style") {
+        val html = navbarPage()
+        // Preview wrapper with mb-4 not-prose class.
+        html shouldContain "class=\"mb-4 not-prose\""
+        // All three previews render the navbar with links.
+        html shouldContain "Home"
+        html shouldContain "Docs"
+        // Client-side only, no server endpoints needed for this example.
     }
 
     test("the interactivity page contains building blocks sections for all three libraries") {

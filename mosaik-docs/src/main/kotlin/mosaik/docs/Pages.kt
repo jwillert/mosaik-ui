@@ -359,6 +359,46 @@ fun buttonPage(): String = layout(BUTTON) {
         }
         interactivityTabs(
             id = "button-interactive",
+            htmxPreview = {
+                mButton(Variant.Primary) {
+                    attributes["hx-post"] = "/_examples/button/submit"
+                    attributes["hx-indicator"] = "#button-spinner"
+                    +"Submit"
+                }
+                span {
+                    id = "button-spinner"
+                    classes = setOf("loading", "loading-spinner", "htmx-indicator")
+                }
+            },
+            alpinePreview = {
+                div {
+                    attributes["x-data"] = "{ loading: false }"
+                    mButton(Variant.Primary) {
+                        attributes["x-on:click"] = "loading = true; fetch('/_examples/button/submit', {method: 'POST'}).finally(() => loading = false)"
+                        attributes["x-bind:disabled"] = "loading"
+                        +"Submit"
+                    }
+                    span {
+                        attributes["x-show"] = "loading"
+                        classes = setOf("loading", "loading-spinner")
+                    }
+                }
+            },
+            datastarPreview = {
+                div {
+                    attributes["data-signals"] = "{ loading: false }"
+                    mButton(Variant.Primary) {
+                        attributes["data-on-click"] = "${'$'}loading=true"
+                        attributes["data-post"] = "/_examples/button/submit"
+                        attributes["data-bind-disabled"] = "${'$'}loading"
+                        +"Submit"
+                    }
+                    span {
+                        attributes["data-show"] = "${'$'}loading"
+                        classes = setOf("loading", "loading-spinner")
+                    }
+                }
+            },
             htmxCode = """
                 mButton(Variant.Primary) {
                     attributes["hx-post"] = "/submit"
@@ -598,6 +638,43 @@ fun cardPage(): String = layout(CARD) {
         }
         interactivityTabs(
             id = "card-interactive",
+            htmxPreview = {
+                mCard("w-96 bg-base-100 shadow-sm") {
+                    mCardBody {
+                        mCardTitle { +"Lazy Card" }
+                        div {
+                            attributes["hx-get"] = "/_examples/card/content"
+                            attributes["hx-trigger"] = "revealed"
+                            +"Loading..."
+                        }
+                    }
+                }
+            },
+            alpinePreview = {
+                mCard("w-96 bg-base-100 shadow-sm") {
+                    attributes["x-data"] = "{ content: 'Loading...', loaded: false }"
+                    attributes["x-intersect"] = "if (!loaded) { fetch('/_examples/card/content').then(r => r.text()).then(t => { content = t; loaded = true; }) }"
+                    mCardBody {
+                        mCardTitle { +"Lazy Card" }
+                        div {
+                            attributes["x-text"] = "content"
+                        }
+                    }
+                }
+            },
+            datastarPreview = {
+                mCard("w-96 bg-base-100 shadow-sm") {
+                    attributes["data-signals"] = "{ content: 'Loading...' }"
+                    attributes["data-intersects"] = "once"
+                    attributes["data-get"] = "/_examples/card/content"
+                    mCardBody {
+                        mCardTitle { +"Lazy Card" }
+                        div {
+                            attributes["data-text"] = "${'$'}content"
+                        }
+                    }
+                }
+            },
             htmxCode = """
                 mCard("w-96 bg-base-100 shadow-sm") {
                     mCardBody {
@@ -863,6 +940,55 @@ fun navbarPage(): String = layout(NAVBAR) {
         }
         interactivityTabs(
             id = "navbar-interactive",
+            htmxPreview = {
+                mNavbar("bg-base-100 shadow-sm rounded-box") {
+                    attributes["hx-boost"] = "true"
+                    mNavbarStart {
+                        a(href = "/", classes = "btn btn-ghost") {
+                            attributes["hx-push-url"] = "true"
+                            +"Home"
+                        }
+                        a(href = "/docs", classes = "btn btn-ghost") {
+                            attributes["hx-push-url"] = "true"
+                            +"Docs"
+                        }
+                    }
+                }
+            },
+            alpinePreview = {
+                mNavbar("bg-base-100 shadow-sm rounded-box") {
+                    attributes["x-data"] = "{ active: '/' }"
+                    mNavbarStart {
+                        a(href = "/", classes = "btn btn-ghost") {
+                            attributes["x-bind:class"] = "active === '/' ? 'btn-active' : ''"
+                            attributes["x-on:click"] = "active = '/'"
+                            +"Home"
+                        }
+                        a(href = "/docs", classes = "btn btn-ghost") {
+                            attributes["x-bind:class"] = "active === '/docs' ? 'btn-active' : ''"
+                            attributes["x-on:click"] = "active = '/docs'"
+                            +"Docs"
+                        }
+                    }
+                }
+            },
+            datastarPreview = {
+                mNavbar("bg-base-100 shadow-sm rounded-box") {
+                    attributes["data-signals"] = "{ active: '/' }"
+                    mNavbarStart {
+                        a(href = "/", classes = "btn btn-ghost") {
+                            attributes["data-bind-class-btn-active"] = "${'$'}active === '/'"
+                            attributes["data-on-click"] = "${'$'}active='/'"
+                            +"Home"
+                        }
+                        a(href = "/docs", classes = "btn btn-ghost") {
+                            attributes["data-bind-class-btn-active"] = "${'$'}active === '/docs'"
+                            attributes["data-on-click"] = "${'$'}active='/docs'"
+                            +"Docs"
+                        }
+                    }
+                }
+            },
             htmxCode = """
                 mNavbar("bg-base-100 shadow-sm") {
                     attributes["hx-boost"] = "true"
@@ -1303,6 +1429,41 @@ fun alertPage(): String = layout(ALERT) {
         }
         interactivityTabs(
             id = "alert-interactive",
+            htmxPreview = {
+                mAlert(AlertVariant.Success) {
+                    +"Your changes have been saved."
+                    button(classes = "btn btn-sm btn-ghost") {
+                        attributes["hx-on:click"] = "this.closest('.alert').remove()"
+                        +"Dismiss"
+                    }
+                }
+            },
+            alpinePreview = {
+                div {
+                    attributes["x-data"] = "{ show: true }"
+                    mAlert(AlertVariant.Success) {
+                        attributes["x-show"] = "show"
+                        +"Your changes have been saved."
+                        button(classes = "btn btn-sm btn-ghost") {
+                            attributes["x-on:click"] = "show = false"
+                            +"Dismiss"
+                        }
+                    }
+                }
+            },
+            datastarPreview = {
+                div {
+                    attributes["data-signals"] = "{ show: true }"
+                    mAlert(AlertVariant.Success) {
+                        attributes["data-show"] = "${'$'}show"
+                        +"Your changes have been saved."
+                        button(classes = "btn btn-sm btn-ghost") {
+                            attributes["data-on-click"] = "${'$'}show=false"
+                            +"Dismiss"
+                        }
+                    }
+                }
+            },
             htmxCode = """
                 mAlert(AlertVariant.Success) {
                     +"Your changes have been saved."
