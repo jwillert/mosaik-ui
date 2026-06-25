@@ -17,4 +17,5 @@ A ShadCN-inspired component toolkit for the Kotlin/Ktor/Gradle ecosystem. Compon
 - **Install** — The act of copying a component's source file(s) into the user's project via `mosaikAdd`. After installation, the user owns the code.
 - **Golden** — A baseline screenshot used by ktor-vrt for visual regression comparison.
 - **Scenario** — A data class in ktor-vrt describing a single visual test case: a name, a render function, and optional pre-screenshot JavaScript.
+- **Preview** — A rendered, working documentation example shown next to a code snippet. For interactive examples, the preview exercises the same interaction style being documented and calls valid docs-app routes when network requests are involved. See ADR 0008.
 - **VRT** — Visual Regression Testing. Renders components in a browser, screenshots them, and diffs against goldens.
