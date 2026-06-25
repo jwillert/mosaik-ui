@@ -34,6 +34,63 @@ fun interactivityPage(): String = layout(INTERACTIVITY) {
             +", and raw HTML form inputs. Each library wires client-side behavior "
             +"(async submit, loading state, error display) onto the same Kotlin code."
         }
+        p {
+            +"The htmx example posts to "
+            code { +"/api/login" }
+            +". Here's the corresponding Ktor route:"
+        }
+        pre {
+            code {
+                +"""
+fun Application.module() {
+    routing {
+        post("/api/login") {
+            val params = call.receiveParameters()
+            val email = params["email"]
+            val password = params["password"]
+
+            // Validate credentials (replace with your auth logic)
+            if (email == "user@example.com" && password == "secret") {
+                call.response.headers.append("HX-Redirect", "/dashboard")
+                call.respondText("Login successful", ContentType.Text.Plain)
+            } else {
+                call.response.status(HttpStatusCode.Unauthorized)
+                call.respondText("Invalid email or password", ContentType.Text.Plain)
+            }
+        }
+    }
+}
+""".trimIndent()
+            }
+        }
+        p {
+            +"The Alpine.js and Datastar examples expect JSON. Here's the route for those:"
+        }
+        pre {
+            code {
+                +"""
+@Serializable
+data class LoginRequest(val email: String, val password: String)
+
+fun Application.module() {
+    install(ContentNegotiation) { json() }
+    routing {
+        post("/api/login") {
+            val req = call.receive<LoginRequest>()
+
+            // Validate credentials (replace with your auth logic)
+            if (req.email == "user@example.com" && req.password == "secret") {
+                call.respondText("OK", ContentType.Text.Plain)
+            } else {
+                call.response.status(HttpStatusCode.Unauthorized)
+                call.respondText("Invalid email or password", ContentType.Text.Plain)
+            }
+        }
+    }
+}
+""".trimIndent()
+            }
+        }
         interactivityTabs(
             id = "login-form",
             htmxCode = """
@@ -200,6 +257,80 @@ mCard("w-96 bg-base-100 shadow-xl") {
             +" and "
             code { +"mButton" }
             +", the form wiring is identical to Login — only the fields change."
+        }
+        p {
+            +"The htmx example posts to "
+            code { +"/api/register" }
+            +". Here's the corresponding Ktor route:"
+        }
+        pre {
+            code {
+                +"""
+fun Application.module() {
+    routing {
+        post("/api/register") {
+            val params = call.receiveParameters()
+            val name = params["name"]
+            val email = params["email"]
+            val password = params["password"]
+            val confirmPassword = params["confirm_password"]
+
+            // Validate passwords match
+            if (password != confirmPassword) {
+                call.response.status(HttpStatusCode.BadRequest)
+                call.respondText("Passwords do not match", ContentType.Text.Plain)
+                return@post
+            }
+
+            // Validate password strength (example: minimum 8 characters)
+            if (password.isNullOrBlank() || password.length < 8) {
+                call.response.status(HttpStatusCode.BadRequest)
+                call.respondText("Password must be at least 8 characters", ContentType.Text.Plain)
+                return@post
+            }
+
+            // Register user (replace with your registration logic)
+            // saveUser(name, email, password)
+
+            call.response.headers.append("HX-Redirect", "/welcome")
+            call.respondText("Registration successful", ContentType.Text.Plain)
+        }
+    }
+}
+""".trimIndent()
+            }
+        }
+        p {
+            +"The Alpine.js and Datastar examples expect JSON. Here's the route for those:"
+        }
+        pre {
+            code {
+                +"""
+@Serializable
+data class RegisterRequest(val name: String, val email: String, val password: String)
+
+fun Application.module() {
+    install(ContentNegotiation) { json() }
+    routing {
+        post("/api/register") {
+            val req = call.receive<RegisterRequest>()
+
+            // Validate password strength (example: minimum 8 characters)
+            if (req.password.length < 8) {
+                call.response.status(HttpStatusCode.BadRequest)
+                call.respondText("Password must be at least 8 characters", ContentType.Text.Plain)
+                return@post
+            }
+
+            // Register user (replace with your registration logic)
+            // saveUser(req.name, req.email, req.password)
+
+            call.respondText("OK", ContentType.Text.Plain)
+        }
+    }
+}
+""".trimIndent()
+            }
         }
         interactivityTabs(
             id = "register-form",
