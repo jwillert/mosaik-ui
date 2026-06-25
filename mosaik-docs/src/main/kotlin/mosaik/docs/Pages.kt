@@ -863,6 +863,55 @@ fun navbarPage(): String = layout(NAVBAR) {
         }
         interactivityTabs(
             id = "navbar-interactive",
+            htmxPreview = {
+                mNavbar("bg-base-100 shadow-sm") {
+                    attributes["hx-boost"] = "true"
+                    mNavbarStart {
+                        a(href = "#", classes = "btn btn-ghost") {
+                            attributes["hx-push-url"] = "false"
+                            +"Home"
+                        }
+                        a(href = "#", classes = "btn btn-ghost") {
+                            attributes["hx-push-url"] = "false"
+                            +"Docs"
+                        }
+                    }
+                }
+            },
+            alpinePreview = {
+                mNavbar("bg-base-100 shadow-sm") {
+                    attributes["x-data"] = "{ active: '/' }"
+                    mNavbarStart {
+                        a(href = "#", classes = "btn btn-ghost") {
+                            attributes["x-bind:class"] = "active === '/' ? 'btn-active' : ''"
+                            attributes["x-on:click.prevent"] = "active = '/'"
+                            +"Home"
+                        }
+                        a(href = "#", classes = "btn btn-ghost") {
+                            attributes["x-bind:class"] = "active === '/docs' ? 'btn-active' : ''"
+                            attributes["x-on:click.prevent"] = "active = '/docs'"
+                            +"Docs"
+                        }
+                    }
+                }
+            },
+            datastarPreview = {
+                mNavbar("bg-base-100 shadow-sm") {
+                    attributes["data-signals"] = "{ active: '/' }"
+                    mNavbarStart {
+                        a(href = "#", classes = "btn btn-ghost") {
+                            attributes["data-bind-class-btn-active"] = "\$active === '/'"
+                            attributes["data-on-click"] = "event.preventDefault(); \$active='/'"
+                            +"Home"
+                        }
+                        a(href = "#", classes = "btn btn-ghost") {
+                            attributes["data-bind-class-btn-active"] = "\$active === '/docs'"
+                            attributes["data-on-click"] = "event.preventDefault(); \$active='/docs'"
+                            +"Docs"
+                        }
+                    }
+                }
+            },
             htmxCode = """
                 mNavbar("bg-base-100 shadow-sm") {
                     attributes["hx-boost"] = "true"
@@ -1303,6 +1352,41 @@ fun alertPage(): String = layout(ALERT) {
         }
         interactivityTabs(
             id = "alert-interactive",
+            htmxPreview = {
+                mAlert(AlertVariant.Success) {
+                    +"Your changes have been saved."
+                    button(classes = "btn btn-sm btn-ghost") {
+                        attributes["hx-on:click"] = "this.closest('.alert').remove()"
+                        +"Dismiss"
+                    }
+                }
+            },
+            alpinePreview = {
+                div {
+                    attributes["x-data"] = "{ show: true }"
+                    mAlert(AlertVariant.Success) {
+                        attributes["x-show"] = "show"
+                        +"Your changes have been saved."
+                        button(classes = "btn btn-sm btn-ghost") {
+                            attributes["x-on:click"] = "show = false"
+                            +"Dismiss"
+                        }
+                    }
+                }
+            },
+            datastarPreview = {
+                div {
+                    attributes["data-signals"] = "{ show: true }"
+                    mAlert(AlertVariant.Success) {
+                        attributes["data-show"] = "\$show"
+                        +"Your changes have been saved."
+                        button(classes = "btn btn-sm btn-ghost") {
+                            attributes["data-on-click"] = "\$show=false"
+                            +"Dismiss"
+                        }
+                    }
+                }
+            },
             htmxCode = """
                 mAlert(AlertVariant.Success) {
                     +"Your changes have been saved."

@@ -474,6 +474,24 @@ class PagesTest : FunSpec({
         html shouldContain "alert-interactive-datastar"
     }
 
+    test("the alert page shows working previews for dismissible alerts per style") {
+        val html = alertPage()
+        // Preview wrapper with mb-4 not-prose class.
+        html shouldContain "class=\"mb-4 not-prose\""
+        // All three previews render the success alert with dismissible behavior.
+        html shouldContain "Your changes have been saved."
+        // Dismiss button is present in previews.
+        html shouldContain "Dismiss"
+        // htmx uses hx-on:click to remove the alert.
+        html shouldContain "hx-on:click"
+        // Alpine.js uses x-data and x-show for visibility control.
+        html shouldContain "x-data"
+        html shouldContain "x-show"
+        // Datastar uses data-signals and data-show.
+        html shouldContain "data-signals"
+        html shouldContain "data-show"
+    }
+
     test("the navbar page has an Interactive usage section with interactivityTabs") {
         val html = navbarPage()
         html shouldContain "<h2>Interactive usage</h2>"
@@ -485,6 +503,24 @@ class PagesTest : FunSpec({
         // Active link example mentions hx-boost for htmx.
         html shouldContain "hx-boost"
 
+    }
+
+    test("the navbar page shows working previews for active link highlighting per style") {
+        val html = navbarPage()
+        // Preview wrapper with mb-4 not-prose class.
+        html shouldContain "class=\"mb-4 not-prose\""
+        // All three previews render the navbar with navigation links.
+        html shouldContain "Home"
+        html shouldContain "Docs"
+        // htmx uses hx-boost for navigation.
+        html shouldContain "hx-boost"
+        // Alpine.js uses x-data for state and x-bind:class for active styling.
+        html shouldContain "x-data"
+        html shouldContain "x-bind:class"
+        html shouldContain "btn-active"
+        // Datastar uses data-signals and data-bind-class-btn-active.
+        html shouldContain "data-signals"
+        html shouldContain "data-bind-class-btn-active"
     }
 
     test("the interactivity page contains building blocks sections for all three libraries") {
