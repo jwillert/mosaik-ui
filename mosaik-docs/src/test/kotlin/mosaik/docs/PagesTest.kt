@@ -305,10 +305,10 @@ class PagesTest : FunSpec({
         html shouldContain "class=\"tabs tabs-lifted not-prose\""
         // Radio inputs with the unique name attribute (id parameter).
         html shouldContain "type=\"radio\" name=\"test-tabs\""
-        // Three tabs: htmx, Alpine.js, Datastar.
-        html shouldContain "htmx-tab"
-        html shouldContain "alpine-tab"
-        html shouldContain "datastar-tab"
+        // Three tabs: htmx, Alpine.js, Datastar with unique IDs derived from the id parameter.
+        html shouldContain "test-tabs-htmx"
+        html shouldContain "test-tabs-alpine"
+        html shouldContain "test-tabs-datastar"
         // htmx tab is checked by default.
         html shouldContain "checked=\"checked\""
         // Tab content panels.

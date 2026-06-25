@@ -38,7 +38,7 @@ fun FlowContent.interactivityTabs(
 
         // htmx tab (checked by default)
         input(type = InputType.radio, name = id, classes = "tab") {
-            this.id = "htmx-tab"
+            this.id = "$id-htmx"
             checked = true
             attributes["aria-label"] = "htmx"
         }
@@ -50,7 +50,7 @@ fun FlowContent.interactivityTabs(
 
         // Alpine.js tab
         input(type = InputType.radio, name = id, classes = "tab") {
-            this.id = "alpine-tab"
+            this.id = "$id-alpine"
             attributes["aria-label"] = "Alpine.js"
         }
         div("tab-content bg-base-200 rounded-box p-4") {
@@ -61,7 +61,7 @@ fun FlowContent.interactivityTabs(
 
         // Datastar tab
         input(type = InputType.radio, name = id, classes = "tab") {
-            this.id = "datastar-tab"
+            this.id = "$id-datastar"
             attributes["aria-label"] = "Datastar"
         }
         div("tab-content bg-base-200 rounded-box p-4") {
