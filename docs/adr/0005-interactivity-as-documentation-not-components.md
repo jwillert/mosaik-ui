@@ -48,6 +48,8 @@ The docs show three levels of examples:
   infrastructure, not a component concern (same precedent as the theme switcher).
 - Adding a new interactivity library later means adding a tab to existing examples, not
   building new components.
+- Live documentation demos that issue network requests must be backed by real docs-app
+  Ktor routes; see ADR-0007.
 - Users who want a ready-made interactive component must copy the code example and adapt
   it — there is no `mosaikAdd --component=button-htmx`. This is intentional: the ShadCN
   model means the user owns and customises the code.
