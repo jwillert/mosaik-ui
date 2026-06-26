@@ -1,0 +1,3 @@
+# ADR 0012: Component Reference Gallery Documentation Model
+
+Mosaik component docs will use a Component Reference Gallery model: a shadcn-first install/usage/API reference flow combined with daisyUI-style visual modifier examples. Component pages should lead with visual confidence through a polished hero preview, use reusable Example Cards that pair previews with Kotlin code, and avoid raw DaisyUI component classes in normal examples when a Mosaik abstraction exists. Interactive examples use a docs-wide Interaction Style switch for htmx, Alpine.js, or Datastar, while the docs app remains server-rendered Kotlin/kotlinx.html with Tailwind/DaisyUI and small vanilla JavaScript.
