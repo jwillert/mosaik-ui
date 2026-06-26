@@ -1,0 +1,29 @@
+name: Agent Unblock
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  requeue-unblocked-issues:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: read
+
+    env:
+      GH_TOKEN: ${{ secrets.AGENT_PAT || secrets.GITHUB_TOKEN }}
+      GH_REPO: ${{ github.repository }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+
+    steps:
+      - name: Checkout automation scripts
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: .github/scripts/requeue-unblocked-agent-issues.sh
+          sparse-checkout-cone-mode: false
+
+      - name: Requeue issues whose blockers are now closed
+        run: bash .github/scripts/requeue-unblocked-agent-issues.sh
