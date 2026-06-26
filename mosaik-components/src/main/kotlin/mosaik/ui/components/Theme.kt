@@ -7,7 +7,19 @@ package mosaik.ui.components
  * and the [buildClasses] helper that assembles the final `class` attribute.
  * Per ADR-0003 components take these tokens as function parameters rather than
  * through a shared scope contract, so there is no `MosaikScope` interface.
+ *
+ * Also defines [MosaikDsl], the DSL marker used by compound components to
+ * constrain which child components are callable from which contexts.
  */
+
+/**
+ * DSL marker for Mosaik compound components. Prevents implicit receiver lookup
+ * across Mosaik context boundaries, so child components can only be called from
+ * their designated parent contexts. Applied to context wrapper classes like
+ * [MCard] and [MCardBody].
+ */
+@DslMarker
+annotation class MosaikDsl
 
 /**
  * A DaisyUI colour role. Components turn the [token] into their own DaisyUI
