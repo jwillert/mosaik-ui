@@ -684,4 +684,36 @@ class PagesTest : FunSpec({
         html shouldContain "Button 1"
         html shouldContain "Button 2"
     }
+
+    test("exampleCard handles titles with special characters safely") {
+        val html = layout(HOME) {
+            exampleCard(
+                title = "Test's \"Example\" with <symbols>",
+                preview = { mButton(Variant.Primary) { +"Test" } },
+                code = "mButton(Variant.Primary) { +\"Test\" }",
+            )
+        }
+        html shouldContain "Test's &quot;Example&quot; with &lt;symbols&gt;"
+        html shouldContain "getElementById('code-test-s--example--with--symbols-"
+        html shouldContain "language-kotlin"
+    }
+
+    test("exampleCard generates unique IDs for duplicate titles") {
+        val html = layout(HOME) {
+            exampleCard(
+                title = "Same Title",
+                preview = { mButton(Variant.Primary) { +"First" } },
+                code = "// First",
+            )
+            exampleCard(
+                title = "Same Title",
+                preview = { mButton(Variant.Secondary) { +"Second" } },
+                code = "// Second",
+            )
+        }
+        html shouldContain "First"
+        html shouldContain "Second"
+        html shouldContain "// First"
+        html shouldContain "// Second"
+    }
 })

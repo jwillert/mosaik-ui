@@ -216,6 +216,12 @@ fun FlowContent.exampleCard(
     preview: FlowContent.() -> Unit,
     code: String,
 ) {
+    val safeId = "code-" + title
+        .replace(Regex("[^a-zA-Z0-9-]"), "-")
+        .lowercase()
+        .let { if (it.length > 50) it.take(50) else it }
+        .plus("-${System.identityHashCode(title)}")
+
     div("not-prose mb-8") {
         h3("text-lg font-semibold mb-3") { +title }
         mCard("bg-base-100 shadow-sm border border-base-300") {
@@ -226,14 +232,14 @@ fun FlowContent.exampleCard(
                 div("relative") {
                     pre("bg-base-200 rounded-box p-4 overflow-x-auto") {
                         code("language-kotlin") {
-                            id = "code-${title.replace(" ", "-").lowercase()}"
-                            attributes["data-copy-target"] = "code-${title.replace(" ", "-").lowercase()}"
+                            id = safeId
+                            attributes["data-copy-target"] = safeId
                             +code
                         }
                     }
                     button(classes = "btn btn-sm btn-ghost absolute top-2 right-2") {
                         attributes["onclick"] = """
-                            const target = document.getElementById('code-${title.replace(" ", "-").lowercase()}');
+                            const target = document.getElementById('$safeId');
                             navigator.clipboard.writeText(target.textContent);
                             this.textContent = 'Copied!';
                             setTimeout(() => this.textContent = 'Copy', 2000);
