@@ -1,7 +1,7 @@
 package mosaik.docs
 
 import kotlinx.html.*
-import mosaik.ui.components.Variant
+import mosaik.ui.components.ButtonVariant
 import mosaik.ui.components.mButton
 import mosaik.ui.components.mCard
 import mosaik.ui.components.mCardActions
@@ -128,7 +128,7 @@ fun Application.module() {
                             }
 
                             div("card-actions justify-end") {
-                                mButton(Variant.Primary) {
+                                mButton(variant = ButtonVariant.Primary) {
                                     type = ButtonType.submit
                                     span { +"Sign in" }
                                     span("loading loading-spinner loading-sm htmx-indicator") {
@@ -180,7 +180,7 @@ fun Application.module() {
                             }
 
                             div("card-actions justify-end") {
-                                mButton(Variant.Primary) {
+                                mButton(variant = ButtonVariant.Primary) {
                                     attributes["x-bind:disabled"] = "loading"
                                     span {
                                         attributes["x-show"] = "!loading"
@@ -231,7 +231,7 @@ fun Application.module() {
                             }
 
                             div("card-actions justify-end") {
-                                mButton(Variant.Primary) {
+                                mButton(variant = ButtonVariant.Primary) {
                                     attributes["data-bind-disabled"] = "\$loading"
                                     span {
                                         attributes["data-show"] = "!\$loading"
@@ -281,7 +281,7 @@ mCard("w-96 bg-base-100 shadow-xl") {
             }
 
             div("card-actions justify-end") {
-                mButton(Variant.Primary) {
+                mButton(variant = ButtonVariant.Primary) {
                     span { +"Sign in" }
                     span("loading loading-spinner loading-sm htmx-indicator") {
                         id = "login-spinner"
@@ -332,7 +332,7 @@ mCard("w-96 bg-base-100 shadow-xl") {
             }
 
             div("card-actions justify-end") {
-                mButton(Variant.Primary) {
+                mButton(variant = ButtonVariant.Primary) {
                     attributes["x-bind:disabled"] = "loading"
                     span {
                         attributes["x-show"] = "!loading"
@@ -383,7 +383,7 @@ mCard("w-96 bg-base-100 shadow-xl") {
             }
 
             div("card-actions justify-end") {
-                mButton(Variant.Primary) {
+                mButton(variant = ButtonVariant.Primary) {
                     attributes["data-bind-disabled"] = "${'$'}loading"
                     span {
                         attributes["data-show"] = "!${'$'}loading"
@@ -541,7 +541,7 @@ fun Application.module() {
                             }
 
                             div("card-actions justify-end") {
-                                mButton(Variant.Primary) {
+                                mButton(variant = ButtonVariant.Primary) {
                                     span { +"Sign up" }
                                     span("loading loading-spinner loading-sm htmx-indicator") {
                                         id = "register-spinner"
@@ -614,7 +614,7 @@ fun Application.module() {
                             }
 
                             div("card-actions justify-end") {
-                                mButton(Variant.Primary) {
+                                mButton(variant = ButtonVariant.Primary) {
                                     attributes["x-bind:disabled"] = "loading"
                                     span {
                                         attributes["x-show"] = "!loading"
@@ -686,7 +686,7 @@ fun Application.module() {
                             }
 
                             div("card-actions justify-end") {
-                                mButton(Variant.Primary) {
+                                mButton(variant = ButtonVariant.Primary) {
                                     attributes["data-bind-disabled"] = "\$loading"
                                     span {
                                         attributes["data-show"] = "!\$loading"
@@ -755,7 +755,7 @@ mCard("w-96 bg-base-100 shadow-xl") {
             }
 
             div("card-actions justify-end") {
-                mButton(Variant.Primary) {
+                mButton(variant = ButtonVariant.Primary) {
                     span { +"Sign up" }
                     span("loading loading-spinner loading-sm htmx-indicator") {
                         id = "register-spinner"
@@ -828,7 +828,7 @@ mCard("w-96 bg-base-100 shadow-xl") {
             }
 
             div("card-actions justify-end") {
-                mButton(Variant.Primary) {
+                mButton(variant = ButtonVariant.Primary) {
                     attributes["x-bind:disabled"] = "loading"
                     span {
                         attributes["x-show"] = "!loading"
@@ -900,7 +900,7 @@ mCard("w-96 bg-base-100 shadow-xl") {
             }
 
             div("card-actions justify-end") {
-                mButton(Variant.Primary) {
+                mButton(variant = ButtonVariant.Primary) {
                     attributes["data-bind-disabled"] = "${'$'}loading"
                     span {
                         attributes["data-show"] = "!${'$'}loading"

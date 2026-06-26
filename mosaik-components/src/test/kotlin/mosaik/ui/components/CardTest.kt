@@ -63,7 +63,7 @@ class CardTest : FunSpec({
                     mCardTitle { +"Shoes!" }
                     p { +"If a dog chews shoes whose shoes does he choose?" }
                     mCardActions("justify-end") {
-                        mButton(Variant.Primary) { +"Buy Now" }
+                        mButton(variant = ButtonVariant.Primary) { +"Buy Now" }
                     }
                 }
             }
