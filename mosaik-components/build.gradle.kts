@@ -1,6 +1,7 @@
 plugins {
     id("mosaik.vrt")
     id("mosaik.css")
+    id("mosaik.ktlint")
 }
 
 dependencies {

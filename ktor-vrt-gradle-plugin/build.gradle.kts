@@ -1,5 +1,6 @@
 plugins {
     id("mosaik.gradle-plugin")
+    id("mosaik.ktlint")
 }
 
 tasks.named<ProcessResources>("processResources") {

@@ -1,6 +1,7 @@
 plugins {
     id("mosaik.ktor-app")
     id("mosaik.css")
+    id("mosaik.ktlint")
     application
 }
 

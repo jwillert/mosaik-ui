@@ -1,5 +1,6 @@
 plugins {
     id("mosaik.kotlin-library")
+    id("mosaik.ktlint")
 }
 
 dependencies {

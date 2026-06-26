@@ -2,6 +2,7 @@ import org.gradle.language.jvm.tasks.ProcessResources
 
 plugins {
     id("mosaik.gradle-plugin")
+    id("mosaik.ktlint")
 }
 
 dependencies {
