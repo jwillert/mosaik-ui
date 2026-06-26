@@ -76,7 +76,7 @@ class CardTest : FunSpec({
             "</div></div>"
     }
 
-    test("the card block receives the raw div element so its html attributes apply natively") {
+    test("the card block receives a context delegating to the div so its html attributes apply natively") {
         val html = render {
             mCard {
                 id = "featured"
