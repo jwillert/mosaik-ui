@@ -41,6 +41,12 @@
       "description": "DaisyUI alert with its own AlertVariant palette (info, success, warning, error), custom classes, and a default role=\"alert\" for assistive tech.",
       "files": ["Alert.kt"],
       "dependencies": ["theme"]
+    },
+    {
+      "name": "loading",
+      "description": "DaisyUI loading indicator with its own LoadingType palette (spinner, dots, ring, ball, bars, infinity), size, and custom classes. Composable content for buttons and other components.",
+      "files": ["Loading.kt"],
+      "dependencies": ["theme"]
     }
   ]
 }
