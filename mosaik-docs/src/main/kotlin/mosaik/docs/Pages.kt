@@ -111,6 +111,15 @@ fun layout(active: NavItem, content: FlowContent.() -> Unit): String =
                 script(src = "https://unpkg.com/htmx.org@2.0.4") {}
                 script(src = "https://unpkg.com/alpinejs@3.14.7/dist/cdn.min.js") { defer = true }
                 script(src = "https://cdn.jsdelivr.net/npm/@sudodevnull/datastar@0.21.1") { type = "module" }
+                // Syntax highlighting for Kotlin code blocks
+                link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css")
+                script(src = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js") {}
+                script(src = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/kotlin.min.js") {}
+                script {
+                    unsafe {
+                        +"hljs.highlightAll();"
+                    }
+                }
             }
             body(classes = "min-h-screen bg-base-100 text-base-content") {
                 div("flex min-h-screen") {
@@ -199,6 +208,54 @@ private fun FlowContent.themeRestoreScript() {
 // the layout stays consistent (PRD #10, issue #11). Code examples are static
 // strings here; there is no build-time extraction from component sources.
 // ---------------------------------------------------------------------------
+
+/**
+ * Renders an Example Card: a titled card containing a rendered preview and a
+ * copyable, syntax-highlighted Kotlin code block. This is the standard docs
+ * presentation primitive for the Component Reference Gallery model, reusable
+ * across all component pages without forcing page-specific content into shared
+ * code.
+ */
+fun FlowContent.exampleCard(
+    title: String,
+    preview: FlowContent.() -> Unit,
+    code: String,
+) {
+    val safeId = "code-" + title
+        .replace(Regex("[^a-zA-Z0-9-]"), "-")
+        .lowercase()
+        .let { if (it.length > 50) it.take(50) else it }
+        .plus("-${System.identityHashCode(title)}")
+
+    div("not-prose mb-8") {
+        h3("text-lg font-semibold mb-3") { +title }
+        mCard("bg-base-100 shadow-sm border border-base-300") {
+            mCardBody("p-6") {
+                div("mb-4") {
+                    preview()
+                }
+                div("relative") {
+                    pre("bg-base-200 rounded-box p-4 overflow-x-auto") {
+                        code("language-kotlin") {
+                            id = safeId
+                            attributes["data-copy-target"] = safeId
+                            +code
+                        }
+                    }
+                    button(classes = "btn btn-sm btn-ghost absolute top-2 right-2") {
+                        attributes["onclick"] = """
+                            const target = document.getElementById('$safeId');
+                            navigator.clipboard.writeText(target.textContent);
+                            this.textContent = 'Copied!';
+                            setTimeout(() => this.textContent = 'Copy', 2000);
+                        """.trimIndent()
+                        +"Copy"
+                    }
+                }
+            }
+        }
+    }
+}
 
 /** A row in an [apiReference] table: one component parameter. */
 data class ApiParam(
