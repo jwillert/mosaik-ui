@@ -203,13 +203,14 @@ private fun FlowContent.interactionStyleSwitcher() {
                     "document.querySelectorAll('.tabs input[type=\"radio\"]').forEach(function(input) {" +
                     "  if (input.getAttribute('data-interaction-style') === localStorage.getItem('mosaik-interaction-style')) {" +
                     "    input.checked = true;" +
+                    "  } else if (input.getAttribute('data-interaction-style')) {" +
+                    "    input.checked = false;" +
                     "  }" +
                     "});"
             INTERACTION_STYLES.forEach { style ->
                 option {
                     value = style
                     +when (style) {
-                        "htmx" -> "htmx"
                         "alpine" -> "Alpine.js"
                         "datastar" -> "Datastar"
                         else -> style
