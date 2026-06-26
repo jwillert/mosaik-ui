@@ -8,9 +8,10 @@
 
 ## Component API
 
-- Scope-based DSL: each component has a Scope class (e.g. `ButtonScope`) implementing `MosaikScope`
+- Parameter-based DSL: design tokens (`variant`, `size`, extra `classes`) are function parameters (ADR 0003)
+- DSL blocks receive raw kotlinx.html receivers for simple components, enabling native HTML attribute and third-party extension access
+- Compound components with child constraints use prefixed DSL context types (e.g. `MCard`) after ADR 0009
 - Top-level components are extension functions on `FlowContent` (e.g. `fun FlowContent.mButton(...)`)
-- HTML properties are delegated to the underlying kotlinx.html element, not wrapped
 - Function prefix is `m` (fixed, not configurable)
 - Placeholder package is `mosaik.ui.components`
 
