@@ -129,6 +129,7 @@ fun Application.module() {
 
                             div("card-actions justify-end") {
                                 mButton(Variant.Primary) {
+                                    type = ButtonType.submit
                                     span { +"Sign in" }
                                     span("loading loading-spinner loading-sm htmx-indicator") {
                                         id = "login-spinner"

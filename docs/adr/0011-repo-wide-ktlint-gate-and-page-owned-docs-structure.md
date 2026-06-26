@@ -1,0 +1,3 @@
+# ADR 0011: Repo-Wide ktlint Gate and Page-Owned Docs Structure
+
+Documentation renderers should be organized by page or guide ownership, with shared documentation blocks extracted only when they are repeated; navigation remains an explicit central registry so sidebar order and routing stay easy to inspect. ktlint will be introduced as a mandatory repo-wide quality gate for `.kt` and `.kts` files, including Gradle Kotlin DSL, using standard defaults with minimal exceptions. The initial docs restructure and ktlint introduction may land together because the current large docs files are expected to block a clean mandatory lint gate, and keeping ktlint optional or temporarily excluding modules would weaken the agent feedback loop we want from `check`.
