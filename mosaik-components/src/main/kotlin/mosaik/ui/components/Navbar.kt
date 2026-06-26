@@ -5,7 +5,8 @@ import kotlinx.html.*
 /**
  * DSL context for [mNavbar]. Provides access to navbar slot functions
  * ([mNavbarStart], [mNavbarCenter], [mNavbarEnd]) and ordinary HTML through
- * [FlowContent]. HTML attributes ([id]) delegate to the underlying [DIV].
+ * [FlowContent]. Common HTML attributes ([id], [style], [title]) delegate to
+ * the underlying [DIV]; other attributes are accessible via [attributes].
  * Marked with [MosaikDsl] to prevent slot functions from leaking into nested
  * ordinary HTML blocks.
  */
@@ -14,6 +15,14 @@ class MNavbar(private val div: DIV) : FlowContent by div {
     var id: String
         get() = div.id
         set(value) { div.id = value }
+
+    var style: String
+        get() = div.style
+        set(value) { div.style = value }
+
+    var title: String
+        get() = div.title
+        set(value) { div.title = value }
 }
 
 /**

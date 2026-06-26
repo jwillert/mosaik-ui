@@ -77,15 +77,19 @@ class NavbarTest : FunSpec({
             "</div>"
     }
 
-    test("the navbar block receives the raw div element so its html attributes apply natively") {
+    test("the navbar block receives the MNavbar context with delegated html attributes") {
         val html = render {
             mNavbar {
                 id = "main-nav"
+                style = "z-index: 50;"
+                title = "Main navigation"
                 attributes["hx-get"] = "/nav"
             }
         }
 
         html shouldContain "id=\"main-nav\""
+        html shouldContain "style=\"z-index: 50;\""
+        html shouldContain "title=\"Main navigation\""
         html shouldContain "hx-get=\"/nav\""
         html shouldContain "class=\"navbar\""
     }
