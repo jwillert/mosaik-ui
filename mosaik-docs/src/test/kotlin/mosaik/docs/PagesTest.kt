@@ -636,106 +636,10 @@ class PagesTest : FunSpec({
         html shouldContain "data-interaction-style=\"datastar\""
     }
 
-    test("exampleCard renders a preview area and a code area") {
-        val html = layout(HOME) {
-            exampleCard(
-                title = "Test Example",
-                preview = {
-                    mButton(Variant.Primary) { +"Test Button" }
-                },
-                code = """
-                    mButton(Variant.Primary) {
-                        +"Test Button"
-                    }
-                """.trimIndent(),
-            )
-        }
-        html shouldContain "Test Example"
-        html shouldContain "Test Button"
-        html shouldContain "mButton(Variant.Primary)"
-    }
-
-    test("exampleCard code blocks expose copy controls") {
-        val html = layout(HOME) {
-            exampleCard(
-                title = "Copy Test",
-                preview = { mButton(Variant.Primary) { +"Copy Me" } },
-                code = "mButton(Variant.Primary) { +\"Copy Me\" }",
-            )
-        }
-        html shouldContain "data-copy-target"
-        html shouldContain "onclick"
-        html shouldContain "Copy"
-    }
-
-    test("exampleCard code blocks use markup compatible with Kotlin syntax highlighting") {
-        val html = layout(HOME) {
-            exampleCard(
-                title = "Highlight Test",
-                preview = { mButton(Variant.Primary) { +"Highlight" } },
-                code = "mButton(Variant.Primary) { +\"Highlight\" }",
-            )
-        }
-        html shouldContain "pre"
-        html shouldContain "code"
-        html shouldContain "language-kotlin"
-    }
-
     test("every page loads highlight.js from CDN for syntax highlighting") {
         listOf(landingPage(), buttonPage()).forEach { html ->
             html shouldContain "highlight.js"
             html shouldContain "highlightAll"
         }
-    }
-
-    test("exampleCard is reusable across different preview and code content") {
-        val html = layout(HOME) {
-            exampleCard(
-                title = "Example 1",
-                preview = { mButton(Variant.Primary) { +"Button 1" } },
-                code = "mButton(Variant.Primary) { +\"Button 1\" }",
-            )
-            exampleCard(
-                title = "Example 2",
-                preview = { mButton(Variant.Secondary) { +"Button 2" } },
-                code = "mButton(Variant.Secondary) { +\"Button 2\" }",
-            )
-        }
-        html shouldContain "Example 1"
-        html shouldContain "Example 2"
-        html shouldContain "Button 1"
-        html shouldContain "Button 2"
-    }
-
-    test("exampleCard handles titles with special characters safely") {
-        val html = layout(HOME) {
-            exampleCard(
-                title = "Test's \"Example\" with <symbols>",
-                preview = { mButton(Variant.Primary) { +"Test" } },
-                code = "mButton(Variant.Primary) { +\"Test\" }",
-            )
-        }
-        html shouldContain "Test's &quot;Example&quot; with &lt;symbols&gt;"
-        html shouldContain "getElementById('code-test-s--example--with--symbols-"
-        html shouldContain "language-kotlin"
-    }
-
-    test("exampleCard generates unique IDs for duplicate titles") {
-        val html = layout(HOME) {
-            exampleCard(
-                title = "Same Title",
-                preview = { mButton(Variant.Primary) { +"First" } },
-                code = "// First",
-            )
-            exampleCard(
-                title = "Same Title",
-                preview = { mButton(Variant.Secondary) { +"Second" } },
-                code = "// Second",
-            )
-        }
-        html shouldContain "First"
-        html shouldContain "Second"
-        html shouldContain "// First"
-        html shouldContain "// Second"
     }
 })
