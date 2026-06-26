@@ -46,7 +46,7 @@ Tests in `PagesTest.kt` currently check for `DIV.()` in API reference tables
 ## Next Steps
 
 1. Wait for #39 (Card constraints) to be completed
-2. Wait for #40 (Navbar constraints) to be completed  
+2. Wait for #40 (Navbar constraints) to be completed
 3. Then complete remaining verification work:
    - Update component source comments
    - Verify all doc examples compile with new DSL
