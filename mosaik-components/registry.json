@@ -2,7 +2,7 @@
   "components": [
     {
       "name": "theme",
-      "description": "Shared foundation: Variant and Size enums, the MosaikScope contract, and the buildClasses utility. Installed automatically with the first component.",
+      "description": "Shared foundation: Variant and Size enums and the buildClasses utility. Installed automatically with the first component.",
       "files": ["Theme.kt"],
       "dependencies": []
     },
