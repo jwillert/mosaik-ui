@@ -8,8 +8,8 @@ package mosaik.ui.components
  * Per ADR-0003 components take these tokens as function parameters rather than
  * through a shared scope contract, so there is no `MosaikScope` interface.
  *
- * Also defines [MosaikDsl], the DSL marker used by compound components to
- * constrain which child components are callable from which contexts.
+ * [MosaikDsl] is the shared DSL marker for compound components. It prevents
+ * child component functions from leaking into nested ordinary HTML blocks.
  */
 
 /**

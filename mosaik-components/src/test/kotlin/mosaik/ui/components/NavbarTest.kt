@@ -77,16 +77,99 @@ class NavbarTest : FunSpec({
             "</div>"
     }
 
-    test("the navbar block receives the raw div element so its html attributes apply natively") {
+    test("the navbar block receives the MNavbar context with delegated html attributes") {
         val html = render {
             mNavbar {
                 id = "main-nav"
+                style = "z-index: 50;"
+                title = "Main navigation"
                 attributes["hx-get"] = "/nav"
             }
         }
 
         html shouldContain "id=\"main-nav\""
+        html shouldContain "style=\"z-index: 50;\""
+        html shouldContain "title=\"Main navigation\""
         html shouldContain "hx-get=\"/nav\""
         html shouldContain "class=\"navbar\""
     }
+
+    test("ordinary HTML remains callable inside the navbar context") {
+        val html = render {
+            mNavbar {
+                a(classes = "link") { +"Direct link" }
+                div { +"Direct div" }
+                span { +"Direct span" }
+            }
+        }
+
+        html shouldContain "<a class=\"link\">Direct link</a>"
+        html shouldContain "<div>Direct div</div>"
+        html shouldContain "<span>Direct span</span>"
+    }
+
+    test("ordinary HTML remains callable inside navbar slots") {
+        val html = render {
+            mNavbar {
+                mNavbarStart {
+                    a(classes = "btn") { +"Button" }
+                    div { +"Content" }
+                }
+                mNavbarEnd {
+                    button { +"Action" }
+                }
+            }
+        }
+
+        html shouldContain "navbar-start"
+        html shouldContain "<a class=\"btn\">Button</a>"
+        html shouldContain "<div>Content</div>"
+        html shouldContain "navbar-end"
+        html shouldContain "<button>Action</button>"
+    }
+
+    test("the MosaikDsl marker prevents navbar slots from leaking into nested HTML blocks") {
+        val html = render {
+            mNavbar {
+                mNavbarStart {
+                    // Nested ordinary HTML div
+                    div {
+                        a { +"Link" }
+                        // mNavbarStart() would not compile here due to @MosaikDsl marker
+                        // mNavbarCenter() would not compile here
+                        // mNavbarEnd() would not compile here
+                    }
+                }
+            }
+        }
+
+        html shouldContain "navbar-start"
+        html shouldContain "<div><a>Link</a></div>"
+    }
+
+    /*
+     * Compile-time constraint tests (documented as code examples):
+     *
+     * The following would NOT compile due to the MNavbar context constraint:
+     *
+     * render {
+     *     mNavbarStart { } // ERROR: unresolved reference (not in MNavbar context)
+     * }
+     *
+     * render {
+     *     div {
+     *         mNavbarStart { } // ERROR: unresolved reference (div is not MNavbar)
+     *     }
+     * }
+     *
+     * The @MosaikDsl marker prevents slot leakage into nested blocks:
+     *
+     * render {
+     *     mNavbar {
+     *         div {
+     *             mNavbarStart { } // ERROR: prevented by @MosaikDsl marker
+     *         }
+     *     }
+     * }
+     */
 })
