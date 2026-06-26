@@ -7,7 +7,10 @@ A ShadCN-inspired component toolkit for the Kotlin/Ktor/Gradle ecosystem. Compon
 ## Terms
 
 - **Component** — A single `.kt` file containing one or more kotlinx.html extension functions that render HTML with DaisyUI classes. Once installed, the file belongs to the user.
-- **Design tokens** — The Mosaik-specific properties (`variant`, `size`, extra `classes`) passed as function parameters to a component function. The block receives the raw kotlinx.html element as its receiver, so all HTML attributes and library extensions (e.g. htmx) work natively. See ADR 0003.
+- **Child Component** — A component function that is only valid inside a specific parent component's DSL context. Child components must be constrained at compile time so they cannot be called in unrelated HTML contexts. When the parent has semantic slots, the child component belongs to the narrowest valid slot rather than the broad parent.
+- **DSL Context Type** — A public receiver type used by parent and slot blocks to constrain which child components are callable while preserving the underlying valid HTML operations. DSL context type names use the configured component prefix to make their generated-source API ownership clear.
+- **Type-safe Modifier** — A Mosaik component property exposed as a Kotlin parameter or enum instead of requiring the caller to know DaisyUI class names. This includes variants, sizes, and DaisyUI modifiers such as `footer-center`, `btn-outline`, or `btn-block`. The component block receives the raw kotlinx.html element as its receiver, so all HTML attributes and library extensions (e.g. htmx) work natively. See ADR 0003.
+- **Structural Sub-component** — A named child function for required internal component structure, used instead of asking callers to create raw elements with DaisyUI structural classes (for example, navbar start/center/end slots).
 - **Theme** — The shared foundation (`Theme.kt`). Contains shared enums (`Variant`, `Size`) and `buildClasses` utility. Installed automatically as a dependency of every component.
 - **Registry** — A JSON manifest listing all available components with their names, descriptions, files, and dependencies. Bundled as a resource in the Gradle plugin for v1.
 - **Resolver** — Pure Kotlin logic in `mosaik-core` that takes a component name, reads the registry, and returns all transitive dependencies in topological order.
@@ -18,4 +21,8 @@ A ShadCN-inspired component toolkit for the Kotlin/Ktor/Gradle ecosystem. Compon
 - **Golden** — A baseline screenshot used by ktor-vrt for visual regression comparison.
 - **Scenario** — A data class in ktor-vrt describing a single visual test case: a name, a render function, and optional pre-screenshot JavaScript.
 - **Preview** — A rendered, working documentation example shown next to a code snippet. For interactive examples, the preview exercises the same interaction style being documented and calls valid docs-app routes when network requests are involved. See ADR 0008.
+- **Component Reference Gallery** — The canonical documentation page type for a component: shadcn-first install/usage/API reference combined with daisyUI-style visual modifier examples.
+- **Interaction Style** — The docs-wide selected client-side wiring style for interactive examples: htmx, Alpine.js, or Datastar. Component pages show previews and code for the selected style instead of repeating all three styles inline.
+- **Example Card** — A reusable documentation block that pairs a rendered preview with the corresponding Kotlin code, including copy support and syntax highlighting where feasible.
+- **Documentation Page** — A route-owned docs renderer whose source should live near its page or guide identity. Shared documentation blocks are extracted only when repeated across pages.
 - **VRT** — Visual Regression Testing. Renders components in a browser, screenshots them, and diffs against goldens.

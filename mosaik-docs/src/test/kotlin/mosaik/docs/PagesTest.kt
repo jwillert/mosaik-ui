@@ -5,7 +5,7 @@ import io.kotest.matchers.string.shouldContain
 import mosaik.ui.components.AlertVariant
 import mosaik.ui.components.BadgeVariant
 import mosaik.ui.components.Size
-import mosaik.ui.components.Variant
+import mosaik.ui.components.ButtonVariant
 import mosaik.ui.components.mButton
 
 /**
@@ -59,12 +59,12 @@ class PagesTest : FunSpec({
     test("the button page shows a basic usage Kotlin code block") {
         val html = buttonPage()
         html shouldContain "Basic usage"
-        html shouldContain "mButton(Variant.Primary, Size.Md)"
+        html shouldContain "mButton(variant = ButtonVariant.Primary, size = Size.Md)"
     }
 
     test("the button page renders every variant as its DaisyUI class") {
         val html = buttonPage()
-        Variant.entries.forEach { variant ->
+        ButtonVariant.entries.forEach { variant ->
             html shouldContain "btn-${variant.token}"
         }
     }
@@ -324,13 +324,13 @@ class PagesTest : FunSpec({
                 alpineCode = "alpine code",
                 datastarCode = "datastar code",
                 htmxPreview = {
-                    mButton(Variant.Primary) { +"htmx preview content" }
+                    mButton(variant = ButtonVariant.Primary) { +"htmx preview content" }
                 },
                 alpinePreview = {
-                    mButton(Variant.Secondary) { +"alpine preview content" }
+                    mButton(variant = ButtonVariant.Secondary) { +"alpine preview content" }
                 },
                 datastarPreview = {
-                    mButton(Variant.Accent) { +"datastar preview content" }
+                    mButton(variant = ButtonVariant.Accent) { +"datastar preview content" }
                 },
             )
         }

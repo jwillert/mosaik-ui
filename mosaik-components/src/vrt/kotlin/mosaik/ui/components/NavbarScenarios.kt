@@ -12,7 +12,7 @@ object NavbarScenarios {
                 a(classes = "btn btn-ghost text-xl") { +"Mosaik" }
             }
             mNavbarEnd {
-                mButton(Variant.Primary) { +"Sign up" }
+                mButton(variant = ButtonVariant.Primary) { +"Sign up" }
             }
         }
     }
@@ -36,7 +36,7 @@ object NavbarScenarios {
                 a(classes = "btn btn-ghost") { +"Docs" }
             }
             mNavbarEnd {
-                mButton(Variant.Primary) { +"Sign up" }
+                mButton(variant = ButtonVariant.Primary) { +"Sign up" }
             }
         }
     }
