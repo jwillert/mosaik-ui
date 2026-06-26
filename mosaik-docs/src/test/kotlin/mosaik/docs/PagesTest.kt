@@ -614,6 +614,28 @@ class PagesTest : FunSpec({
         html shouldContain "Hybrid"
     }
 
+    test("every page renders the sidebar Interaction Style switcher") {
+        listOf(landingPage(), buttonPage(), interactivityPage()).forEach { html ->
+            html shouldContain "id=\"interaction-style-switcher\""
+            html shouldContain "value=\"htmx\""
+            html shouldContain "value=\"alpine\""
+            html shouldContain "value=\"datastar\""
+        }
+    }
+
+    test("the Interaction Style switcher has a label and is in the sidebar") {
+        val html = landingPage()
+        html shouldContain "Interaction Style"
+        html shouldContain "for=\"interaction-style-switcher\""
+    }
+
+    test("interactivityTabs supports data-interaction-style attribute for style selection") {
+        val html = interactivityTabsTestPage()
+        html shouldContain "data-interaction-style=\"htmx\""
+        html shouldContain "data-interaction-style=\"alpine\""
+        html shouldContain "data-interaction-style=\"datastar\""
+    }
+
     test("exampleCard renders a preview area and a code area") {
         val html = layout(HOME) {
             exampleCard(

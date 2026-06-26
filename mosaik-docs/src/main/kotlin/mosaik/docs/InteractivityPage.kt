@@ -1105,6 +1105,7 @@ fun FlowContent.interactivityTabs(
             this.id = "$id-htmx"
             checked = true
             attributes["aria-label"] = "htmx"
+            attributes["data-interaction-style"] = "htmx"
         }
         div("tab-content bg-base-200 rounded-box p-4") {
             if (htmxPreview != null) {
@@ -1121,6 +1122,7 @@ fun FlowContent.interactivityTabs(
         input(type = InputType.radio, name = id, classes = "tab") {
             this.id = "$id-alpine"
             attributes["aria-label"] = "Alpine.js"
+            attributes["data-interaction-style"] = "alpine"
         }
         div("tab-content bg-base-200 rounded-box p-4") {
             if (alpinePreview != null) {
@@ -1137,6 +1139,7 @@ fun FlowContent.interactivityTabs(
         input(type = InputType.radio, name = id, classes = "tab") {
             this.id = "$id-datastar"
             attributes["aria-label"] = "Datastar"
+            attributes["data-interaction-style"] = "datastar"
         }
         div("tab-content bg-base-200 rounded-box p-4") {
             if (datastarPreview != null) {
