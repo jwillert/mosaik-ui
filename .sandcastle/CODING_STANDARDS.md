@@ -8,11 +8,16 @@
 
 ## Component API
 
-- Parameter-based DSL: design tokens (`variant`, `size`, extra `classes`) are function parameters (ADR 0003)
-- DSL blocks receive raw kotlinx.html receivers for simple components, enabling native HTML attribute and third-party extension access
-- Compound components with child constraints use prefixed DSL context types (e.g. `MCard`) after ADR 0009
 - Top-level components are extension functions on `FlowContent` (e.g. `fun FlowContent.mButton(...)`)
 - Function prefix is `m` (fixed, not configurable)
+- Parameter-based API per ADR-0003: design tokens (`variant`, `size`, `classes`) are function parameters; the block receives the underlying kotlinx.html element or a delegating context
+- DSL blocks receive raw kotlinx.html receivers for simple components, enabling native HTML attribute and third-party extension access
+- Top-level components are extension functions on `FlowContent` (e.g. `fun FlowContent.mButton(...)`)
+- Compound components with child constraints use prefixed DSL context types (e.g. `MCard`) after ADR 0009
+- Compound components (Card, Navbar, Footer) may use DSL context classes marked with `@MosaikDsl` to constrain child placement
+- HTML properties are delegated to the underlying kotlinx.html element, not wrapped
+- Function prefix is `m` (fixed, not configurable per ADR-0002)
+- Public DSL context type names use `M` prefix (e.g. `MCard`, `MCardBody`)
 - Placeholder package is `mosaik.ui.components`
 
 ## Style
