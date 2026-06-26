@@ -1,6 +1,7 @@
 package mosaik.ui.components
 
 import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
 import kotlinx.html.*
@@ -32,6 +33,11 @@ class LoadingTest : FunSpec({
             val html = render { mLoading(type) }
             html shouldContain "class=\"loading $css\""
         }
+    }
+
+    test("LoadingType declares exactly the six DaisyUI loading types") {
+        LoadingType.entries.map { it.name } shouldBe
+            listOf("Spinner", "Dots", "Ring", "Ball", "Bars", "Infinity")
     }
 
     test("every non-default size maps to its DaisyUI class and Md is omitted") {
