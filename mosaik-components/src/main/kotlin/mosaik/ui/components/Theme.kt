@@ -13,9 +13,10 @@ package mosaik.ui.components
  */
 
 /**
- * DSL marker for Mosaik compound component contexts. Applied to context types
- * (e.g. [MNavbar]) to prevent child components from being callable inside
- * nested ordinary HTML blocks where the DSL marker can prevent it.
+ * DSL marker for Mosaik compound components. Prevents implicit receiver lookup
+ * across Mosaik context boundaries, so child components can only be called from
+ * their designated parent contexts. Applied to context wrapper classes like
+ * [MCard] and [MCardBody].
  */
 @DslMarker
 annotation class MosaikDsl
