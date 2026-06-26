@@ -90,7 +90,7 @@ class LoadingTest : FunSpec({
 
     test("loading can be composed inside button content") {
         val html = render {
-            mButton(Variant.Primary) {
+            mButton(variant = ButtonVariant.Primary) {
                 mLoading(LoadingType.Spinner, Size.Sm, "mr-2")
                 +"Processing..."
             }

@@ -4,6 +4,7 @@ import kotlinx.html.*
 import kotlinx.html.stream.appendHTML
 import mosaik.ui.components.AlertVariant
 import mosaik.ui.components.BadgeVariant
+import mosaik.ui.components.ButtonVariant
 import mosaik.ui.components.Size
 import mosaik.ui.components.Variant
 import mosaik.ui.components.mAlert
@@ -288,10 +289,10 @@ fun buttonPage(): String = layout(BUTTON) {
     usageSection(
         """
         import mosaik.ui.components.mButton
-        import mosaik.ui.components.Variant
+        import mosaik.ui.components.ButtonVariant
         import mosaik.ui.components.Size
 
-        mButton(Variant.Primary, Size.Md) {
+        mButton(variant = ButtonVariant.Primary, size = Size.Md) {
             +"Save"
         }
         """.trimIndent(),
@@ -301,17 +302,17 @@ fun buttonPage(): String = layout(BUTTON) {
         h2 { +"Variants" }
         p {
             +"Every "
-            code { +"Variant" }
+            code { +"ButtonVariant" }
             +" maps to a DaisyUI colour role."
         }
         div("flex flex-wrap gap-2 not-prose") {
-            Variant.entries.forEach { v ->
+            ButtonVariant.entries.forEach { v ->
                 mButton(variant = v) { +v.name }
             }
         }
         codeBlock(
             """
-            Variant.entries.forEach { v ->
+            ButtonVariant.entries.forEach { v ->
                 mButton(variant = v) { +v.name }
             }
             """.trimIndent(),
@@ -329,13 +330,13 @@ fun buttonPage(): String = layout(BUTTON) {
         }
         div("flex flex-wrap items-center gap-2 not-prose") {
             Size.entries.forEach { s ->
-                mButton(variant = Variant.Primary, size = s) { +s.name }
+                mButton(variant = ButtonVariant.Primary, size = s) { +s.name }
             }
         }
         codeBlock(
             """
             Size.entries.forEach { s ->
-                mButton(variant = Variant.Primary, size = s) { +s.name }
+                mButton(variant = ButtonVariant.Primary, size = s) { +s.name }
             }
             """.trimIndent(),
         )
@@ -344,11 +345,11 @@ fun buttonPage(): String = layout(BUTTON) {
     section {
         h2 { +"Disabled" }
         div("flex flex-wrap gap-2 not-prose") {
-            mButton(variant = Variant.Primary) { disabled = true; +"Disabled" }
+            mButton(variant = ButtonVariant.Primary) { disabled = true; +"Disabled" }
         }
         codeBlock(
             """
-            mButton(variant = Variant.Primary) {
+            mButton(variant = ButtonVariant.Primary) {
                 disabled = true
                 +"Disabled"
             }
@@ -369,7 +370,7 @@ fun buttonPage(): String = layout(BUTTON) {
             id = "button-interactive",
             htmxPreview = {
                 div("flex items-center gap-2") {
-                    mButton(Variant.Primary) {
+                    mButton(variant = ButtonVariant.Primary) {
                         attributes["hx-post"] = "/_examples/button/submit"
                         attributes["hx-indicator"] = "#button-spinner-htmx"
                         attributes["hx-target"] = "#button-result-htmx"
@@ -390,7 +391,7 @@ fun buttonPage(): String = layout(BUTTON) {
                 div {
                     attributes["x-data"] = "{ loading: false, result: '' }"
                     div("flex items-center gap-2") {
-                        mButton(Variant.Primary) {
+                        mButton(variant = ButtonVariant.Primary) {
                             attributes["x-on:click"] = "loading = true; result = ''; fetch('/_examples/button/submit', {method: 'POST'}).then(r => r.text()).then(t => result = t).finally(() => loading = false)"
                             attributes["x-bind:disabled"] = "loading"
                             +"Submit"
@@ -411,7 +412,7 @@ fun buttonPage(): String = layout(BUTTON) {
                 div {
                     attributes["data-store"] = "{ loading: false, result: '' }"
                     div("flex items-center gap-2") {
-                        mButton(Variant.Primary) {
+                        mButton(variant = ButtonVariant.Primary) {
                             attributes["data-on-click"] = "\$loading=true; \$result=''; fetch('/_examples/button/submit', {method: 'POST'}).then(r => r.text()).then(t => \$result = t).finally(() => \$loading = false)"
                             attributes["data-bind-disabled"] = "\$loading"
                             +"Submit"
@@ -429,7 +430,7 @@ fun buttonPage(): String = layout(BUTTON) {
                 }
             },
             htmxCode = """
-                mButton(Variant.Primary) {
+                mButton(variant = ButtonVariant.Primary) {
                     attributes["hx-post"] = "/submit"
                     attributes["hx-indicator"] = "#spinner"
                     +"Submit"
@@ -442,7 +443,7 @@ fun buttonPage(): String = layout(BUTTON) {
             alpineCode = """
                 div {
                     attributes["x-data"] = "{ loading: false }"
-                    mButton(Variant.Primary) {
+                    mButton(variant = ButtonVariant.Primary) {
                         attributes["x-on:click"] = "loading = true; fetch('/submit', {method: 'POST'}).finally(() => loading = false)"
                         attributes["x-bind:disabled"] = "loading"
                         +"Submit"
@@ -456,7 +457,7 @@ fun buttonPage(): String = layout(BUTTON) {
             datastarCode = """
                 div {
                     attributes["data-signals"] = "{ loading: false }"
-                    mButton(Variant.Primary) {
+                    mButton(variant = ButtonVariant.Primary) {
                         attributes["data-on-click"] = "${'$'}loading=true"
                         attributes["data-post"] = "/submit"
                         attributes["data-bind-disabled"] = "${'$'}loading"
@@ -558,7 +559,7 @@ fun cardPage(): String = layout(CARD) {
                 mCardTitle { +"Shoes!" }
                 p { +"If a dog chews shoes whose shoes does he choose?" }
                 mCardActions("justify-end") {
-                    mButton(Variant.Primary) { +"Buy Now" }
+                    mButton(variant = ButtonVariant.Primary) { +"Buy Now" }
                 }
             }
         }
@@ -603,7 +604,7 @@ fun cardPage(): String = layout(CARD) {
                     mCardTitle { +"Buy these shoes" }
                     p { +"If a dog chews shoes whose shoes does he choose?" }
                     mCardActions("justify-end") {
-                        mButton(Variant.Primary) { +"Buy Now" }
+                        mButton(variant = ButtonVariant.Primary) { +"Buy Now" }
                     }
                 }
             }
@@ -615,7 +616,7 @@ fun cardPage(): String = layout(CARD) {
                     mCardTitle { +"Buy these shoes" }
                     p { +"If a dog chews shoes whose shoes does he choose?" }
                     mCardActions("justify-end") {
-                        mButton(Variant.Primary) { +"Buy Now" }
+                        mButton(variant = ButtonVariant.Primary) { +"Buy Now" }
                     }
                 }
             }
@@ -861,7 +862,7 @@ fun navbarPage(): String = layout(NAVBAR) {
                 a(classes = "btn btn-ghost text-xl") { +"Mosaik" }
             }
             mNavbarEnd {
-                mButton(Variant.Primary) { +"Sign up" }
+                mButton(variant = ButtonVariant.Primary) { +"Sign up" }
             }
         }
         """.trimIndent(),
@@ -882,7 +883,7 @@ fun navbarPage(): String = layout(NAVBAR) {
                     a(classes = "btn btn-ghost text-xl") { +"Mosaik" }
                 }
                 mNavbarEnd {
-                    mButton(Variant.Primary) { +"Sign up" }
+                    mButton(variant = ButtonVariant.Primary) { +"Sign up" }
                 }
             }
         }
@@ -893,7 +894,7 @@ fun navbarPage(): String = layout(NAVBAR) {
                     a(classes = "btn btn-ghost text-xl") { +"Mosaik" }
                 }
                 mNavbarEnd {
-                    mButton(Variant.Primary) { +"Sign up" }
+                    mButton(variant = ButtonVariant.Primary) { +"Sign up" }
                 }
             }
             """.trimIndent(),
@@ -940,7 +941,7 @@ fun navbarPage(): String = layout(NAVBAR) {
                     a(classes = "btn btn-ghost") { +"Docs" }
                 }
                 mNavbarEnd {
-                    mButton(Variant.Primary) { +"Sign up" }
+                    mButton(variant = ButtonVariant.Primary) { +"Sign up" }
                 }
             }
         }
@@ -954,7 +955,7 @@ fun navbarPage(): String = layout(NAVBAR) {
                     a(classes = "btn btn-ghost") { +"Docs" }
                 }
                 mNavbarEnd {
-                    mButton(Variant.Primary) { +"Sign up" }
+                    mButton(variant = ButtonVariant.Primary) { +"Sign up" }
                 }
             }
             """.trimIndent(),

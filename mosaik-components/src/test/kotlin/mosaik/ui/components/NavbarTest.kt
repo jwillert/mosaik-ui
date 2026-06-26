@@ -65,7 +65,7 @@ class NavbarTest : FunSpec({
                     a { +"Docs" }
                 }
                 mNavbarEnd {
-                    mButton(Variant.Primary) { +"Sign up" }
+                    mButton(variant = ButtonVariant.Primary) { +"Sign up" }
                 }
             }
         }
