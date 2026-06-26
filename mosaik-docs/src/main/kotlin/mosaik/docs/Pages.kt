@@ -68,6 +68,19 @@ val GUIDES = listOf(INTERACTIVITY)
 const val DEFAULT_THEME = "light"
 
 /**
+ * The default interaction style for interactive examples. The
+ * [interactionStyleSwitcher] allows the user to choose between htmx, Alpine.js,
+ * and Datastar; the choice persists across navigation via localStorage.
+ */
+const val DEFAULT_INTERACTION_STYLE = "htmx"
+
+/**
+ * Every available interaction style offered by the [interactionStyleSwitcher].
+ * Each maps to a library used in the docs' interactive examples (ADR-0005).
+ */
+val INTERACTION_STYLES = listOf("htmx", "alpine", "datastar")
+
+/**
  * Every DaisyUI built-in theme, offered by the [themeSwitcher]. `input.css`
  * enables `themes: all`, so each of these compiles into `output.css` and can be
  * previewed live. Order matches DaisyUI's own theme list.
@@ -120,7 +133,7 @@ fun layout(active: NavItem, content: FlowContent.() -> Unit): String =
         }
     }
 
-/** Left navigation listing Home, component pages, guide pages, and the theme switcher. */
+/** Left navigation listing Home, component pages, guide pages, the theme switcher, and the interaction style switcher. */
 private fun FlowContent.sidebar(activePath: String) {
     aside(classes = "w-64 shrink-0 bg-base-200 p-4") {
         h1("text-xl font-bold px-2 pb-4") { +"Mosaik UI" }
@@ -132,6 +145,7 @@ private fun FlowContent.sidebar(activePath: String) {
             GUIDES.forEach { navLink(it, activePath) }
         }
         themeSwitcher()
+        interactionStyleSwitcher()
     }
 }
 
@@ -171,8 +185,45 @@ private fun FlowContent.themeSwitcher() {
 }
 
 /**
- * Reapplies the saved theme (if any) on load and syncs the [themeSwitcher] to the
- * active theme, so the dropdown reflects the previewed theme across navigation.
+ * A `<select>` in the sidebar that lets users choose their preferred interaction
+ * style for interactive examples (htmx, Alpine.js, or Datastar). On change it
+ * persists the choice to localStorage and triggers the interactivity tabs to
+ * switch. This is docs-only JavaScript — components remain CSS-only.
+ */
+private fun FlowContent.interactionStyleSwitcher() {
+    div("px-2 pt-4") {
+        label("label text-xs opacity-70") {
+            attributes["for"] = "interaction-style-switcher"
+            +"Interaction Style"
+        }
+        select(classes = "select select-sm select-bordered w-full mt-1") {
+            id = "interaction-style-switcher"
+            attributes["onchange"] =
+                "localStorage.setItem('mosaik-interaction-style', this.value);" +
+                    "document.querySelectorAll('.tabs input[type=\"radio\"]').forEach(function(input) {" +
+                    "  if (input.getAttribute('data-interaction-style') === localStorage.getItem('mosaik-interaction-style')) {" +
+                    "    input.checked = true;" +
+                    "  }" +
+                    "});"
+            INTERACTION_STYLES.forEach { style ->
+                option {
+                    value = style
+                    +when (style) {
+                        "htmx" -> "htmx"
+                        "alpine" -> "Alpine.js"
+                        "datastar" -> "Datastar"
+                        else -> style
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Reapplies the saved theme and interaction style (if any) on load and syncs the
+ * [themeSwitcher] and [interactionStyleSwitcher] to the active values, so the
+ * dropdowns reflect the previewed state across navigation.
  */
 private fun FlowContent.themeRestoreScript() {
     script {
@@ -183,6 +234,16 @@ private fun FlowContent.themeRestoreScript() {
               if (saved) { document.documentElement.setAttribute('data-theme', saved); }
               var sel = document.getElementById('theme-switcher');
               if (sel) { sel.value = document.documentElement.getAttribute('data-theme'); }
+
+              var interactionStyle = localStorage.getItem('mosaik-interaction-style') || '$DEFAULT_INTERACTION_STYLE';
+              var styleSel = document.getElementById('interaction-style-switcher');
+              if (styleSel) { styleSel.value = interactionStyle; }
+
+              document.querySelectorAll('.tabs input[type="radio"]').forEach(function(input) {
+                if (input.getAttribute('data-interaction-style') === interactionStyle) {
+                  input.checked = true;
+                }
+              });
             })();
             """.trimIndent()
         }
