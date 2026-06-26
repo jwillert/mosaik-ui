@@ -15,6 +15,7 @@ Create these labels in GitHub:
 
 - `agent:implement` — add to an issue to start implementation.
 - `agent:review` — added to an internal PR to start automated review.
+- `agent:update-branch` — add to an internal PR to merge its base branch and let the agent resolve conflicts if needed.
 - `agent:in-progress` — workflow is currently running.
 - `agent:blocked` — workflow failed or refused to run.
 
@@ -27,4 +28,5 @@ Create these labels in GitHub:
 5. The implementation workflow labels the PR `agent:review`.
 6. The review workflow only runs for PR branches in this repository, not external forks. It may commit refinements, posts a review, and marks the PR ready.
 7. Humans still merge PRs manually. There is no auto-merge step.
-8. When an agent PR is merged, the unblock workflow scans open `ready-for-agent` + `agent:blocked` issues that were blocked by the issue closed by that PR. If all tracked blockers are now closed, it removes `agent:blocked` and re-adds `agent:implement` automatically.
+8. If an internal PR is out of date or has merge conflicts, add `agent:update-branch`. The update-branch workflow first tries a normal `git merge origin/<base> --no-edit`; if conflicts remain, Claude resolves them, commits the merge, pushes with `--force-with-lease`, and comments with the resolution summary.
+9. When an agent PR is merged, the unblock workflow scans open `ready-for-agent` + `agent:blocked` issues that were blocked by the issue closed by that PR. If all tracked blockers are now closed, it removes `agent:blocked` and re-adds `agent:implement` automatically.
