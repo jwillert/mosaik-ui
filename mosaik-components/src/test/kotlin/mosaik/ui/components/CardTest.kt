@@ -41,6 +41,23 @@ class CardTest :
             html shouldContain "<div class=\"card-actions\">Buy</div>"
         }
 
+        test("card body can render at the current flow position for form-wrapped card contents") {
+            val html =
+                render {
+                    mCard {
+                        form {
+                            mCardBody {
+                                mCardTitle { +"Login" }
+                                mCardActions("justify-end") { +"Submit" }
+                            }
+                        }
+                    }
+                }
+
+            html shouldContain "<form><div class=\"card-body\"><h2 class=\"card-title\">Login</h2>" +
+                "<div class=\"card-actions justify-end\">Submit</div></div></form>"
+        }
+
         test("sub-components accept custom classes that are appended after their base class") {
             val html =
                 render {

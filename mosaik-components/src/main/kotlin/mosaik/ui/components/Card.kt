@@ -87,7 +87,22 @@ fun MCard.mCardBody(
     classes: String? = null,
     block: MCardBody.() -> Unit = {},
 ) {
-    underlying.div(classes = buildClasses("card-body", classes)) {
+    underlying.mCardBody(classes, block)
+}
+
+/**
+ * The `card-body` section rendered at the current flow position.
+ *
+ * Prefer the scoped [MCard.mCardBody] inside a plain card. This overload exists
+ * for valid HTML structures where another container (for example a `<form>`)
+ * must wrap the card body while still using the Mosaik component API instead of
+ * raw DaisyUI class strings.
+ */
+fun FlowContent.mCardBody(
+    classes: String? = null,
+    block: MCardBody.() -> Unit = {},
+) {
+    div(classes = buildClasses("card-body", classes)) {
         MCardBody(this).block()
     }
 }
@@ -101,7 +116,15 @@ fun MCardBody.mCardTitle(
     classes: String? = null,
     block: H2.() -> Unit = {},
 ) {
-    underlying.h2(classes = buildClasses("card-title", classes), block = block)
+    underlying.mCardTitle(classes, block)
+}
+
+/** Renders a DaisyUI `card-title` heading at the current flow position. */
+fun FlowContent.mCardTitle(
+    classes: String? = null,
+    block: H2.() -> Unit = {},
+) {
+    h2(classes = buildClasses("card-title", classes), block = block)
 }
 
 /**
@@ -113,5 +136,13 @@ fun MCardBody.mCardActions(
     classes: String? = null,
     block: DIV.() -> Unit = {},
 ) {
-    underlying.div(classes = buildClasses("card-actions", classes), block = block)
+    underlying.mCardActions(classes, block)
+}
+
+/** Renders a DaisyUI `card-actions` row at the current flow position. */
+fun FlowContent.mCardActions(
+    classes: String? = null,
+    block: DIV.() -> Unit = {},
+) {
+    div(classes = buildClasses("card-actions", classes), block = block)
 }
