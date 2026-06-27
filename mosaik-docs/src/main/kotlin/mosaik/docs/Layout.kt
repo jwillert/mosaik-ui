@@ -28,13 +28,44 @@ val INTERACTION_STYLES = listOf("htmx", "alpine", "datastar")
  * enables `themes: all`, so each of these compiles into `output.css` and can be
  * previewed live. Order matches DaisyUI's own theme list.
  */
-val THEMES = listOf(
-    "light", "dark", "cupcake", "bumblebee", "emerald", "corporate", "synthwave",
-    "retro", "cyberpunk", "valentine", "halloween", "garden", "forest", "aqua",
-    "lofi", "pastel", "fantasy", "wireframe", "black", "luxury", "dracula", "cmyk",
-    "autumn", "business", "acid", "lemonade", "night", "coffee", "winter", "dim",
-    "nord", "sunset", "caramellatte", "abyss", "silk",
-)
+val THEMES =
+    listOf(
+        "light",
+        "dark",
+        "cupcake",
+        "bumblebee",
+        "emerald",
+        "corporate",
+        "synthwave",
+        "retro",
+        "cyberpunk",
+        "valentine",
+        "halloween",
+        "garden",
+        "forest",
+        "aqua",
+        "lofi",
+        "pastel",
+        "fantasy",
+        "wireframe",
+        "black",
+        "luxury",
+        "dracula",
+        "cmyk",
+        "autumn",
+        "business",
+        "acid",
+        "lemonade",
+        "night",
+        "coffee",
+        "winter",
+        "dim",
+        "nord",
+        "sunset",
+        "caramellatte",
+        "abyss",
+        "silk",
+    )
 
 /**
  * Opens `<html data-theme="light" lang="en">`. The attributes are passed at tag
@@ -51,7 +82,10 @@ private fun <T> TagConsumer<T>.htmlDocument(block: HTML.() -> Unit): T =
  * that highlights the [active] page (whose label is also the document title).
  * Returns a full HTML document string.
  */
-fun layout(active: NavItem, content: FlowContent.() -> Unit): String =
+fun layout(
+    active: NavItem,
+    content: FlowContent.() -> Unit,
+): String =
     buildString {
         append("<!DOCTYPE html>")
         appendHTML(prettyPrint = false).htmlDocument {
@@ -104,7 +138,10 @@ private fun FlowContent.sidebar(activePath: String) {
     }
 }
 
-private fun UL.navLink(item: NavItem, activePath: String) {
+private fun UL.navLink(
+    item: NavItem,
+    activePath: String,
+) {
     li {
         // DaisyUI marks the current menu entry with `menu-active`.
         val active = if (item.path == activePath) "menu-active" else ""
@@ -128,7 +165,7 @@ private fun FlowContent.themeSwitcher() {
             id = "theme-switcher"
             attributes["onchange"] =
                 "document.documentElement.setAttribute('data-theme', this.value);" +
-                    "localStorage.setItem('mosaik-theme', this.value);"
+                "localStorage.setItem('mosaik-theme', this.value);"
             THEMES.forEach { theme ->
                 option {
                     value = theme
@@ -156,11 +193,11 @@ private fun FlowContent.interactionStyleSwitcher() {
             id = "interaction-style-switcher"
             attributes["onchange"] =
                 "localStorage.setItem('mosaik-interaction-style', this.value);" +
-                    "document.querySelectorAll('.tabs input[type=\"radio\"]').forEach(function(input) {" +
-                    "  if (input.getAttribute('data-interaction-style') === localStorage.getItem('mosaik-interaction-style')) {" +
-                    "    input.checked = true;" +
-                    "  }" +
-                    "});"
+                "document.querySelectorAll('.tabs input[type=\"radio\"]').forEach(function(input) {" +
+                "  if (input.getAttribute('data-interaction-style') === localStorage.getItem('mosaik-interaction-style')) {" +
+                "    input.checked = true;" +
+                "  }" +
+                "});"
             INTERACTION_STYLES.forEach { style ->
                 option {
                     value = style
@@ -184,24 +221,25 @@ private fun FlowContent.interactionStyleSwitcher() {
 private fun FlowContent.themeRestoreScript() {
     script {
         unsafe {
-            +"""
-            (function () {
-              var saved = localStorage.getItem('mosaik-theme');
-              if (saved) { document.documentElement.setAttribute('data-theme', saved); }
-              var sel = document.getElementById('theme-switcher');
-              if (sel) { sel.value = document.documentElement.getAttribute('data-theme'); }
+            +
+                """
+                (function () {
+                  var saved = localStorage.getItem('mosaik-theme');
+                  if (saved) { document.documentElement.setAttribute('data-theme', saved); }
+                  var sel = document.getElementById('theme-switcher');
+                  if (sel) { sel.value = document.documentElement.getAttribute('data-theme'); }
 
-              var interactionStyle = localStorage.getItem('mosaik-interaction-style') || '$DEFAULT_INTERACTION_STYLE';
-              var styleSel = document.getElementById('interaction-style-switcher');
-              if (styleSel) { styleSel.value = interactionStyle; }
+                  var interactionStyle = localStorage.getItem('mosaik-interaction-style') || '$DEFAULT_INTERACTION_STYLE';
+                  var styleSel = document.getElementById('interaction-style-switcher');
+                  if (styleSel) { styleSel.value = interactionStyle; }
 
-              document.querySelectorAll('.tabs input[type="radio"]').forEach(function(input) {
-                if (input.getAttribute('data-interaction-style') === interactionStyle) {
-                  input.checked = true;
-                }
-              });
-            })();
-            """.trimIndent()
+                  document.querySelectorAll('.tabs input[type="radio"]').forEach(function(input) {
+                    if (input.getAttribute('data-interaction-style') === interactionStyle) {
+                      input.checked = true;
+                    }
+                  });
+                })();
+                """.trimIndent()
         }
     }
 }

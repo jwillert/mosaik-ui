@@ -3,6 +3,66 @@ package mosaik.docs
 import kotlinx.html.*
 
 /**
+ * Shared documentation blocks extracted from component pages. These helpers
+ * are reused across multiple component reference galleries to keep rendering
+ * consistent (PRD #10, issue #11).
+ */
+
+/** A row in an [apiReference] table: one component parameter. */
+data class ApiParam(
+    val name: String,
+    val type: String,
+    val default: String,
+    val description: String,
+)
+
+/** The `./gradlew mosaikAdd` install command for [component]. */
+fun FlowContent.installSection(component: String) {
+    h2 { +"Installation" }
+    codeBlock("./gradlew mosaikAdd --component=$component")
+}
+
+/** A minimal Kotlin usage snippet under a "Basic usage" heading. */
+fun FlowContent.usageSection(code: String) {
+    h2 { +"Basic usage" }
+    codeBlock(code)
+}
+
+/** A fenced, monospaced code block. Text is escaped by kotlinx.html. */
+fun FlowContent.codeBlock(code: String) {
+    pre("bg-base-200 rounded-box p-4 overflow-x-auto") {
+        code { +code }
+    }
+}
+
+/** The parameter reference table closing every component page. */
+fun FlowContent.apiReference(params: List<ApiParam>) {
+    h2 { +"API reference" }
+    div("overflow-x-auto") {
+        table("table table-zebra") {
+            thead {
+                tr {
+                    th { +"Parameter" }
+                    th { +"Type" }
+                    th { +"Default" }
+                    th { +"Description" }
+                }
+            }
+            tbody {
+                params.forEach { p ->
+                    tr {
+                        td { code { +p.name } }
+                        td { code { +p.type } }
+                        td { code { +p.default } }
+                        td { +p.description }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**
  * Renders DaisyUI CSS-only radio tabs for toggling between htmx, Alpine.js,
  * and Datastar code examples. Each tab group uses the [id] parameter as the
  * unique radio group `name` to prevent interference between multiple tab
@@ -78,19 +138,4 @@ fun FlowContent.interactivityTabs(
             }
         }
     }
-}
-
-/**
- * A test page that renders the [interactivityTabs] helper with example code
- * blocks, so smoke tests can verify the tab HTML structure without depending
- * on the interactivity guide content.
- */
-fun interactivityTabsTestPage(): String = layout(INTERACTIVITY) {
-    h1 { +"Test page" }
-    interactivityTabs(
-        id = "test-tabs",
-        htmxCode = "htmx example",
-        alpineCode = "alpine example",
-        datastarCode = "datastar example",
-    )
 }
