@@ -19,7 +19,8 @@ package-lock.json
 npm-debug.log*
 *.tsbuildinfo
 
-# Generated/raw frontend vendor assets
+# Generated docs static assets
+mosaik-docs/src/main/resources/static/output.css
 mosaik-docs/src/main/resources/static/vendor/
 
 .sandcastle/worktrees/
