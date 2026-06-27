@@ -47,8 +47,8 @@ class InteractivityPreviewTest :
 
         test("card page includes Datastar preview with working demo route") {
             val html = cardPage()
-            html shouldContain "data-intersects"
-            html shouldContain "data-get"
+            html shouldContain "data-signals"
+            html shouldContain "data-on-intersect__once"
             html shouldContain "/_examples/card/content"
             html shouldContain "data-text"
         }

@@ -400,7 +400,7 @@ class PagesTest :
 
         test("the Datastar building blocks section documents core primitives and notes SSE requirement") {
             val html = interactivityPage()
-            html shouldContain "data-store"
+            html shouldContain "data-signals"
             html shouldContain "data-on"
             html shouldContain "SSE"
             html shouldContain "Server-Sent Events"
@@ -896,7 +896,7 @@ class PagesTest :
 
         test("the Datastar building blocks section documents core primitives and notes SSE requirement") {
             val html = interactivityPage()
-            html shouldContain "data-store"
+            html shouldContain "data-signals"
             html shouldContain "data-on"
             html shouldContain "SSE"
             html shouldContain "Server-Sent Events"
