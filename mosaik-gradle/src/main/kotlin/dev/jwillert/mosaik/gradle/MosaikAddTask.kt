@@ -20,7 +20,6 @@ import java.io.File
  * is passed. Every file is logged so the user sees exactly what changed.
  */
 abstract class MosaikAddTask : DefaultTask() {
-
     @get:Optional
     @get:Input
     @get:Option(option = "component", description = "Name of the component to install.")
@@ -41,17 +40,20 @@ abstract class MosaikAddTask : DefaultTask() {
 
     @TaskAction
     fun add() {
-        val name = component.orNull
-            ?: throw GradleException("Specify a component: ./gradlew mosaikAdd --component=<name>")
-        val pkg = packageName.orNull
-            ?: throw GradleException("Set mosaikUi { packageName } before installing components.")
+        val name =
+            component.orNull
+                ?: throw GradleException("Specify a component: ./gradlew mosaikAdd --component=<name>")
+        val pkg =
+            packageName.orNull
+                ?: throw GradleException("Set mosaikUi { packageName } before installing components.")
 
         val registry = BundledRegistry.load()
-        val resolved = try {
-            Resolver(registry).resolve(name)
-        } catch (e: RuntimeException) {
-            throw GradleException(e.message ?: "Could not resolve component '$name'.", e)
-        }
+        val resolved =
+            try {
+                Resolver(registry).resolve(name)
+            } catch (e: RuntimeException) {
+                throw GradleException(e.message ?: "Could not resolve component '$name'.", e)
+            }
 
         val writer = FileWriter(pkg)
         val packageDir = File(sourceRoot.get().asFile, pkg.replace('.', '/'))

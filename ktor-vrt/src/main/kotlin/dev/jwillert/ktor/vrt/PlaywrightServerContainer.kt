@@ -5,13 +5,15 @@ import org.testcontainers.containers.wait.strategy.Wait
 import org.testcontainers.utility.DockerImageName
 
 // Keep PLAYWRIGHT_VERSION in sync with the `playwright` version in gradle/libs.versions.toml.
-class PlaywrightServerContainer : GenericContainer<PlaywrightServerContainer>(
-    DockerImageName.parse("mcr.microsoft.com/playwright:v$PLAYWRIGHT_VERSION-jammy"),
-) {
+class PlaywrightServerContainer :
+    GenericContainer<PlaywrightServerContainer>(
+        DockerImageName.parse("mcr.microsoft.com/playwright:v$PLAYWRIGHT_VERSION-jammy"),
+    ) {
     init {
         withExposedPorts(SERVER_PORT)
         withCommand(
-            "/bin/sh", "-c",
+            "/bin/sh",
+            "-c",
             "npx playwright@$PLAYWRIGHT_VERSION run-server --port $SERVER_PORT --host 0.0.0.0",
         )
         waitingFor(Wait.forListeningPort())

@@ -8,17 +8,17 @@ import org.gradle.api.tasks.TaskAction
  * dependencies, so users can discover what they can install.
  */
 abstract class MosaikListTask : DefaultTask() {
-
     @TaskAction
     fun list() {
         val registry = BundledRegistry.load()
         logger.lifecycle("Available components:")
         for (entry in registry.all()) {
-            val deps = if (entry.dependencies.isEmpty()) {
-                ""
-            } else {
-                " (depends on: ${entry.dependencies.joinToString(", ")})"
-            }
+            val deps =
+                if (entry.dependencies.isEmpty()) {
+                    ""
+                } else {
+                    " (depends on: ${entry.dependencies.joinToString(", ")})"
+                }
             logger.lifecycle("  ${entry.name} — ${entry.description}$deps")
         }
     }

@@ -14,7 +14,8 @@ import java.io.File
 import javax.imageio.ImageIO
 
 internal fun parseAttributes(spec: String): Map<String, String> =
-    spec.split(",")
+    spec
+        .split(",")
         .map { it.trim() }
         .filter { it.isNotEmpty() }
         .associate { entry ->
@@ -29,11 +30,12 @@ internal fun buildPage(
     htmlAttributes: Map<String, String>,
     wrapperClasses: Set<String>,
 ): String {
-    val fragment = createHTML().div {
-        id = "capture"
-        if (wrapperClasses.isNotEmpty()) classes = wrapperClasses
-        scenario.render(this)
-    }
+    val fragment =
+        createHTML().div {
+            id = "capture"
+            if (wrapperClasses.isNotEmpty()) classes = wrapperClasses
+            scenario.render(this)
+        }
     val attrs = htmlAttributes.entries.joinToString(" ") { (k, v) -> """$k="$v"""" }
     return """
         <!DOCTYPE html>
@@ -45,7 +47,7 @@ internal fun buildPage(
         </head>
         <body>$fragment</body>
         </html>
-    """.trimIndent()
+        """.trimIndent()
 }
 
 class VrtHarness {
@@ -56,8 +58,13 @@ class VrtHarness {
     private val diffDir = File(requireProperty("vrt.diffDir"))
     private val updateGoldens = System.getProperty("vrt.updateGoldens") == "true"
     private val htmlAttributes = parseAttributes(System.getProperty("vrt.htmlAttributes", ""))
-    private val wrapperClasses = System.getProperty("vrt.wrapperClasses", "")
-        .split(Regex("\\s+")).map { it.trim() }.filter { it.isNotEmpty() }.toSet()
+    private val wrapperClasses =
+        System
+            .getProperty("vrt.wrapperClasses", "")
+            .split(Regex("\\s+"))
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+            .toSet()
 
     private val tolerancePercent = if (isDocker) 0.1 else 5.0
 
@@ -69,20 +76,22 @@ class VrtHarness {
 
     fun start() {
         try {
-            playwright = if (isDocker) {
-                Playwright.create(
-                    Playwright.CreateOptions().setEnv(mapOf("PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD" to "1")),
-                )
-            } else {
-                Playwright.create()
-            }
-            browser = if (isDocker) {
-                val c = PlaywrightServerContainer().apply { start() }
-                container = c
-                playwright.chromium().connect(c.wsEndpoint())
-            } else {
-                playwright.chromium().launch(BrowserType.LaunchOptions().setHeadless(true))
-            }
+            playwright =
+                if (isDocker) {
+                    Playwright.create(
+                        Playwright.CreateOptions().setEnv(mapOf("PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD" to "1")),
+                    )
+                } else {
+                    Playwright.create()
+                }
+            browser =
+                if (isDocker) {
+                    val c = PlaywrightServerContainer().apply { start() }
+                    container = c
+                    playwright.chromium().connect(c.wsEndpoint())
+                } else {
+                    playwright.chromium().launch(BrowserType.LaunchOptions().setHeadless(true))
+                }
             goldenDir.mkdirs()
             diffDir.mkdirs()
         } catch (t: Throwable) {
@@ -98,9 +107,10 @@ class VrtHarness {
     }
 
     fun check(scenario: Scenario): String? {
-        val page = browser.newPage(
-            Browser.NewPageOptions().setViewportSize(1024, 768).setDeviceScaleFactor(1.0),
-        )
+        val page =
+            browser.newPage(
+                Browser.NewPageOptions().setViewportSize(1024, 768).setDeviceScaleFactor(1.0),
+            )
         try {
             page.setContent(buildPage(scenario, css, htmlAttributes, wrapperClasses))
             scenario.beforeShot?.let { page.evaluate(it) }
@@ -114,9 +124,10 @@ class VrtHarness {
 
             val expected = ImageIO.read(golden)
             val actual = ImageIO.read(ByteArrayInputStream(shot))
-            val result = ImageComparison(expected, actual)
-                .setAllowingPercentOfDifferentPixels(tolerancePercent)
-                .compareImages()
+            val result =
+                ImageComparison(expected, actual)
+                    .setAllowingPercentOfDifferentPixels(tolerancePercent)
+                    .compareImages()
 
             if (result.imageComparisonState == ImageComparisonState.MATCH) return null
 

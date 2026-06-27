@@ -11,7 +11,9 @@ import kotlinx.html.*
  * component can't render. The enum lives here, next to [mLoading], not in
  * Theme.kt.
  */
-enum class LoadingType(val token: String) {
+enum class LoadingType(
+    val token: String,
+) {
     Spinner("spinner"),
     Dots("dots"),
     Ring("ring"),
@@ -42,12 +44,13 @@ fun FlowContent.mLoading(
     block: SPAN.() -> Unit = {},
 ) {
     span(
-        classes = buildClasses(
-            "loading",
-            "loading-${type.token}",
-            size.token?.let { "loading-$it" },
-            classes,
-        ),
+        classes =
+            buildClasses(
+                "loading",
+                "loading-${type.token}",
+                size.token?.let { "loading-$it" },
+                classes,
+            ),
         block = block,
     )
 }

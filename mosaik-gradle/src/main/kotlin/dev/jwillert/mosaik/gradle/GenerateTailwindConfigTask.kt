@@ -17,7 +17,6 @@ import java.io.File
  * `@source` directives — no separate `tailwind.config.js` is needed.
  */
 abstract class GenerateTailwindConfigTask : DefaultTask() {
-
     @get:Internal
     abstract val projectDir: DirectoryProperty
 
@@ -51,7 +50,10 @@ abstract class GenerateTailwindConfigTask : DefaultTask() {
         }
     }
 
-    private fun writeIfMissing(file: File, content: String) {
+    private fun writeIfMissing(
+        file: File,
+        content: String,
+    ) {
         if (file.exists()) {
             logger.lifecycle("mosaik: ${file.name} already exists — leaving it untouched")
         } else {

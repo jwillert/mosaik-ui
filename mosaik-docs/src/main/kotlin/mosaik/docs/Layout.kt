@@ -100,7 +100,10 @@ fun layout(
                 script(src = "https://unpkg.com/alpinejs@3.14.7/dist/cdn.min.js") { defer = true }
                 script(src = "https://cdn.jsdelivr.net/npm/@sudodevnull/datastar@0.21.1") { type = "module" }
                 // Syntax highlighting for Kotlin code blocks.
-                link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css")
+                link(
+                    rel = "stylesheet",
+                    href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css",
+                )
                 script(src = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js") {}
                 script(src = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/kotlin.min.js") {}
                 script {
@@ -194,7 +197,8 @@ private fun FlowContent.interactionStyleSwitcher() {
             attributes["onchange"] =
                 "localStorage.setItem('mosaik-interaction-style', this.value);" +
                 "document.querySelectorAll('.tabs input[type=\"radio\"]').forEach(function(input) {" +
-                "  if (input.getAttribute('data-interaction-style') === localStorage.getItem('mosaik-interaction-style')) {" +
+                "  if (input.getAttribute('data-interaction-style') === " +
+                "localStorage.getItem('mosaik-interaction-style')) {" +
                 "    input.checked = true;" +
                 "  }" +
                 "});"

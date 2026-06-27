@@ -12,7 +12,9 @@ import kotlinx.html.*
  * reject a role the alert can't render. The enum lives here, next to [mAlert],
  * not in Theme.kt.
  */
-enum class AlertVariant(val token: String) {
+enum class AlertVariant(
+    val token: String,
+) {
     Info("info"),
     Success("success"),
     Warning("warning"),
@@ -46,11 +48,12 @@ fun FlowContent.mAlert(
     block: DIV.() -> Unit = {},
 ) {
     div(
-        classes = buildClasses(
-            "alert",
-            "alert-${variant.token}",
-            classes,
-        ),
+        classes =
+            buildClasses(
+                "alert",
+                "alert-${variant.token}",
+                classes,
+            ),
     ) {
         attributes["role"] = "alert"
         block()

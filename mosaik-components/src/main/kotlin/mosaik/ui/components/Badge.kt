@@ -11,7 +11,9 @@ import kotlinx.html.*
  * the compiler from accepting a role the badge can't render. The enum lives here,
  * next to [mBadge], not in Theme.kt.
  */
-enum class BadgeVariant(val token: String) {
+enum class BadgeVariant(
+    val token: String,
+) {
     Primary("primary"),
     Secondary("secondary"),
     Accent("accent"),
@@ -46,12 +48,13 @@ fun FlowContent.mBadge(
     block: SPAN.() -> Unit = {},
 ) {
     span(
-        classes = buildClasses(
-            "badge",
-            "badge-${variant.token}",
-            size.token?.let { "badge-$it" },
-            classes,
-        ),
+        classes =
+            buildClasses(
+                "badge",
+                "badge-${variant.token}",
+                size.token?.let { "badge-$it" },
+                classes,
+            ),
         block = block,
     )
 }

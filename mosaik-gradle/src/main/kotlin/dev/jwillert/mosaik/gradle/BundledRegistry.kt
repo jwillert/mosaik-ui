@@ -9,7 +9,6 @@ import org.gradle.api.GradleException
  * Reading from the classpath keeps `mosaikAdd` fully offline.
  */
 internal object BundledRegistry {
-
     private const val REGISTRY = "/mosaik/registry.json"
     private const val COMPONENTS_DIR = "/mosaik/components"
 
@@ -20,7 +19,10 @@ internal object BundledRegistry {
     fun componentSource(fileName: String): String = read("$COMPONENTS_DIR/$fileName")
 
     private fun read(path: String): String =
-        BundledRegistry::class.java.getResourceAsStream(path)?.bufferedReader()?.use { it.readText() }
+        BundledRegistry::class.java
+            .getResourceAsStream(path)
+            ?.bufferedReader()
+            ?.use { it.readText() }
             ?: throw GradleException(
                 "Bundled resource '$path' not found on the plugin classpath. " +
                     "This is a packaging error in the mosaik-gradle plugin.",

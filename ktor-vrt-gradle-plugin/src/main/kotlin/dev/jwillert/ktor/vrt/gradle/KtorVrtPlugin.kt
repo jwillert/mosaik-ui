@@ -7,12 +7,12 @@ import org.gradle.api.tasks.testing.Test
 import java.util.Properties
 
 class KtorVrtPlugin : Plugin<Project> {
-
     private val ktorVrtVersion: String by lazy {
         val props = Properties()
-        val stream = checkNotNull(javaClass.getResourceAsStream("/ktor-vrt.properties")) {
-            "ktor-vrt.properties not found on the plugin classpath"
-        }
+        val stream =
+            checkNotNull(javaClass.getResourceAsStream("/ktor-vrt.properties")) {
+                "ktor-vrt.properties not found on the plugin classpath"
+            }
         stream.use { props.load(it) }
         requireNotNull(props.getProperty("ktorVrtVersion")) {
             "ktorVrtVersion missing from ktor-vrt.properties"
@@ -29,16 +29,21 @@ class KtorVrtPlugin : Plugin<Project> {
         }
     }
 
-    private fun configure(project: Project, ext: KtorVrtExtension) {
+    private fun configure(
+        project: Project,
+        ext: KtorVrtExtension,
+    ) {
         val sourceSets = project.extensions.getByType(SourceSetContainer::class.java)
         val main = sourceSets.getByName("main")
         val vrt = sourceSets.create("vrt")
         vrt.compileClasspath += main.output
         vrt.runtimeClasspath += main.output
 
-        project.configurations.getByName("vrtImplementation")
+        project.configurations
+            .getByName("vrtImplementation")
             .extendsFrom(project.configurations.getByName("implementation"))
-        project.configurations.getByName("vrtRuntimeOnly")
+        project.configurations
+            .getByName("vrtRuntimeOnly")
             .extendsFrom(project.configurations.getByName("runtimeOnly"))
 
         project.dependencies.add("vrtImplementation", "dev.jwillert:ktor-vrt:$ktorVrtVersion")
@@ -52,10 +57,31 @@ class KtorVrtPlugin : Plugin<Project> {
                 task.useJUnitPlatform()
                 ext.cssTaskDependency.orNull?.let { task.dependsOn(it) }
                 task.systemProperty("vrt.mode", mode)
-                task.systemProperty("vrt.css", ext.css.get().asFile.absolutePath)
-                task.systemProperty("vrt.goldenDir", ext.goldenDir.get().asFile.absolutePath)
-                task.systemProperty("vrt.diffDir", ext.diffDir.get().asFile.absolutePath)
-                task.systemProperty("vrt.htmlAttributes", ext.htmlAttributes.get().entries.joinToString(",") { "${it.key}=${it.value}" })
+                task.systemProperty(
+                    "vrt.css",
+                    ext.css
+                        .get()
+                        .asFile.absolutePath,
+                )
+                task.systemProperty(
+                    "vrt.goldenDir",
+                    ext.goldenDir
+                        .get()
+                        .asFile.absolutePath,
+                )
+                task.systemProperty(
+                    "vrt.diffDir",
+                    ext.diffDir
+                        .get()
+                        .asFile.absolutePath,
+                )
+                task.systemProperty(
+                    "vrt.htmlAttributes",
+                    ext.htmlAttributes
+                        .get()
+                        .entries
+                        .joinToString(",") { "${it.key}=${it.value}" },
+                )
                 task.systemProperty("vrt.wrapperClasses", ext.wrapperClasses.get().joinToString(" "))
                 if (project.hasProperty("updateGoldens")) task.systemProperty("vrt.updateGoldens", "true")
                 task.outputs.upToDateWhen { false }

@@ -8,10 +8,14 @@ import kotlinx.html.*
  * [FlowContent] to allow ordinary HTML content.
  */
 @MosaikDsl
-class MCard(internal val div: DIV) : FlowContent by div {
+class MCard(
+    internal val div: DIV,
+) : FlowContent by div {
     var id: String
         get() = div.id
-        set(value) { div.id = value }
+        set(value) {
+            div.id = value
+        }
 
     override val attributes: MutableMap<String, String>
         get() = div.attributes
@@ -24,7 +28,9 @@ class MCard(internal val div: DIV) : FlowContent by div {
  * HTML content.
  */
 @MosaikDsl
-class MCardBody(internal val div: DIV) : FlowContent by div {
+class MCardBody(
+    internal val div: DIV,
+) : FlowContent by div {
     override val attributes: MutableMap<String, String>
         get() = div.attributes
 }

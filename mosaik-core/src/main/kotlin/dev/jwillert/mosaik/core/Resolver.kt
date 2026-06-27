@@ -5,8 +5,9 @@ package dev.jwillert.mosaik.core
  * dependency, returned in topological order so that dependencies always precede the
  * components that need them (e.g. `theme` before `button`).
  */
-class Resolver(private val registry: Registry) {
-
+class Resolver(
+    private val registry: Registry,
+) {
     /**
      * Returns [name] and all of its transitive dependencies in topological order
      * (dependencies first). The requested component is always last.

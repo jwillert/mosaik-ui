@@ -1,5 +1,5 @@
 // Repo-wide ktlint convention: applies ktlint to .kt and .kts files with standard defaults.
-// Provides ktlintCheck and ktlintFormat tasks but does NOT wire into check lifecycle.
+// ktlintCheck is wired into the check lifecycle to make lint feedback mandatory.
 
 plugins {
     id("org.jlleitschuh.gradle.ktlint")
@@ -15,14 +15,7 @@ ktlint {
     }
 }
 
-// Do not wire ktlintCheck into the check lifecycle yet.
-// This allows the repository to have ktlint tasks available without making them mandatory.
-tasks.matching { it.name == "check" }.configureEach {
-    setDependsOn(dependsOn.filterNot { dep ->
-        when (dep) {
-            is TaskProvider<*> -> dep.name.startsWith("ktlint")
-            is Task -> dep.name.startsWith("ktlint")
-            else -> false
-        }
-    })
+// Wire ktlintCheck into the check lifecycle to make lint mandatory (ADR 0011).
+tasks.named("check") {
+    dependsOn(tasks.named("ktlintCheck"))
 }

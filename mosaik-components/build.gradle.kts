@@ -25,9 +25,15 @@ tasks.register<Exec>("buildVrtCss") {
     dependsOn("installTailwind")
     workingDir = projectDir
     commandLine(
-        "npx", "@tailwindcss/cli",
-        "-i", "input.css",
-        "-o", layout.buildDirectory.file("vrt/output.css").get().asFile.absolutePath,
+        "npx",
+        "@tailwindcss/cli",
+        "-i",
+        "input.css",
+        "-o",
+        layout.buildDirectory
+            .file("vrt/output.css")
+            .get()
+            .asFile.absolutePath,
         "--minify",
     )
     inputs.file("input.css")

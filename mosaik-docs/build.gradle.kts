@@ -21,7 +21,15 @@ mosaikCss {
 }
 
 tasks.named<Exec>("buildCss") {
-    setCommandLine("npx", "@tailwindcss/cli", "-i", "input.css", "-o", "src/main/resources/static/output.css", "--minify")
+    setCommandLine(
+        "npx",
+        "@tailwindcss/cli",
+        "-i",
+        "input.css",
+        "-o",
+        "src/main/resources/static/output.css",
+        "--minify",
+    )
     outputs.file("src/main/resources/static/output.css")
 }
 

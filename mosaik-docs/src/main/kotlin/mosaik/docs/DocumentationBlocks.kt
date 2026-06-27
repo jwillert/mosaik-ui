@@ -2,12 +2,6 @@ package mosaik.docs
 
 import kotlinx.html.*
 
-/**
- * Shared documentation blocks extracted from component pages. These helpers
- * are reused across multiple component reference galleries to keep rendering
- * consistent (PRD #10, issue #11).
- */
-
 /** A row in an [apiReference] table: one component parameter. */
 data class ApiParam(
     val name: String,
