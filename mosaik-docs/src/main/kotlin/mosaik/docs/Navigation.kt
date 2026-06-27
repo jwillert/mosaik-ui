@@ -1,7 +1,11 @@
 package mosaik.docs
 
 /** A documentation page: the route it lives at, its sidebar label, and how it renders. */
-data class NavItem(val path: String, val label: String, val render: () -> String)
+data class NavItem(
+    val path: String,
+    val label: String,
+    val render: () -> String,
+)
 
 /** The landing page. */
 val HOME = NavItem("/", "Home", ::landingPage)
