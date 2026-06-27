@@ -84,11 +84,11 @@ class PagesTest :
         test("the button page includes an API reference table for every mButton parameter") {
             val html = buttonPage()
             html shouldContain "API reference"
-            listOf("variant", "size", "classes", "block").forEach { param ->
+            listOf("variant", "style", "shape", "width", "size", "classes", "block").forEach { param ->
                 html shouldContain param
             }
             // Types and defaults are documented in the table.
-            html shouldContain "Variant.Primary"
+            html shouldContain "ButtonVariant.Neutral"
             html shouldContain "Size.Md"
         }
 
@@ -125,6 +125,314 @@ class PagesTest :
             html shouldContain "DIV.()"
             listOf("mCardBody", "mCardTitle", "mCardActions").forEach { fn ->
                 html shouldContain fn
+            }
+        }
+
+        test("the interactivity page includes a Login form composed example section") {
+            val html = interactivityPage()
+            html shouldContain "Login form"
+            // The example describes the composition pattern.
+            html shouldContain "mCard"
+            html shouldContain "mButton"
+        }
+
+        test("the interactivity page includes a Register form composed example section") {
+            val html = interactivityPage()
+            html shouldContain "Register form"
+            // The example describes the composition pattern.
+            html shouldContain "mCard"
+            html shouldContain "mButton"
+        }
+
+        test("the interactivity page Login form shows all three library implementations") {
+            val html = interactivityPage()
+            // Login form tabs exist with unique IDs.
+            html shouldContain "login-form-htmx"
+            html shouldContain "login-form-alpine"
+            html shouldContain "login-form-datastar"
+            // htmx implementation uses hx-post.
+            html shouldContain "hx-post"
+            // Alpine.js implementation uses x-data.
+            html shouldContain "x-data"
+            // Datastar implementation uses data-on-submit.
+            html shouldContain "data-on-submit"
+        }
+
+        test("the interactivity page Login form shows working previews per style") {
+            val html = interactivityPage()
+            // Preview wrapper with mb-4 not-prose class.
+            html shouldContain "class=\"mb-4 not-prose\""
+            // All three previews render the login form card.
+            html shouldContain "Login"
+            // Form inputs are present in previews.
+            html shouldContain "type=\"email\" name=\"email\""
+            html shouldContain "type=\"password\" name=\"password\""
+            // Submit button is present.
+            html shouldContain "Sign in"
+            // Result/error display elements are present.
+            html shouldContain "login-result"
+        }
+
+        test("the interactivity page Register form shows all three library implementations") {
+            val html = interactivityPage()
+            // Register form tabs exist with unique IDs.
+            html shouldContain "register-form-htmx"
+            html shouldContain "register-form-alpine"
+            html shouldContain "register-form-datastar"
+            // htmx implementation uses hx-post.
+            html shouldContain "hx-post"
+            // Alpine.js implementation uses x-data.
+            html shouldContain "x-data"
+            // Datastar implementation uses data-on-submit.
+            html shouldContain "data-on-submit"
+        }
+
+        test("the interactivity page Register form shows working previews per style") {
+            val html = interactivityPage()
+            // Preview wrapper with mb-4 not-prose class.
+            html shouldContain "class=\"mb-4 not-prose\""
+            // All three previews render the registration form card.
+            html shouldContain "Create account"
+            // Form inputs are present in previews.
+            html shouldContain "type=\"text\" name=\"name\""
+            html shouldContain "type=\"email\" name=\"email\""
+            html shouldContain "type=\"password\" name=\"password\""
+            html shouldContain "name=\"confirm_password\""
+            // Submit button is present.
+            html shouldContain "Sign up"
+            // Result/error display elements are present.
+            html shouldContain "register-result"
+        }
+        test("the button page has an Interactive usage section with interactivityTabs") {
+            val html = buttonPage()
+            html shouldContain "<h2>Interactive usage</h2>"
+            // The tab structure uses the button-interactive id.
+            html shouldContain "name=\"button-interactive\""
+            html shouldContain "button-interactive-htmx"
+            html shouldContain "button-interactive-alpine"
+            html shouldContain "button-interactive-datastar"
+            // Form submit example mentions hx-post for htmx.
+            html shouldContain "hx-post"
+        }
+
+        test("the button page Interactive section has working previews per style") {
+            val html = buttonPage()
+            // Preview wrapper with mb-4 not-prose class.
+            html shouldContain "class=\"mb-4 not-prose\""
+            // All three previews render the submit button.
+            html shouldContain "Submit"
+            // Preview uses /_examples/button/submit route.
+            html shouldContain "/_examples/button/submit"
+            // Loading spinner is present in previews.
+            html shouldContain "loading-spinner"
+        }
+
+        test("the button page shows button styles (Outline, Ghost, Link)") {
+            val html = buttonPage()
+            html shouldContain "<h2>Styles</h2>"
+            html shouldContain "btn-outline"
+            html shouldContain "btn-ghost"
+            html shouldContain "btn-link"
+            html shouldContain "ButtonStyle"
+        }
+
+        test("the button page shows button shapes (Circle, Square)") {
+            val html = buttonPage()
+            html shouldContain "<h2>Shapes</h2>"
+            html shouldContain "btn-circle"
+            html shouldContain "btn-square"
+            html shouldContain "ButtonShape"
+        }
+
+        test("the button page shows button widths (Wide, Block)") {
+            val html = buttonPage()
+            html shouldContain "<h2>Widths</h2>"
+            html shouldContain "btn-wide"
+            html shouldContain "btn-block"
+            html shouldContain "ButtonWidth"
+        }
+
+        test("the button page shows icon and content composition") {
+            val html = buttonPage()
+            html shouldContain "<h2>Icon and content composition</h2>"
+            html shouldContain "Next"
+            html shouldContain "Back"
+        }
+
+        test("the button page shows loading content with mLoading component") {
+            val html = buttonPage()
+            html shouldContain "<h2>Loading content</h2>"
+            html shouldContain "mLoading"
+            html shouldContain "LoadingType"
+            html shouldContain "loading-spinner"
+            html shouldContain "loading-dots"
+            html shouldContain "Processing..."
+        }
+
+        test("the button page Interactive section uses mLoading instead of raw loading classes") {
+            val html = buttonPage()
+            // Interactive examples should mention mLoading in code
+            html shouldContain "mLoading(LoadingType.Spinner"
+            // Should not use raw loading classes in the code examples
+            html shouldContain "import mosaik.ui.components.mLoading"
+            html shouldContain "import mosaik.ui.components.LoadingType"
+        }
+
+        test("the card page has an Interactive usage section with interactivityTabs") {
+            val html = cardPage()
+            html shouldContain "<h2>Interactive usage</h2>"
+            // The tab structure uses the card-interactive id.
+            html shouldContain "name=\"card-interactive\""
+            html shouldContain "card-interactive-htmx"
+            html shouldContain "card-interactive-alpine"
+            html shouldContain "card-interactive-datastar"
+            // Lazy-load example mentions hx-get for htmx.
+            html shouldContain "hx-get"
+        }
+
+        test("the card page Interactive section has working previews per style") {
+            val html = cardPage()
+            // Preview wrapper with mb-4 not-prose class.
+            html shouldContain "class=\"mb-4 not-prose\""
+            // All three previews render the lazy card.
+            html shouldContain "Lazy Card"
+            // Preview uses /_examples/card/content route.
+            html shouldContain "/_examples/card/content"
+            // Loading placeholder is present in htmx preview.
+            html shouldContain "Loading..."
+        }
+
+        test("the alert page has an Interactive usage section with interactivityTabs") {
+            val html = alertPage()
+            html shouldContain "<h2>Interactive usage</h2>"
+            // The tab structure uses the alert-interactive id.
+            html shouldContain "name=\"alert-interactive\""
+            html shouldContain "alert-interactive-htmx"
+            html shouldContain "alert-interactive-alpine"
+            html shouldContain "alert-interactive-datastar"
+        }
+
+        test("the alert page shows working previews for dismissible alerts per style") {
+            val html = alertPage()
+            // Preview wrapper with mb-4 not-prose class.
+            html shouldContain "class=\"mb-4 not-prose\""
+            // All three previews render the success alert with dismissible behavior.
+            html shouldContain "Your changes have been saved."
+            // Dismiss button is present in previews.
+            html shouldContain "Dismiss"
+            // htmx uses hx-on:click to remove the alert.
+            html shouldContain "hx-on:click"
+            // Alpine.js uses x-data and x-show for visibility control.
+            html shouldContain "x-data"
+            html shouldContain "x-show"
+            // Datastar uses data-signals and data-show.
+            html shouldContain "data-signals"
+            html shouldContain "data-show"
+        }
+
+        test("the navbar page has an Interactive usage section with interactivityTabs") {
+            val html = navbarPage()
+            html shouldContain "<h2>Interactive usage</h2>"
+            // The tab structure uses the navbar-interactive id.
+            html shouldContain "name=\"navbar-interactive\""
+            html shouldContain "navbar-interactive-htmx"
+            html shouldContain "navbar-interactive-alpine"
+            html shouldContain "navbar-interactive-datastar"
+            // Active link example mentions hx-boost for htmx.
+            html shouldContain "hx-boost"
+        }
+
+        test("the navbar page shows working previews for active link highlighting per style") {
+            val html = navbarPage()
+            // Preview wrapper with mb-4 not-prose class.
+            html shouldContain "class=\"mb-4 not-prose\""
+            // All three previews render the navbar with navigation links.
+            html shouldContain "Home"
+            html shouldContain "Docs"
+            // htmx uses hx-boost for navigation.
+            html shouldContain "hx-boost"
+            // Alpine.js uses x-data for state and x-bind:class for active styling.
+            html shouldContain "x-data"
+            html shouldContain "x-bind:class"
+            html shouldContain "btn-active"
+            // Datastar uses data-signals and data-bind-class-btn-active.
+            html shouldContain "data-signals"
+            html shouldContain "data-bind-class-btn-active"
+        }
+
+        test("the navbar page Interactive section has working previews per style") {
+            val html = navbarPage()
+            // Preview wrapper with mb-4 not-prose class.
+            html shouldContain "class=\"mb-4 not-prose\""
+            // All three previews render the navbar with links.
+            html shouldContain "Home"
+            html shouldContain "Docs"
+            // Client-side only, no server endpoints needed for this example.
+        }
+
+        test("the interactivity page contains building blocks sections for all three libraries") {
+            val html = interactivityPage()
+            html shouldContain "Building blocks"
+            html shouldContain "htmx"
+            html shouldContain "Alpine.js"
+            html shouldContain "Datastar"
+        }
+
+        test("the htmx building blocks section documents core primitives and uses attributes syntax") {
+            val html = interactivityPage()
+            html shouldContain "hx-get"
+            html shouldContain "hx-post"
+            html shouldContain "hx-target"
+            html shouldContain "hx-swap"
+            html shouldContain "hx-trigger"
+            html shouldContain "attributes"
+            html shouldContain "Ktor 3.2"
+        }
+
+        test("the Alpine.js building blocks section documents core primitives") {
+            val html = interactivityPage()
+            html shouldContain "x-data"
+            html shouldContain "x-show"
+            html shouldContain "x-on"
+            html shouldContain "x-bind"
+            html shouldContain "x-model"
+        }
+
+        test("the Datastar building blocks section documents core primitives and notes SSE requirement") {
+            val html = interactivityPage()
+            html shouldContain "data-store"
+            html shouldContain "data-on"
+            html shouldContain "SSE"
+            html shouldContain "Server-Sent Events"
+        }
+
+        test("the interactivity page contains a comparison table") {
+            val html = interactivityPage()
+            html shouldContain "Comparison"
+            html shouldContain "table"
+            html shouldContain "Paradigm"
+            html shouldContain "Server requirement"
+            html shouldContain "Script size"
+        }
+
+        test("the comparison table includes all three libraries and their paradigms") {
+            val html = interactivityPage()
+            // Check that all three libraries appear in the table
+            html shouldContain "htmx"
+            html shouldContain "Alpine.js"
+            html shouldContain "Datastar"
+            // Check for paradigm values that distinguish the libraries
+            html shouldContain "Server-driven"
+            html shouldContain "Client-side"
+            html shouldContain "Hybrid"
+        }
+
+        test("every page renders the sidebar Interaction Style switcher") {
+            listOf(landingPage(), buttonPage(), interactivityPage()).forEach { html ->
+                html shouldContain "id=\"interaction-style-switcher\""
+                html shouldContain "value=\"htmx\""
+                html shouldContain "value=\"alpine\""
+                html shouldContain "value=\"datastar\""
             }
         }
 
