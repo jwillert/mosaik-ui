@@ -83,11 +83,11 @@ class PagesTest : FunSpec({
     test("the button page includes an API reference table for every mButton parameter") {
         val html = buttonPage()
         html shouldContain "API reference"
-        listOf("variant", "size", "classes", "block").forEach { param ->
+        listOf("variant", "style", "shape", "width", "size", "classes", "block").forEach { param ->
             html shouldContain param
         }
         // Types and defaults are documented in the table.
-        html shouldContain "Variant.Primary"
+        html shouldContain "ButtonVariant.Neutral"
         html shouldContain "Size.Md"
     }
 
@@ -462,6 +462,57 @@ class PagesTest : FunSpec({
         html shouldContain "/_examples/button/submit"
         // Loading spinner is present in previews.
         html shouldContain "loading-spinner"
+    }
+
+    test("the button page shows button styles (Outline, Ghost, Link)") {
+        val html = buttonPage()
+        html shouldContain "<h2>Styles</h2>"
+        html shouldContain "btn-outline"
+        html shouldContain "btn-ghost"
+        html shouldContain "btn-link"
+        html shouldContain "ButtonStyle"
+    }
+
+    test("the button page shows button shapes (Circle, Square)") {
+        val html = buttonPage()
+        html shouldContain "<h2>Shapes</h2>"
+        html shouldContain "btn-circle"
+        html shouldContain "btn-square"
+        html shouldContain "ButtonShape"
+    }
+
+    test("the button page shows button widths (Wide, Block)") {
+        val html = buttonPage()
+        html shouldContain "<h2>Widths</h2>"
+        html shouldContain "btn-wide"
+        html shouldContain "btn-block"
+        html shouldContain "ButtonWidth"
+    }
+
+    test("the button page shows icon and content composition") {
+        val html = buttonPage()
+        html shouldContain "<h2>Icon and content composition</h2>"
+        html shouldContain "Next"
+        html shouldContain "Back"
+    }
+
+    test("the button page shows loading content with mLoading component") {
+        val html = buttonPage()
+        html shouldContain "<h2>Loading content</h2>"
+        html shouldContain "mLoading"
+        html shouldContain "LoadingType"
+        html shouldContain "loading-spinner"
+        html shouldContain "loading-dots"
+        html shouldContain "Processing..."
+    }
+
+    test("the button page Interactive section uses mLoading instead of raw loading classes") {
+        val html = buttonPage()
+        // Interactive examples should mention mLoading in code
+        html shouldContain "mLoading(LoadingType.Spinner"
+        // Should not use raw loading classes in the code examples
+        html shouldContain "import mosaik.ui.components.mLoading"
+        html shouldContain "import mosaik.ui.components.LoadingType"
     }
 
     test("the card page has an Interactive usage section with interactivityTabs") {
