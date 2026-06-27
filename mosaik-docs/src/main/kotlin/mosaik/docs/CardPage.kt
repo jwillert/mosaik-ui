@@ -202,9 +202,9 @@ fun cardPage(): String =
                 },
                 datastarPreview = {
                     mCard("w-96 bg-base-100 shadow-sm") {
-                        attributes["data-store"] = "{ content: 'Loading...' }"
-                        attributes["data-intersects"] = "once"
-                        attributes["data-get"] = "/_examples/card/content"
+                        attributes["data-signals"] = "{ content: 'Loading...' }"
+                        attributes["data-on-intersect__once"] =
+                            "fetch('/_examples/card/content').then(r => r.text()).then(t => \$content = t)"
                         mCardBody {
                             mCardTitle { +"Lazy Card" }
                             div {
@@ -242,9 +242,9 @@ fun cardPage(): String =
                 datastarCode =
                     """
                     mCard("w-96 bg-base-100 shadow-sm") {
-                        attributes["data-store"] = "{ content: 'Loading...' }"
-                        attributes["data-intersects"] = "once"
-                        attributes["data-get"] = "/card-content"
+                        attributes["data-signals"] = "{ content: 'Loading...' }"
+                        attributes["data-on-intersect__once"] =
+                            "fetch('/card-content').then(r => r.text()).then(t => ${'$'}content = t)"
                         mCardBody {
                             mCardTitle { +"Lazy Card" }
                             div {

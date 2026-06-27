@@ -33,6 +33,13 @@ tasks.named<Exec>("buildCss") {
     outputs.file("src/main/resources/static/output.css")
 }
 
+val copyDatastar by tasks.registering(Copy::class) {
+    dependsOn("installTailwind")
+    from("node_modules/@starfederation/datastar/dist/datastar.js")
+    into("src/main/resources/static/vendor")
+    outputs.file("src/main/resources/static/vendor/datastar.js")
+}
+
 tasks.named("processResources") {
-    dependsOn("buildCss")
+    dependsOn("buildCss", copyDatastar)
 }

@@ -1,6 +1,7 @@
 {
   "private": true,
   "devDependencies": {
+    "@starfederation/datastar": "^1.0.0-beta.11",
     "@tailwindcss/cli": "^4.3.1",
     "daisyui": "^5.6.3",
     "tailwindcss": "^4.3.1"

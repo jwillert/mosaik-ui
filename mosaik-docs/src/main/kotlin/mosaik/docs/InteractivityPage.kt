@@ -2,8 +2,14 @@ package mosaik.docs
 
 import kotlinx.html.*
 import mosaik.ui.components.ButtonVariant
+import mosaik.ui.components.LoadingType
+import mosaik.ui.components.Size
 import mosaik.ui.components.mButton
 import mosaik.ui.components.mCard
+import mosaik.ui.components.mCardActions
+import mosaik.ui.components.mCardBody
+import mosaik.ui.components.mCardTitle
+import mosaik.ui.components.mLoading
 
 /**
  * The interactivity guide: how to add client-side behavior (htmx, Alpine.js,
@@ -100,8 +106,8 @@ fun Application.module() {
                             attributes["hx-target"] = "#login-result"
                             attributes["hx-indicator"] = "#login-spinner"
 
-                            div("card-body") {
-                                h2("card-title") { +"Login" }
+                            mCardBody {
+                                mCardTitle { +"Login" }
 
                                 label("form-control w-full") {
                                     div("label") {
@@ -135,11 +141,11 @@ fun Application.module() {
                                     attributes["aria-live"] = "polite"
                                 }
 
-                                div("card-actions justify-end") {
+                                mCardActions("justify-end") {
                                     mButton(variant = ButtonVariant.Primary) {
                                         type = ButtonType.submit
                                         span { +"Sign in" }
-                                        span("loading loading-spinner loading-sm htmx-indicator") {
+                                        mLoading(LoadingType.Spinner, Size.Sm, "htmx-indicator") {
                                             id = "login-spinner"
                                             attributes["style"] = "display:none;"
                                         }
@@ -161,8 +167,8 @@ fun Application.module() {
                                 ".then(r => r.ok ? alert('Login successful!') : r.text().then(t => error = t))" +
                                 ".catch(e => error = 'Network error').finally(() => loading = false)"
 
-                            div("card-body") {
-                                h2("card-title") { +"Login" }
+                            mCardBody {
+                                mCardTitle { +"Login" }
 
                                 label("form-control w-full") {
                                     div("label") {
@@ -198,14 +204,14 @@ fun Application.module() {
                                     attributes["role"] = "alert"
                                 }
 
-                                div("card-actions justify-end") {
+                                mCardActions("justify-end") {
                                     mButton(variant = ButtonVariant.Primary) {
                                         attributes["x-bind:disabled"] = "loading"
                                         span {
                                             attributes["x-show"] = "!loading"
                                             +"Sign in"
                                         }
-                                        span("loading loading-spinner loading-sm") {
+                                        mLoading(LoadingType.Spinner, Size.Sm) {
                                             attributes["x-show"] = "loading"
                                         }
                                     }
@@ -218,10 +224,10 @@ fun Application.module() {
                     mCard("w-96 bg-base-100 shadow-xl") {
                         form {
                             attributes["data-on-submit"] = "\$\$post('/_examples/login')"
-                            attributes["data-store"] = "{ email: '', password: '', loading: false, error: '' }"
+                            attributes["data-signals"] = "{ email: '', password: '', loading: false, error: '' }"
 
-                            div("card-body") {
-                                h2("card-title") { +"Login" }
+                            mCardBody {
+                                mCardTitle { +"Login" }
 
                                 label("form-control w-full") {
                                     div("label") {
@@ -257,14 +263,14 @@ fun Application.module() {
                                     attributes["role"] = "alert"
                                 }
 
-                                div("card-actions justify-end") {
+                                mCardActions("justify-end") {
                                     mButton(variant = ButtonVariant.Primary) {
                                         attributes["data-bind-disabled"] = "\$loading"
                                         span {
                                             attributes["data-show"] = "!\$loading"
                                             +"Sign in"
                                         }
-                                        span("loading loading-spinner loading-sm") {
+                                        mLoading(LoadingType.Spinner, Size.Sm) {
                                             attributes["data-show"] = "\$loading"
                                         }
                                     }
@@ -281,8 +287,8 @@ mCard("w-96 bg-base-100 shadow-xl") {
         attributes["hx-target"] = "#login-result"
         attributes["hx-indicator"] = "#login-spinner"
 
-        div("card-body") {
-            h2("card-title") { +"Login" }
+        mCardBody {
+            mCardTitle { +"Login" }
 
             label("form-control w-full") {
                 div("label") {
@@ -308,10 +314,10 @@ mCard("w-96 bg-base-100 shadow-xl") {
                 attributes["aria-live"] = "polite"
             }
 
-            div("card-actions justify-end") {
+            mCardActions("justify-end") {
                 mButton(variant = ButtonVariant.Primary) {
                     span { +"Sign in" }
-                    span("loading loading-spinner loading-sm htmx-indicator") {
+                    mLoading(LoadingType.Spinner, Size.Sm, "htmx-indicator") {
                         id = "login-spinner"
                         attributes["style"] = "display:none;"
                     }
@@ -331,8 +337,8 @@ mCard("w-96 bg-base-100 shadow-xl") {
             "body: JSON.stringify({ email, password }) }).then(r => r.ok ? location.href = '/dashboard' : " +
             "r.text().then(t => error = t)).catch(e => error = 'Network error').finally(() => loading = false)"
 
-        div("card-body") {
-            h2("card-title") { +"Login" }
+        mCardBody {
+            mCardTitle { +"Login" }
 
             label("form-control w-full") {
                 div("label") {
@@ -360,14 +366,14 @@ mCard("w-96 bg-base-100 shadow-xl") {
                 attributes["role"] = "alert"
             }
 
-            div("card-actions justify-end") {
+            mCardActions("justify-end") {
                 mButton(variant = ButtonVariant.Primary) {
                     attributes["x-bind:disabled"] = "loading"
                     span {
                         attributes["x-show"] = "!loading"
                         +"Sign in"
                     }
-                    span("loading loading-spinner loading-sm") {
+                    mLoading(LoadingType.Spinner, Size.Sm) {
                         attributes["x-show"] = "loading"
                     }
                 }
@@ -381,10 +387,10 @@ mCard("w-96 bg-base-100 shadow-xl") {
 mCard("w-96 bg-base-100 shadow-xl") {
     form {
         attributes["data-on-submit"] = "${'$'}${'$'}post('/api/login')"
-        attributes["data-store"] = "{ loading: false, error: '' }"
+        attributes["data-signals"] = "{ loading: false, error: '' }"
 
-        div("card-body") {
-            h2("card-title") { +"Login" }
+        mCardBody {
+            mCardTitle { +"Login" }
 
             label("form-control w-full") {
                 div("label") {
@@ -412,14 +418,14 @@ mCard("w-96 bg-base-100 shadow-xl") {
                 attributes["role"] = "alert"
             }
 
-            div("card-actions justify-end") {
+            mCardActions("justify-end") {
                 mButton(variant = ButtonVariant.Primary) {
                     attributes["data-bind-disabled"] = "${'$'}loading"
                     span {
                         attributes["data-show"] = "!${'$'}loading"
                         +"Sign in"
                     }
-                    span("loading loading-spinner loading-sm") {
+                    mLoading(LoadingType.Spinner, Size.Sm) {
                         attributes["data-show"] = "${'$'}loading"
                     }
                 }
@@ -526,8 +532,8 @@ fun Application.module() {
                             attributes["hx-target"] = "#register-result"
                             attributes["hx-indicator"] = "#register-spinner"
 
-                            div("card-body") {
-                                h2("card-title") { +"Create account" }
+                            mCardBody {
+                                mCardTitle { +"Create account" }
 
                                 label("form-control w-full") {
                                     div("label") {
@@ -588,10 +594,10 @@ fun Application.module() {
                                     attributes["aria-live"] = "polite"
                                 }
 
-                                div("card-actions justify-end") {
+                                mCardActions("justify-end") {
                                     mButton(variant = ButtonVariant.Primary) {
                                         span { +"Sign up" }
-                                        span("loading loading-spinner loading-sm htmx-indicator") {
+                                        mLoading(LoadingType.Spinner, Size.Sm, "htmx-indicator") {
                                             id = "register-spinner"
                                             attributes["style"] = "display:none;"
                                         }
@@ -615,8 +621,8 @@ fun Application.module() {
                                 ".then(r => r.ok ? alert('Registration successful!') : r.text().then(t => error = t))" +
                                 ".catch(e => error = 'Network error').finally(() => loading = false)"
 
-                            div("card-body") {
-                                h2("card-title") { +"Create account" }
+                            mCardBody {
+                                mCardTitle { +"Create account" }
 
                                 label("form-control w-full") {
                                     div("label") {
@@ -681,14 +687,14 @@ fun Application.module() {
                                     attributes["role"] = "alert"
                                 }
 
-                                div("card-actions justify-end") {
+                                mCardActions("justify-end") {
                                     mButton(variant = ButtonVariant.Primary) {
                                         attributes["x-bind:disabled"] = "loading"
                                         span {
                                             attributes["x-show"] = "!loading"
                                             +"Sign up"
                                         }
-                                        span("loading loading-spinner loading-sm") {
+                                        mLoading(LoadingType.Spinner, Size.Sm) {
                                             attributes["x-show"] = "loading"
                                         }
                                     }
@@ -702,11 +708,11 @@ fun Application.module() {
                         form {
                             attributes["data-on-submit"] =
                                 "if (\$password !== \$confirmPassword) { \$error = 'Passwords do not match'; return; } \$\$post('/_examples/register')"
-                            attributes["data-store"] =
+                            attributes["data-signals"] =
                                 "{ name: '', email: '', password: '', confirmPassword: '', loading: false, error: '' }"
 
-                            div("card-body") {
-                                h2("card-title") { +"Create account" }
+                            mCardBody {
+                                mCardTitle { +"Create account" }
 
                                 label("form-control w-full") {
                                     div("label") {
@@ -771,14 +777,14 @@ fun Application.module() {
                                     attributes["role"] = "alert"
                                 }
 
-                                div("card-actions justify-end") {
+                                mCardActions("justify-end") {
                                     mButton(variant = ButtonVariant.Primary) {
                                         attributes["data-bind-disabled"] = "\$loading"
                                         span {
                                             attributes["data-show"] = "!\$loading"
                                             +"Sign up"
                                         }
-                                        span("loading loading-spinner loading-sm") {
+                                        mLoading(LoadingType.Spinner, Size.Sm) {
                                             attributes["data-show"] = "\$loading"
                                         }
                                     }
@@ -795,8 +801,8 @@ mCard("w-96 bg-base-100 shadow-xl") {
         attributes["hx-target"] = "#register-result"
         attributes["hx-indicator"] = "#register-spinner"
 
-        div("card-body") {
-            h2("card-title") { +"Create account" }
+        mCardBody {
+            mCardTitle { +"Create account" }
 
             label("form-control w-full") {
                 div("label") {
@@ -841,10 +847,10 @@ mCard("w-96 bg-base-100 shadow-xl") {
                 attributes["aria-live"] = "polite"
             }
 
-            div("card-actions justify-end") {
+            mCardActions("justify-end") {
                 mButton(variant = ButtonVariant.Primary) {
                     span { +"Sign up" }
-                    span("loading loading-spinner loading-sm htmx-indicator") {
+                    mLoading(LoadingType.Spinner, Size.Sm, "htmx-indicator") {
                         id = "register-spinner"
                         attributes["style"] = "display:none;"
                     }
@@ -865,8 +871,8 @@ mCard("w-96 bg-base-100 shadow-xl") {
             "body: JSON.stringify({ name, email, password }) }).then(r => r.ok ? location.href = '/welcome' : " +
             "r.text().then(t => error = t)).catch(e => error = 'Network error').finally(() => loading = false)"
 
-        div("card-body") {
-            h2("card-title") { +"Create account" }
+        mCardBody {
+            mCardTitle { +"Create account" }
 
             label("form-control w-full") {
                 div("label") {
@@ -915,14 +921,14 @@ mCard("w-96 bg-base-100 shadow-xl") {
                 attributes["role"] = "alert"
             }
 
-            div("card-actions justify-end") {
+            mCardActions("justify-end") {
                 mButton(variant = ButtonVariant.Primary) {
                     attributes["x-bind:disabled"] = "loading"
                     span {
                         attributes["x-show"] = "!loading"
                         +"Sign up"
                     }
-                    span("loading loading-spinner loading-sm") {
+                    mLoading(LoadingType.Spinner, Size.Sm) {
                         attributes["x-show"] = "loading"
                     }
                 }
@@ -936,10 +942,10 @@ mCard("w-96 bg-base-100 shadow-xl") {
 mCard("w-96 bg-base-100 shadow-xl") {
     form {
         attributes["data-on-submit"] = "if (${'$'}password !== ${'$'}confirmPassword) { ${'$'}error = 'Passwords do not match'; return; } ${'$'}${'$'}post('/api/register')"
-        attributes["data-store"] = "{ name: '', email: '', password: '', confirmPassword: '', loading: false, error: '' }"
+        attributes["data-signals"] = "{ name: '', email: '', password: '', confirmPassword: '', loading: false, error: '' }"
 
-        div("card-body") {
-            h2("card-title") { +"Create account" }
+        mCardBody {
+            mCardTitle { +"Create account" }
 
             label("form-control w-full") {
                 div("label") {
@@ -988,14 +994,14 @@ mCard("w-96 bg-base-100 shadow-xl") {
                 attributes["role"] = "alert"
             }
 
-            div("card-actions justify-end") {
+            mCardActions("justify-end") {
                 mButton(variant = ButtonVariant.Primary) {
                     attributes["data-bind-disabled"] = "${'$'}loading"
                     span {
                         attributes["data-show"] = "!${'$'}loading"
                         +"Sign up"
                     }
-                    span("loading loading-spinner loading-sm") {
+                    mLoading(LoadingType.Spinner, Size.Sm) {
                         attributes["data-show"] = "${'$'}loading"
                     }
                 }
@@ -1100,7 +1106,7 @@ mCard("w-96 bg-base-100 shadow-xl") {
         ul {
             li {
                 strong { +"Core primitives: " }
-                code { +"data-store" }
+                code { +"data-signals" }
                 +", "
                 code { +"data-on" }
                 +", "

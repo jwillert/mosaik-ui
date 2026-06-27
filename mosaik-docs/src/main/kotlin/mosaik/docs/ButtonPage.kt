@@ -315,7 +315,7 @@ fun buttonPage(): String =
                 },
                 datastarPreview = {
                     div {
-                        attributes["data-store"] = "{ loading: false, result: '' }"
+                        attributes["data-signals"] = "{ loading: false, result: '' }"
                         div("flex items-center gap-2") {
                             mButton(variant = ButtonVariant.Primary) {
                                 attributes["data-on-click"] =
@@ -374,8 +374,8 @@ fun buttonPage(): String =
                     div {
                         attributes["data-signals"] = "{ loading: false }"
                         mButton(variant = ButtonVariant.Primary) {
-                            attributes["data-on-click"] = "${'$'}loading=true"
-                            attributes["data-post"] = "/submit"
+                            attributes["data-on-click"] =
+                                "${'$'}loading=true; fetch('/submit', { method: 'POST' }).finally(() => ${'$'}loading = false)"
                             attributes["data-bind-disabled"] = "${'$'}loading"
                             +"Submit"
                         }
