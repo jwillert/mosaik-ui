@@ -198,9 +198,9 @@ fun buttonPage(): String = layout(BUTTON) {
             +"."
         }
         div("flex flex-wrap gap-2 not-prose mb-4") {
-            mButton(variant = ButtonVariant.Primary, style = mosaik.ui.components.ButtonStyle.Outline) { +"Outline" }
-            mButton(variant = ButtonVariant.Primary, style = mosaik.ui.components.ButtonStyle.Ghost) { +"Ghost" }
-            mButton(variant = ButtonVariant.Primary, style = mosaik.ui.components.ButtonStyle.Link) { +"Link" }
+            mButton(variant = ButtonVariant.Primary, style = ButtonStyle.Outline) { +"Outline" }
+            mButton(variant = ButtonVariant.Primary, style = ButtonStyle.Ghost) { +"Ghost" }
+            mButton(variant = ButtonVariant.Primary, style = ButtonStyle.Link) { +"Link" }
         }
         codeBlock(
             """
@@ -225,8 +225,8 @@ fun buttonPage(): String = layout(BUTTON) {
             +"."
         }
         div("flex flex-wrap gap-2 not-prose mb-4") {
-            mButton(variant = ButtonVariant.Primary, shape = mosaik.ui.components.ButtonShape.Circle) { +"C" }
-            mButton(variant = ButtonVariant.Primary, shape = mosaik.ui.components.ButtonShape.Square) { +"S" }
+            mButton(variant = ButtonVariant.Primary, shape = ButtonShape.Circle) { +"C" }
+            mButton(variant = ButtonVariant.Primary, shape = ButtonShape.Square) { +"S" }
         }
         codeBlock(
             """
@@ -250,8 +250,8 @@ fun buttonPage(): String = layout(BUTTON) {
             +"."
         }
         div("flex flex-col gap-2 not-prose mb-4") {
-            mButton(variant = ButtonVariant.Primary, width = mosaik.ui.components.ButtonWidth.Wide) { +"Wide" }
-            mButton(variant = ButtonVariant.Primary, width = mosaik.ui.components.ButtonWidth.Block) { +"Block" }
+            mButton(variant = ButtonVariant.Primary, width = ButtonWidth.Wide) { +"Wide" }
+            mButton(variant = ButtonVariant.Primary, width = ButtonWidth.Block) { +"Block" }
         }
         codeBlock(
             """
