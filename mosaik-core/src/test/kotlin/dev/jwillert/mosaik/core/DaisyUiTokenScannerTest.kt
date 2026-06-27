@@ -147,4 +147,74 @@ fun example() {
             findings shouldHaveSize 1
             findings.first().suggestedComponent shouldBe "Card"
         }
+
+        test("allowlists component test files in standard test source directory") {
+            val tempDir = tempdir()
+            File(tempDir, "src/test/kotlin/mosaik/ui/components").apply { mkdirs() }
+            File(tempDir, "src/test/kotlin/mosaik/ui/components/ButtonTest.kt").apply {
+                writeText(
+                    """package mosaik.ui.components
+
+import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.string.shouldContain
+
+class ButtonTest : FunSpec({
+    test("renders btn class") {
+        result shouldContain "btn"
+    }
+})
+""",
+                )
+            }
+
+            val findings = DaisyUiTokenScanner.scan(tempDir)
+
+            findings.shouldBeEmpty()
+        }
+
+        test("allowlists VRT scenario files") {
+            val tempDir = tempdir()
+            File(tempDir, "src/vrt/kotlin/mosaik/ui/components").apply { mkdirs() }
+            File(tempDir, "src/vrt/kotlin/mosaik/ui/components/ButtonScenarios.kt").apply {
+                writeText(
+                    """package mosaik.ui.components
+
+import dev.jwillert.ktor.vrt.Scenario
+
+val buttonScenarios = listOf(
+    Scenario("primary") { /* btn btn-primary */ }
+)
+""",
+                )
+            }
+
+            val findings = DaisyUiTokenScanner.scan(tempDir)
+
+            findings.shouldBeEmpty()
+        }
+
+        test("may produce false positives for non-HTML function calls with DaisyUI token names") {
+            val tempDir = tempdir()
+            val file =
+                File(tempDir, "DocsPage.kt").apply {
+                    writeText(
+                        """package mosaik.docs
+
+fun example() {
+    println("footer") { }
+    someFunction("btn") { }
+}
+""",
+                    )
+                }
+
+            val findings = DaisyUiTokenScanner.scan(tempDir)
+
+            // The pattern \("([^"]+)"\)\s*\{ matches ANY function call with a string + block,
+            // not just HTML element constructors. This produces false positives, but that's
+            // acceptable for a report-only tool - humans can review and ignore non-issues.
+            findings shouldHaveSize 2
+            findings[0].token shouldBe "footer" // sorted by file, line, then token
+            findings[1].token shouldBe "btn"
+        }
     })

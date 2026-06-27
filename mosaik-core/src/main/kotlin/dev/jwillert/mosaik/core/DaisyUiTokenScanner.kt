@@ -334,9 +334,7 @@ object DaisyUiTokenScanner {
 
     private fun isAllowlisted(file: File): Boolean {
         val path = file.path
-        return path.contains("mosaik/ui/components") &&
-            (path.endsWith("Test.kt") || !path.contains("/test/")) &&
-            !path.contains("/test/")
+        return path.contains("mosaik/ui/components")
     }
 
     private fun scanFile(
