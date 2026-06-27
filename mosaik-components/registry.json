@@ -47,6 +47,12 @@
       "description": "DaisyUI loading indicator with its own LoadingType palette (spinner, dots, ring, ball, bars, infinity), size, and custom classes. Composable content for buttons and other components.",
       "files": ["Loading.kt"],
       "dependencies": ["theme"]
+    },
+    {
+      "name": "menu",
+      "description": "DaisyUI menu navigation container with no variant or size, plus the mMenuItem and mMenuTitle sub-components (all in Menu.kt) for type-safe navigation links and section headers.",
+      "files": ["Menu.kt"],
+      "dependencies": ["theme"]
     }
   ]
 }
