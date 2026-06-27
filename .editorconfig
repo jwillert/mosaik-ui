@@ -1,0 +1,24 @@
+# EditorConfig for Mosaik UI
+# https://editorconfig.org
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{kt,kts}]
+indent_size = 4
+indent_style = space
+max_line_length = 120
+
+# ktlint configuration
+# Disable no-wildcard-imports rule for kotlinx.html (DSL library where it's idiomatic)
+ktlint_standard_no-wildcard-imports = disabled
+
+# Documentation pages contain large multiline string templates for code examples.
+# The unary-op-spacing rule conflicts with readable formatting of these templates.
+[**/mosaik/docs/*.kt]
+ktlint_standard_unary-op-spacing = disabled

@@ -10,7 +10,9 @@ import kotlinx.html.*
  * styles (see [ButtonStyle]), not color roles. The enum lives here, next to
  * [mButton], not in Theme.kt.
  */
-enum class ButtonVariant(val token: String) {
+enum class ButtonVariant(
+    val token: String,
+) {
     Neutral("neutral"),
     Primary("primary"),
     Secondary("secondary"),
@@ -27,7 +29,9 @@ enum class ButtonVariant(val token: String) {
  * These are orthogonal to [ButtonVariant] and can be combined with color roles.
  * Ghost and link are represented here as styles, not color variants per ADR-0010.
  */
-enum class ButtonStyle(val token: String) {
+enum class ButtonStyle(
+    val token: String,
+) {
     Outline("outline"),
     Ghost("ghost"),
     Link("link"),
@@ -36,7 +40,9 @@ enum class ButtonStyle(val token: String) {
 /**
  * The DaisyUI button shape modifiers.
  */
-enum class ButtonShape(val token: String) {
+enum class ButtonShape(
+    val token: String,
+) {
     Circle("circle"),
     Square("square"),
 }
@@ -44,7 +50,9 @@ enum class ButtonShape(val token: String) {
 /**
  * The DaisyUI button width modifiers.
  */
-enum class ButtonWidth(val token: String) {
+enum class ButtonWidth(
+    val token: String,
+) {
     Wide("wide"),
     Block("block"),
 }
@@ -81,15 +89,16 @@ fun FlowContent.mButton(
     block: BUTTON.() -> Unit = {},
 ) {
     button(
-        classes = buildClasses(
-            "btn",
-            "btn-${variant.token}",
-            style?.let { "btn-${it.token}" },
-            shape?.let { "btn-${it.token}" },
-            width?.let { "btn-${it.token}" },
-            size.token?.let { "btn-$it" },
-            classes,
-        ),
+        classes =
+            buildClasses(
+                "btn",
+                "btn-${variant.token}",
+                style?.let { "btn-${it.token}" },
+                shape?.let { "btn-${it.token}" },
+                width?.let { "btn-${it.token}" },
+                size.token?.let { "btn-$it" },
+                classes,
+            ),
         block = block,
     )
 }

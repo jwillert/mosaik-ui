@@ -8,96 +8,102 @@ import kotlinx.html.*
 import kotlinx.html.stream.createHTML
 
 /** Renders a flow fragment without pretty-printing so assertions are deterministic. */
-private fun render(block: FlowContent.() -> Unit): String =
-    createHTML(prettyPrint = false).div { block() }
+private fun render(block: FlowContent.() -> Unit): String = createHTML(prettyPrint = false).div { block() }
 
-class LoadingTest : FunSpec({
+class LoadingTest :
+    FunSpec({
 
-    test("a spinner medium loading renders the base and type classes, omitting the default size") {
-        val html = render { mLoading(LoadingType.Spinner, Size.Md) }
+        test("a spinner medium loading renders the base and type classes, omitting the default size") {
+            val html = render { mLoading(LoadingType.Spinner, Size.Md) }
 
-        html shouldContain "<span class=\"loading loading-spinner\"></span>"
-    }
-
-    test("every loading type maps to its DaisyUI class") {
-        val expected = mapOf(
-            LoadingType.Spinner to "loading-spinner",
-            LoadingType.Dots to "loading-dots",
-            LoadingType.Ring to "loading-ring",
-            LoadingType.Ball to "loading-ball",
-            LoadingType.Bars to "loading-bars",
-            LoadingType.Infinity to "loading-infinity",
-        )
-
-        expected.forEach { (type, css) ->
-            val html = render { mLoading(type) }
-            html shouldContain "class=\"loading $css\""
-        }
-    }
-
-    test("LoadingType declares exactly the six DaisyUI loading types") {
-        LoadingType.entries.map { it.name } shouldBe
-            listOf("Spinner", "Dots", "Ring", "Ball", "Bars", "Infinity")
-    }
-
-    test("every non-default size maps to its DaisyUI class and Md is omitted") {
-        val expected = mapOf(
-            Size.Xs to "loading-xs",
-            Size.Sm to "loading-sm",
-            Size.Lg to "loading-lg",
-            Size.Xl to "loading-xl",
-        )
-
-        expected.forEach { (size, css) ->
-            val html = render { mLoading(LoadingType.Spinner, size) }
-            html shouldContain "class=\"loading loading-spinner $css\""
+            html shouldContain "<span class=\"loading loading-spinner\"></span>"
         }
 
-        val md = render { mLoading(LoadingType.Spinner, Size.Md) }
-        md shouldNotContain "loading-md"
-    }
+        test("every loading type maps to its DaisyUI class") {
+            val expected =
+                mapOf(
+                    LoadingType.Spinner to "loading-spinner",
+                    LoadingType.Dots to "loading-dots",
+                    LoadingType.Ring to "loading-ring",
+                    LoadingType.Ball to "loading-ball",
+                    LoadingType.Bars to "loading-bars",
+                    LoadingType.Infinity to "loading-infinity",
+                )
 
-    test("custom classes are appended after the type and size classes") {
-        val html = render {
-            mLoading(LoadingType.Dots, Size.Lg, "text-primary mr-2")
-        }
-
-        html shouldContain "class=\"loading loading-dots loading-lg text-primary mr-2\""
-    }
-
-    test("the block receives the raw span element so its html attributes apply natively") {
-        val html = render {
-            mLoading(LoadingType.Ring) {
-                id = "status"
-                title = "Loading..."
+            expected.forEach { (type, css) ->
+                val html = render { mLoading(type) }
+                html shouldContain "class=\"loading $css\""
             }
         }
 
-        html shouldContain "id=\"status\""
-        html shouldContain "title=\"Loading...\""
-    }
-
-    test("arbitrary attributes work natively via the raw element") {
-        val html = render {
-            mLoading(LoadingType.Spinner) {
-                attributes["aria-label"] = "Loading content"
-            }
+        test("LoadingType declares exactly the six DaisyUI loading types") {
+            LoadingType.entries.map { it.name } shouldBe
+                listOf("Spinner", "Dots", "Ring", "Ball", "Bars", "Infinity")
         }
 
-        html shouldContain "aria-label=\"Loading content\""
-        html shouldContain "class=\"loading loading-spinner\""
-    }
+        test("every non-default size maps to its DaisyUI class and Md is omitted") {
+            val expected =
+                mapOf(
+                    Size.Xs to "loading-xs",
+                    Size.Sm to "loading-sm",
+                    Size.Lg to "loading-lg",
+                    Size.Xl to "loading-xl",
+                )
 
-    test("loading can be composed inside button content") {
-        val html = render {
-            mButton(variant = ButtonVariant.Primary) {
-                mLoading(LoadingType.Spinner, Size.Sm, "mr-2")
-                +"Processing..."
+            expected.forEach { (size, css) ->
+                val html = render { mLoading(LoadingType.Spinner, size) }
+                html shouldContain "class=\"loading loading-spinner $css\""
             }
+
+            val md = render { mLoading(LoadingType.Spinner, Size.Md) }
+            md shouldNotContain "loading-md"
         }
 
-        html shouldContain "<button class=\"btn btn-primary\">"
-        html shouldContain "<span class=\"loading loading-spinner loading-sm mr-2\"></span>"
-        html shouldContain "Processing..."
-    }
-})
+        test("custom classes are appended after the type and size classes") {
+            val html =
+                render {
+                    mLoading(LoadingType.Dots, Size.Lg, "text-primary mr-2")
+                }
+
+            html shouldContain "class=\"loading loading-dots loading-lg text-primary mr-2\""
+        }
+
+        test("the block receives the raw span element so its html attributes apply natively") {
+            val html =
+                render {
+                    mLoading(LoadingType.Ring) {
+                        id = "status"
+                        title = "Loading..."
+                    }
+                }
+
+            html shouldContain "id=\"status\""
+            html shouldContain "title=\"Loading...\""
+        }
+
+        test("arbitrary attributes work natively via the raw element") {
+            val html =
+                render {
+                    mLoading(LoadingType.Spinner) {
+                        attributes["aria-label"] = "Loading content"
+                    }
+                }
+
+            html shouldContain "aria-label=\"Loading content\""
+            html shouldContain "class=\"loading loading-spinner\""
+        }
+
+        test("loading can be composed inside button content") {
+            val html =
+                render {
+                    mButton(variant = ButtonVariant.Primary) {
+                        mLoading(LoadingType.Spinner, Size.Sm, "mr-2")
+                        +"Processing..."
+                    }
+                }
+
+            html shouldContain "<button class=\"btn btn-primary\">"
+            html shouldContain "<span class=\"loading loading-spinner loading-sm mr-2\"></span>"
+            html shouldContain "Processing..."
+        }
+    })

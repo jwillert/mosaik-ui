@@ -6,36 +6,38 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-private val SAMPLE = """
+private val SAMPLE =
+    """
     {
       "components": [
         { "name": "theme",  "description": "Foundation",        "files": ["Theme.kt"],  "dependencies": [] },
         { "name": "button", "description": "DaisyUI button",    "files": ["Button.kt"], "dependencies": ["theme"] }
       ]
     }
-""".trimIndent()
+    """.trimIndent()
 
-class RegistryTest : FunSpec({
+class RegistryTest :
+    FunSpec({
 
-    test("parses component entries from JSON and looks them up by name") {
-        val registry = Registry.fromJson(SAMPLE)
+        test("parses component entries from JSON and looks them up by name") {
+            val registry = Registry.fromJson(SAMPLE)
 
-        val button = registry.get("button")!!
-        button.name shouldBe "button"
-        button.description shouldBe "DaisyUI button"
-        button.files shouldContainExactly listOf("Button.kt")
-        button.dependencies shouldContainExactly listOf("theme")
-    }
+            val button = registry.get("button")!!
+            button.name shouldBe "button"
+            button.description shouldBe "DaisyUI button"
+            button.files shouldContainExactly listOf("Button.kt")
+            button.dependencies shouldContainExactly listOf("theme")
+        }
 
-    test("get returns null for an unknown component") {
-        Registry.fromJson(SAMPLE).get("modal").shouldBeNull()
-    }
+        test("get returns null for an unknown component") {
+            Registry.fromJson(SAMPLE).get("modal").shouldBeNull()
+        }
 
-    test("require throws for an unknown component") {
-        shouldThrow<IllegalArgumentException> { Registry.fromJson(SAMPLE).require("modal") }
-    }
+        test("require throws for an unknown component") {
+            shouldThrow<IllegalArgumentException> { Registry.fromJson(SAMPLE).require("modal") }
+        }
 
-    test("all preserves declaration order") {
-        Registry.fromJson(SAMPLE).all().map { it.name } shouldContainExactly listOf("theme", "button")
-    }
-})
+        test("all preserves declaration order") {
+            Registry.fromJson(SAMPLE).all().map { it.name } shouldContainExactly listOf("theme", "button")
+        }
+    })

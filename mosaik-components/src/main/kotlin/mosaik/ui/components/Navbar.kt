@@ -11,18 +11,26 @@ import kotlinx.html.*
  * ordinary HTML blocks.
  */
 @MosaikDsl
-class MNavbar(private val div: DIV) : FlowContent by div {
+class MNavbar(
+    private val div: DIV,
+) : FlowContent by div {
     var id: String
         get() = div.id
-        set(value) { div.id = value }
+        set(value) {
+            div.id = value
+        }
 
     var style: String
         get() = div.style
-        set(value) { div.style = value }
+        set(value) {
+            div.style = value
+        }
 
     var title: String
         get() = div.title
-        set(value) { div.title = value }
+        set(value) {
+            div.title = value
+        }
 }
 
 /**

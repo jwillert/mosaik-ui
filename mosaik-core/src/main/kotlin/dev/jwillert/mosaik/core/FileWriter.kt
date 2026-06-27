@@ -29,7 +29,6 @@ class FileWriter(
     private val packageName: String,
     private val placeholderPackage: String = "mosaik.ui.components",
 ) {
-
     /** Rewrites the placeholder package in [source] to the configured [packageName]. */
     fun transform(source: String): String = source.replace(placeholderPackage, packageName)
 
@@ -38,7 +37,11 @@ class FileWriter(
      * Existing files are only overwritten when [force] is true; otherwise the file is left
      * untouched. Returns the [WriteOutcome] describing what happened.
      */
-    fun write(target: File, source: String, force: Boolean = false): WriteOutcome {
+    fun write(
+        target: File,
+        source: String,
+        force: Boolean = false,
+    ): WriteOutcome {
         val existed = target.exists()
         if (existed && !force) return WriteOutcome.ALREADY_EXISTS
 

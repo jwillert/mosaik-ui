@@ -15,7 +15,6 @@ import java.io.File
  * each component's files exist in the configured package directory.
  */
 abstract class MosaikStatusTask : DefaultTask() {
-
     @get:Optional
     @get:Input
     abstract val packageName: Property<String>
@@ -25,8 +24,9 @@ abstract class MosaikStatusTask : DefaultTask() {
 
     @TaskAction
     fun status() {
-        val pkg = packageName.orNull
-            ?: throw GradleException("Set mosaikUi { packageName } before checking component status.")
+        val pkg =
+            packageName.orNull
+                ?: throw GradleException("Set mosaikUi { packageName } before checking component status.")
 
         val registry = BundledRegistry.load()
         val packageDir = File(sourceRoot.get().asFile, pkg.replace('.', '/'))

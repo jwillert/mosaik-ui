@@ -107,7 +107,11 @@ fun Application.module() {
                                     div("label") {
                                         span("label-text") { +"Email" }
                                     }
-                                    input(type = InputType.email, name = "email", classes = "input input-bordered w-full") {
+                                    input(
+                                        type = InputType.email,
+                                        name = "email",
+                                        classes = "input input-bordered w-full",
+                                    ) {
                                         required = true
                                     }
                                 }
@@ -116,7 +120,11 @@ fun Application.module() {
                                     div("label") {
                                         span("label-text") { +"Password" }
                                     }
-                                    input(type = InputType.password, name = "password", classes = "input input-bordered w-full") {
+                                    input(
+                                        type = InputType.password,
+                                        name = "password",
+                                        classes = "input input-bordered w-full",
+                                    ) {
                                         required = true
                                     }
                                 }
@@ -145,10 +153,13 @@ fun Application.module() {
                     mCard("w-96 bg-base-100 shadow-xl") {
                         form {
                             attributes["x-data"] = "{ email: '', password: '', loading: false, error: '' }"
-                            attributes["x-on:submit.prevent"] = "loading = true; error = ''; " +
-                                "fetch('/_examples/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, " +
-                                "body: JSON.stringify({ email, password }) }).then(r => r.ok ? alert('Login successful!') : " +
-                                "r.text().then(t => error = t)).catch(e => error = 'Network error').finally(() => loading = false)"
+                            attributes["x-on:submit.prevent"] =
+                                "loading = true; error = ''; " +
+                                "fetch('/_examples/login', { method: 'POST', " +
+                                "headers: { 'Content-Type': 'application/json' }, " +
+                                "body: JSON.stringify({ email, password }) })" +
+                                ".then(r => r.ok ? alert('Login successful!') : r.text().then(t => error = t))" +
+                                ".catch(e => error = 'Network error').finally(() => loading = false)"
 
                             div("card-body") {
                                 h2("card-title") { +"Login" }
@@ -157,7 +168,11 @@ fun Application.module() {
                                     div("label") {
                                         span("label-text") { +"Email" }
                                     }
-                                    input(type = InputType.email, name = "email", classes = "input input-bordered w-full") {
+                                    input(
+                                        type = InputType.email,
+                                        name = "email",
+                                        classes = "input input-bordered w-full",
+                                    ) {
                                         required = true
                                         attributes["x-model"] = "email"
                                     }
@@ -167,7 +182,11 @@ fun Application.module() {
                                     div("label") {
                                         span("label-text") { +"Password" }
                                     }
-                                    input(type = InputType.password, name = "password", classes = "input input-bordered w-full") {
+                                    input(
+                                        type = InputType.password,
+                                        name = "password",
+                                        classes = "input input-bordered w-full",
+                                    ) {
                                         required = true
                                         attributes["x-model"] = "password"
                                     }
@@ -208,7 +227,11 @@ fun Application.module() {
                                     div("label") {
                                         span("label-text") { +"Email" }
                                     }
-                                    input(type = InputType.email, name = "email", classes = "input input-bordered w-full") {
+                                    input(
+                                        type = InputType.email,
+                                        name = "email",
+                                        classes = "input input-bordered w-full",
+                                    ) {
                                         required = true
                                         attributes["data-model"] = "email"
                                     }
@@ -218,7 +241,11 @@ fun Application.module() {
                                     div("label") {
                                         span("label-text") { +"Password" }
                                     }
-                                    input(type = InputType.password, name = "password", classes = "input input-bordered w-full") {
+                                    input(
+                                        type = InputType.password,
+                                        name = "password",
+                                        classes = "input input-bordered w-full",
+                                    ) {
                                         required = true
                                         attributes["data-model"] = "password"
                                     }
@@ -506,7 +533,11 @@ fun Application.module() {
                                     div("label") {
                                         span("label-text") { +"Name" }
                                     }
-                                    input(type = InputType.text, name = "name", classes = "input input-bordered w-full") {
+                                    input(
+                                        type = InputType.text,
+                                        name = "name",
+                                        classes = "input input-bordered w-full",
+                                    ) {
                                         required = true
                                     }
                                 }
@@ -515,7 +546,11 @@ fun Application.module() {
                                     div("label") {
                                         span("label-text") { +"Email" }
                                     }
-                                    input(type = InputType.email, name = "email", classes = "input input-bordered w-full") {
+                                    input(
+                                        type = InputType.email,
+                                        name = "email",
+                                        classes = "input input-bordered w-full",
+                                    ) {
                                         required = true
                                     }
                                 }
@@ -524,7 +559,11 @@ fun Application.module() {
                                     div("label") {
                                         span("label-text") { +"Password" }
                                     }
-                                    input(type = InputType.password, name = "password", classes = "input input-bordered w-full") {
+                                    input(
+                                        type = InputType.password,
+                                        name = "password",
+                                        classes = "input input-bordered w-full",
+                                    ) {
                                         required = true
                                         attributes["minlength"] = "8"
                                     }
@@ -534,7 +573,11 @@ fun Application.module() {
                                     div("label") {
                                         span("label-text") { +"Confirm password" }
                                     }
-                                    input(type = InputType.password, name = "confirm_password", classes = "input input-bordered w-full") {
+                                    input(
+                                        type = InputType.password,
+                                        name = "confirm_password",
+                                        classes = "input input-bordered w-full",
+                                    ) {
                                         required = true
                                     }
                                 }
@@ -561,13 +604,16 @@ fun Application.module() {
                 alpinePreview = {
                     mCard("w-96 bg-base-100 shadow-xl") {
                         form {
-                            attributes["x-data"] = "{ name: '', email: '', password: '', confirmPassword: '', loading: false, error: '' }"
+                            attributes["x-data"] =
+                                "{ name: '', email: '', password: '', confirmPassword: '', loading: false, error: '' }"
                             attributes["x-on:submit.prevent"] =
                                 "if (password !== confirmPassword) { error = 'Passwords do not match'; return; } " +
                                 "loading = true; error = ''; " +
-                                "fetch('/_examples/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, " +
-                                "body: JSON.stringify({ name, email, password }) }).then(r => r.ok ? alert('Registration successful!') : " +
-                                "r.text().then(t => error = t)).catch(e => error = 'Network error').finally(() => loading = false)"
+                                "fetch('/_examples/register', { method: 'POST', " +
+                                "headers: { 'Content-Type': 'application/json' }, " +
+                                "body: JSON.stringify({ name, email, password }) })" +
+                                ".then(r => r.ok ? alert('Registration successful!') : r.text().then(t => error = t))" +
+                                ".catch(e => error = 'Network error').finally(() => loading = false)"
 
                             div("card-body") {
                                 h2("card-title") { +"Create account" }
@@ -576,7 +622,11 @@ fun Application.module() {
                                     div("label") {
                                         span("label-text") { +"Name" }
                                     }
-                                    input(type = InputType.text, name = "name", classes = "input input-bordered w-full") {
+                                    input(
+                                        type = InputType.text,
+                                        name = "name",
+                                        classes = "input input-bordered w-full",
+                                    ) {
                                         required = true
                                         attributes["x-model"] = "name"
                                     }
@@ -586,7 +636,11 @@ fun Application.module() {
                                     div("label") {
                                         span("label-text") { +"Email" }
                                     }
-                                    input(type = InputType.email, name = "email", classes = "input input-bordered w-full") {
+                                    input(
+                                        type = InputType.email,
+                                        name = "email",
+                                        classes = "input input-bordered w-full",
+                                    ) {
                                         required = true
                                         attributes["x-model"] = "email"
                                     }
@@ -596,7 +650,11 @@ fun Application.module() {
                                     div("label") {
                                         span("label-text") { +"Password" }
                                     }
-                                    input(type = InputType.password, name = "password", classes = "input input-bordered w-full") {
+                                    input(
+                                        type = InputType.password,
+                                        name = "password",
+                                        classes = "input input-bordered w-full",
+                                    ) {
                                         required = true
                                         attributes["minlength"] = "8"
                                         attributes["x-model"] = "password"
@@ -607,7 +665,11 @@ fun Application.module() {
                                     div("label") {
                                         span("label-text") { +"Confirm password" }
                                     }
-                                    input(type = InputType.password, name = "confirm_password", classes = "input input-bordered w-full") {
+                                    input(
+                                        type = InputType.password,
+                                        name = "confirm_password",
+                                        classes = "input input-bordered w-full",
+                                    ) {
                                         required = true
                                         attributes["x-model"] = "confirmPassword"
                                     }
@@ -650,7 +712,11 @@ fun Application.module() {
                                     div("label") {
                                         span("label-text") { +"Name" }
                                     }
-                                    input(type = InputType.text, name = "name", classes = "input input-bordered w-full") {
+                                    input(
+                                        type = InputType.text,
+                                        name = "name",
+                                        classes = "input input-bordered w-full",
+                                    ) {
                                         required = true
                                         attributes["data-model"] = "name"
                                     }
@@ -660,7 +726,11 @@ fun Application.module() {
                                     div("label") {
                                         span("label-text") { +"Email" }
                                     }
-                                    input(type = InputType.email, name = "email", classes = "input input-bordered w-full") {
+                                    input(
+                                        type = InputType.email,
+                                        name = "email",
+                                        classes = "input input-bordered w-full",
+                                    ) {
                                         required = true
                                         attributes["data-model"] = "email"
                                     }
@@ -670,7 +740,11 @@ fun Application.module() {
                                     div("label") {
                                         span("label-text") { +"Password" }
                                     }
-                                    input(type = InputType.password, name = "password", classes = "input input-bordered w-full") {
+                                    input(
+                                        type = InputType.password,
+                                        name = "password",
+                                        classes = "input input-bordered w-full",
+                                    ) {
                                         required = true
                                         attributes["minlength"] = "8"
                                         attributes["data-model"] = "password"
@@ -681,7 +755,11 @@ fun Application.module() {
                                     div("label") {
                                         span("label-text") { +"Confirm password" }
                                     }
-                                    input(type = InputType.password, name = "confirm_password", classes = "input input-bordered w-full") {
+                                    input(
+                                        type = InputType.password,
+                                        name = "confirm_password",
+                                        classes = "input input-bordered w-full",
+                                    ) {
                                         required = true
                                         attributes["data-model"] = "confirmPassword"
                                     }

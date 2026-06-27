@@ -23,8 +23,9 @@ data class ComponentEntry(
  * The JSON shape is an object with a `components` array, each element having `name`,
  * `description`, `files` and `dependencies` (see `mosaik-components/registry.json`).
  */
-class Registry private constructor(private val entries: Map<String, ComponentEntry>) {
-
+class Registry private constructor(
+    private val entries: Map<String, ComponentEntry>,
+) {
     /** All components in the order they appear in the registry. */
     fun all(): List<ComponentEntry> = entries.values.toList()
 
@@ -33,23 +34,29 @@ class Registry private constructor(private val entries: Map<String, ComponentEnt
 
     /** Like [get] but throws [IllegalArgumentException] when the component is unknown. */
     fun require(name: String): ComponentEntry =
-        get(name) ?: throw IllegalArgumentException("Unknown component '$name'. Available: ${entries.keys.joinToString(", ")}")
+        get(name)
+            ?: throw IllegalArgumentException(
+                "Unknown component '$name'. Available: ${entries.keys.joinToString(", ")}",
+            )
 
     companion object {
         /** Parses a registry from its JSON [text]. */
         fun fromJson(text: String): Registry {
-            val components = Json.parseToJsonElement(text).jsonObject["components"]?.jsonArray
-                ?: throw IllegalArgumentException("Registry JSON must have a 'components' array")
-            val entries = components.map { element ->
-                val obj = element.jsonObject
-                ComponentEntry(
-                    name = obj["name"]?.jsonPrimitive?.content
-                        ?: throw IllegalArgumentException("A component entry is missing its 'name'"),
-                    description = obj["description"]?.jsonPrimitive?.content ?: "",
-                    files = obj["files"]?.jsonArray?.map { it.jsonPrimitive.content } ?: emptyList(),
-                    dependencies = obj["dependencies"]?.jsonArray?.map { it.jsonPrimitive.content } ?: emptyList(),
-                )
-            }
+            val components =
+                Json.parseToJsonElement(text).jsonObject["components"]?.jsonArray
+                    ?: throw IllegalArgumentException("Registry JSON must have a 'components' array")
+            val entries =
+                components.map { element ->
+                    val obj = element.jsonObject
+                    ComponentEntry(
+                        name =
+                            obj["name"]?.jsonPrimitive?.content
+                                ?: throw IllegalArgumentException("A component entry is missing its 'name'"),
+                        description = obj["description"]?.jsonPrimitive?.content ?: "",
+                        files = obj["files"]?.jsonArray?.map { it.jsonPrimitive.content } ?: emptyList(),
+                        dependencies = obj["dependencies"]?.jsonArray?.map { it.jsonPrimitive.content } ?: emptyList(),
+                    )
+                }
             // Preserve declaration order for listing while keeping name lookups O(1).
             return Registry(entries.associateByTo(LinkedHashMap()) { it.name })
         }

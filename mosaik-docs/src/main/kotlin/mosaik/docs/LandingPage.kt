@@ -6,7 +6,12 @@ import kotlinx.html.*
 fun landingPage(): String =
     layout(HOME) {
         h1 { +"Mosaik UI" }
-        p { +"ShadCN-style components for Kotlin, Ktor and Gradle. Pick a component from the sidebar to see every variant rendered." }
+        p {
+            +(
+                "ShadCN-style components for Kotlin, Ktor and Gradle. Pick a component from the sidebar to see " +
+                    "every variant rendered."
+            )
+        }
         p {
             +"This app dogfoods "
             span("font-mono") { +"mosaik-components" }
