@@ -26,4 +26,5 @@ A ShadCN-inspired component toolkit for the Kotlin/Ktor/Gradle ecosystem. Compon
 - **Interaction Style** — The docs-wide selected client-side wiring style for interactive examples: htmx, Alpine.js, or Datastar. Component pages show previews and code for the selected style instead of repeating all three styles inline.
 - **Example Card** — A reusable documentation block that pairs a rendered preview with the corresponding Kotlin code, including copy support and syntax highlighting where feasible.
 - **Documentation Page** — A route-owned docs renderer whose source should live near its page or guide identity. Shared documentation blocks are extracted only when repeated across pages.
+- **Docs Shell Navigation** — Client-enhanced docs navigation where the persistent docs chrome (sidebar, theme controls, loaded scripts, selected theme) stays mounted while only the page content is replaced. It avoids the white full-page reload flash, especially when a dark theme is selected.
 - **VRT** — Visual Regression Testing. Renders components in a browser, screenshots them, and diffs against goldens.
