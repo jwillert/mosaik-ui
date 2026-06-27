@@ -1,6 +1,7 @@
 package mosaik.docs
 
 import kotlinx.html.*
+import mosaik.ui.components.mTable
 
 /** A row in an [apiReference] table: one component parameter. */
 data class ApiParam(
@@ -33,7 +34,7 @@ fun FlowContent.codeBlock(code: String) {
 fun FlowContent.apiReference(params: List<ApiParam>) {
     h2 { +"API reference" }
     div("overflow-x-auto") {
-        table("table table-zebra") {
+        mTable(zebra = true) {
             thead {
                 tr {
                     th { +"Parameter" }

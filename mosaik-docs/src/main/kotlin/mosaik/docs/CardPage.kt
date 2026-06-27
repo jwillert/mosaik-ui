@@ -7,6 +7,7 @@ import mosaik.ui.components.mCard
 import mosaik.ui.components.mCardActions
 import mosaik.ui.components.mCardBody
 import mosaik.ui.components.mCardTitle
+import mosaik.ui.components.mTable
 
 /**
  * Card page, following the five-section component template: title +
@@ -286,7 +287,7 @@ fun cardPage(): String =
                 +"."
             }
             div("overflow-x-auto") {
-                table("table table-zebra") {
+                mTable(zebra = true) {
                     thead {
                         tr {
                             th { +"Function" }

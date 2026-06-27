@@ -7,6 +7,7 @@ import mosaik.ui.components.mNavbar
 import mosaik.ui.components.mNavbarCenter
 import mosaik.ui.components.mNavbarEnd
 import mosaik.ui.components.mNavbarStart
+import mosaik.ui.components.mTable
 
 /**
  * Navbar page, following the five-section component template: title +
@@ -304,7 +305,7 @@ fun navbarPage(): String =
                 +"."
             }
             div("overflow-x-auto") {
-                table("table table-zebra") {
+                mTable(zebra = true) {
                     thead {
                         tr {
                             th { +"Function" }
