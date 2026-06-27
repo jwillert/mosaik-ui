@@ -87,8 +87,8 @@ object ButtonScenarios {
     val iconContent = listOf(
         Scenario("button-icon-right") {
             mButton(variant = ButtonVariant.Primary) {
-                span { +"→" }
-                span("ml-2") { +"Next" }
+                span { +"Next" }
+                span("ml-2") { +"→" }
             }
         },
         Scenario("button-icon-left") {
