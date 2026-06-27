@@ -1,6 +1,7 @@
 package mosaik.ui.components
 
 import dev.jwillert.ktor.vrt.Scenario
+import kotlinx.html.span
 
 object ButtonScenarios {
 
@@ -59,5 +60,44 @@ object ButtonScenarios {
         sizeScenario(Size.Xl),
     )
 
-    val all = variants + styles + shapes + widths + sizes
+    val disabled = listOf(
+        Scenario("button-disabled") {
+            mButton(variant = ButtonVariant.Primary) {
+                disabled = true
+                +"Disabled"
+            }
+        },
+    )
+
+    val loadingContent = listOf(
+        Scenario("button-loading-spinner") {
+            mButton(variant = ButtonVariant.Primary) {
+                mLoading(LoadingType.Spinner, Size.Sm, "mr-2")
+                +"Processing..."
+            }
+        },
+        Scenario("button-loading-dots") {
+            mButton(variant = ButtonVariant.Secondary) {
+                mLoading(LoadingType.Dots, Size.Sm, "mr-2")
+                +"Loading..."
+            }
+        },
+    )
+
+    val iconContent = listOf(
+        Scenario("button-icon-right") {
+            mButton(variant = ButtonVariant.Primary) {
+                span { +"→" }
+                span("ml-2") { +"Next" }
+            }
+        },
+        Scenario("button-icon-left") {
+            mButton(variant = ButtonVariant.Secondary) {
+                span("mr-2") { +"←" }
+                span { +"Back" }
+            }
+        },
+    )
+
+    val all = variants + styles + shapes + widths + sizes + disabled + loadingContent + iconContent
 }
