@@ -407,4 +407,274 @@ class ShellNavigationTest :
                 )
             datastarPresent shouldBe true
         }
+
+        test("ctrl-click opens link in new tab without intercepting") {
+            page.navigate("http://127.0.0.1:$testPort/")
+
+            // Set a marker to detect if shell navigation was triggered
+            page.evaluate("() => { window.shellNavigationTriggered = false; }")
+            page.evaluate(
+                """() => {
+                    const original = window.fetch;
+                    window.fetch = function(...args) {
+                        if (args[0].includes('?partial=true')) {
+                            window.shellNavigationTriggered = true;
+                        }
+                        return original.apply(this, args);
+                    };
+                }
+                """,
+            )
+
+            // Ctrl-click the Button link
+            page.locator(".menu a[href='/components/button']").click(
+                com.microsoft.playwright.Locator.ClickOptions().setModifiers(
+                    listOf(com.microsoft.playwright.options.KeyboardModifier.CONTROL),
+                ),
+            )
+
+            // Give it a moment to see if shell navigation was triggered
+            Thread.sleep(100)
+
+            // Shell navigation should NOT have been triggered
+            val triggered = page.evaluate("() => window.shellNavigationTriggered")
+            triggered shouldBe false
+
+            // Original page should still be the home page
+            page.url() shouldBe "http://127.0.0.1:$testPort/"
+        }
+
+        test("middle-click opens link in new tab without intercepting") {
+            page.navigate("http://127.0.0.1:$testPort/")
+
+            // Set a marker to detect if shell navigation was triggered
+            page.evaluate("() => { window.shellNavigationTriggered = false; }")
+            page.evaluate(
+                """() => {
+                    const original = window.fetch;
+                    window.fetch = function(...args) {
+                        if (args[0].includes('?partial=true')) {
+                            window.shellNavigationTriggered = true;
+                        }
+                        return original.apply(this, args);
+                    };
+                }
+                """,
+            )
+
+            // Middle-click the Button link
+            page.locator(".menu a[href='/components/button']").click(
+                com.microsoft.playwright.Locator.ClickOptions().setButton(
+                    com.microsoft.playwright.options.MouseButton.MIDDLE,
+                ),
+            )
+
+            // Give it a moment to see if shell navigation was triggered
+            Thread.sleep(100)
+
+            // Shell navigation should NOT have been triggered
+            val triggered = page.evaluate("() => window.shellNavigationTriggered")
+            triggered shouldBe false
+
+            // Original page should still be the home page
+            page.url() shouldBe "http://127.0.0.1:$testPort/"
+        }
+
+        test("link with target attribute is not intercepted") {
+            page.navigate("http://127.0.0.1:$testPort/")
+
+            // Create a test link with target="_blank"
+            page.evaluate(
+                """() => {
+                    const link = document.createElement('a');
+                    link.href = '/components/button';
+                    link.target = '_blank';
+                    link.textContent = 'Test Link';
+                    link.id = 'test-target-link';
+                    document.body.appendChild(link);
+                }
+                """,
+            )
+
+            // Set a marker to detect if shell navigation was triggered
+            page.evaluate("() => { window.shellNavigationTriggered = false; }")
+            page.evaluate(
+                """() => {
+                    const original = window.fetch;
+                    window.fetch = function(...args) {
+                        if (args[0].includes('?partial=true')) {
+                            window.shellNavigationTriggered = true;
+                        }
+                        return original.apply(this, args);
+                    };
+                }
+                """,
+            )
+
+            // Click the targeted link
+            page.locator("#test-target-link").click()
+
+            // Give it a moment to see if shell navigation was triggered
+            Thread.sleep(100)
+
+            // Shell navigation should NOT have been triggered
+            val triggered = page.evaluate("() => window.shellNavigationTriggered")
+            triggered shouldBe false
+
+            // Original page should still be the home page
+            page.url() shouldBe "http://127.0.0.1:$testPort/"
+        }
+
+        test("download link is not intercepted") {
+            page.navigate("http://127.0.0.1:$testPort/")
+
+            // Create a test download link
+            page.evaluate(
+                """() => {
+                    const link = document.createElement('a');
+                    link.href = '/components/button';
+                    link.download = 'button.html';
+                    link.textContent = 'Download Link';
+                    link.id = 'test-download-link';
+                    document.body.appendChild(link);
+                }
+                """,
+            )
+
+            // Set a marker to detect if shell navigation was triggered
+            page.evaluate("() => { window.shellNavigationTriggered = false; }")
+            page.evaluate(
+                """() => {
+                    const original = window.fetch;
+                    window.fetch = function(...args) {
+                        if (args[0].includes('?partial=true')) {
+                            window.shellNavigationTriggered = true;
+                        }
+                        return original.apply(this, args);
+                    };
+                }
+                """,
+            )
+
+            // Click the download link
+            page.locator("#test-download-link").click()
+
+            // Give it a moment to see if shell navigation was triggered
+            Thread.sleep(100)
+
+            // Shell navigation should NOT have been triggered
+            val triggered = page.evaluate("() => window.shellNavigationTriggered")
+            triggered shouldBe false
+        }
+
+        test("external link is not intercepted") {
+            page.navigate("http://127.0.0.1:$testPort/")
+
+            // Create an external link and intercept click to prevent actual navigation
+            page.evaluate(
+                """() => {
+                    window.externalLinkClicked = false;
+                    const link = document.createElement('a');
+                    link.href = 'https://example.com';
+                    link.textContent = 'External Link';
+                    link.id = 'test-external-link';
+                    link.addEventListener('click', (e) => {
+                        // Track that default browser behavior would happen
+                        if (!e.defaultPrevented) {
+                            window.externalLinkClicked = true;
+                        }
+                        // Prevent actual navigation during test
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }, true);
+                    document.body.appendChild(link);
+                }
+                """,
+            )
+
+            // Click the external link
+            page.locator("#test-external-link").click()
+
+            // Give it a moment
+            Thread.sleep(100)
+
+            // Link should have been clicked with default behavior (not intercepted)
+            val clicked = page.evaluate("() => window.externalLinkClicked")
+            clicked shouldBe true
+
+            // Original page should still be the home page (we prevented actual navigation)
+            page.url() shouldBe "http://127.0.0.1:$testPort/"
+        }
+
+        test("static asset link is not intercepted") {
+            page.navigate("http://127.0.0.1:$testPort/")
+
+            // Create a static asset link and intercept click to prevent actual navigation
+            page.evaluate(
+                """() => {
+                    window.staticLinkClicked = false;
+                    const link = document.createElement('a');
+                    link.href = '/static/output.css';
+                    link.textContent = 'CSS Link';
+                    link.id = 'test-static-link';
+                    link.addEventListener('click', (e) => {
+                        // Track that default browser behavior would happen
+                        if (!e.defaultPrevented) {
+                            window.staticLinkClicked = true;
+                        }
+                        // Prevent actual navigation during test
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }, true);
+                    document.body.appendChild(link);
+                }
+                """,
+            )
+
+            // Click the static asset link
+            page.locator("#test-static-link").click()
+
+            // Give it a moment
+            Thread.sleep(100)
+
+            // Link should have been clicked with default behavior (not intercepted)
+            val clicked = page.evaluate("() => window.staticLinkClicked")
+            clicked shouldBe true
+        }
+
+        test("/_examples endpoint is not intercepted") {
+            page.navigate("http://127.0.0.1:$testPort/")
+
+            // Create an _examples link and intercept click to prevent actual navigation
+            page.evaluate(
+                """() => {
+                    window.examplesLinkClicked = false;
+                    const link = document.createElement('a');
+                    link.href = '/_examples/button/toggle';
+                    link.textContent = 'Example Link';
+                    link.id = 'test-examples-link';
+                    link.addEventListener('click', (e) => {
+                        // Track that default browser behavior would happen
+                        if (!e.defaultPrevented) {
+                            window.examplesLinkClicked = true;
+                        }
+                        // Prevent actual navigation during test
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }, true);
+                    document.body.appendChild(link);
+                }
+                """,
+            )
+
+            // Click the examples link
+            page.locator("#test-examples-link").click()
+
+            // Give it a moment
+            Thread.sleep(100)
+
+            // Link should have been clicked with default behavior (not intercepted)
+            val clicked = page.evaluate("() => window.examplesLinkClicked")
+            clicked shouldBe true
+        }
     })

@@ -31,7 +31,7 @@ fun main() {
 fun setupShellNavigation() {
     document.addEventListener("click", { event ->
         val target = event.target
-        if (target is HTMLAnchorElement && isInternalDocsLink(target)) {
+        if (target is HTMLAnchorElement && shouldEnhanceNavigation(target, event)) {
             event.preventDefault()
             navigateToPage(target.href)
         }
@@ -51,6 +51,52 @@ fun isInternalDocsLink(anchor: HTMLAnchorElement): Boolean {
     val origin = window.location.origin
     // Only intercept same-origin links that are docs pages (not /_examples routes).
     return href.startsWith(origin) && !href.contains("/_examples/")
+}
+
+/**
+ * Returns true if the navigation should be enhanced via shell navigation.
+ *
+ * Preserves native browser navigation boundaries for:
+ * - Modified clicks (ctrl/cmd/shift/alt)
+ * - Non-left-clicks (middle/right clicks)
+ * - Links with target attributes
+ * - Download links
+ * - External links
+ * - Static asset URLs
+ * - Live example endpoints under /_examples
+ */
+fun shouldEnhanceNavigation(
+    anchor: HTMLAnchorElement,
+    event: dynamic,
+): Boolean {
+    // Don't enhance if the link has a target attribute (e.g., target="_blank")
+    if (anchor.target.isNotEmpty()) {
+        return false
+    }
+
+    // Don't enhance if the link is a download
+    if (anchor.hasAttribute("download")) {
+        return false
+    }
+
+    // Don't enhance if click has modifiers (ctrl, cmd, shift, alt)
+    if (event.ctrlKey == true || event.metaKey == true || event.shiftKey == true || event.altKey == true) {
+        return false
+    }
+
+    // Don't enhance if it's not a left-click (button 0 is left-click)
+    if (event.button != 0) {
+        return false
+    }
+
+    // Don't enhance if the URL is a static asset
+    val href = anchor.href
+    if (href.contains("/static/")) {
+        return false
+    }
+
+    // Only enhance internal docs links (checks for same-origin and excludes /_examples)
+    return isInternalDocsLink(anchor)
 }
 
 /**
