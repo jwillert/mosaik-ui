@@ -9,6 +9,10 @@ import mosaik.ui.components.mCard
 import mosaik.ui.components.mCardActions
 import mosaik.ui.components.mCardBody
 import mosaik.ui.components.mCardTitle
+import mosaik.ui.components.mFormControl
+import mosaik.ui.components.mInput
+import mosaik.ui.components.mLabel
+import mosaik.ui.components.mLabelText
 import mosaik.ui.components.mLoading
 import mosaik.ui.components.mTable
 
@@ -110,28 +114,22 @@ fun Application.module() {
                             mCardBody {
                                 mCardTitle { +"Login" }
 
-                                label("form-control w-full") {
-                                    div("label") {
-                                        span("label-text") { +"Email" }
+                                mFormControl("w-full") {
+                                    mLabel {
+                                        mLabelText { +"Email" }
                                     }
-                                    input(
-                                        type = InputType.email,
-                                        name = "email",
-                                        classes = "input input-bordered w-full",
-                                    ) {
+                                    mInput(type = InputType.email, classes = "w-full") {
+                                        name = "email"
                                         required = true
                                     }
                                 }
 
-                                label("form-control w-full") {
-                                    div("label") {
-                                        span("label-text") { +"Password" }
+                                mFormControl("w-full") {
+                                    mLabel {
+                                        mLabelText { +"Password" }
                                     }
-                                    input(
-                                        type = InputType.password,
-                                        name = "password",
-                                        classes = "input input-bordered w-full",
-                                    ) {
+                                    mInput(type = InputType.password, classes = "w-full") {
+                                        name = "password"
                                         required = true
                                     }
                                 }
@@ -171,29 +169,23 @@ fun Application.module() {
                             mCardBody {
                                 mCardTitle { +"Login" }
 
-                                label("form-control w-full") {
-                                    div("label") {
-                                        span("label-text") { +"Email" }
+                                mFormControl("w-full") {
+                                    mLabel {
+                                        mLabelText { +"Email" }
                                     }
-                                    input(
-                                        type = InputType.email,
-                                        name = "email",
-                                        classes = "input input-bordered w-full",
-                                    ) {
+                                    mInput(type = InputType.email, classes = "w-full") {
+                                        name = "email"
                                         required = true
                                         attributes["x-model"] = "email"
                                     }
                                 }
 
-                                label("form-control w-full") {
-                                    div("label") {
-                                        span("label-text") { +"Password" }
+                                mFormControl("w-full") {
+                                    mLabel {
+                                        mLabelText { +"Password" }
                                     }
-                                    input(
-                                        type = InputType.password,
-                                        name = "password",
-                                        classes = "input input-bordered w-full",
-                                    ) {
+                                    mInput(type = InputType.password, classes = "w-full") {
+                                        name = "password"
                                         required = true
                                         attributes["x-model"] = "password"
                                     }
@@ -230,29 +222,23 @@ fun Application.module() {
                             mCardBody {
                                 mCardTitle { +"Login" }
 
-                                label("form-control w-full") {
-                                    div("label") {
-                                        span("label-text") { +"Email" }
+                                mFormControl("w-full") {
+                                    mLabel {
+                                        mLabelText { +"Email" }
                                     }
-                                    input(
-                                        type = InputType.email,
-                                        name = "email",
-                                        classes = "input input-bordered w-full",
-                                    ) {
+                                    mInput(type = InputType.email, classes = "w-full") {
+                                        name = "email"
                                         required = true
                                         attributes["data-model"] = "email"
                                     }
                                 }
 
-                                label("form-control w-full") {
-                                    div("label") {
-                                        span("label-text") { +"Password" }
+                                mFormControl("w-full") {
+                                    mLabel {
+                                        mLabelText { +"Password" }
                                     }
-                                    input(
-                                        type = InputType.password,
-                                        name = "password",
-                                        classes = "input input-bordered w-full",
-                                    ) {
+                                    mInput(type = InputType.password, classes = "w-full") {
+                                        name = "password"
                                         required = true
                                         attributes["data-model"] = "password"
                                     }
@@ -291,20 +277,22 @@ mCard("w-96 bg-base-100 shadow-xl") {
         mCardBody {
             mCardTitle { +"Login" }
 
-            label("form-control w-full") {
-                div("label") {
-                    span("label-text") { +"Email" }
+            mFormControl("w-full") {
+                mLabel {
+                    mLabelText { +"Email" }
                 }
-                input(type = InputType.email, name = "email", classes = "input input-bordered w-full") {
+                mInput(type = InputType.email, classes = "w-full") {
+                    name = "email"
                     required = true
                 }
             }
 
-            label("form-control w-full") {
-                div("label") {
-                    span("label-text") { +"Password" }
+            mFormControl("w-full") {
+                mLabel {
+                    mLabelText { +"Password" }
                 }
-                input(type = InputType.password, name = "password", classes = "input input-bordered w-full") {
+                mInput(type = InputType.password, classes = "w-full") {
+                    name = "password"
                     required = true
                 }
             }
@@ -341,21 +329,23 @@ mCard("w-96 bg-base-100 shadow-xl") {
         mCardBody {
             mCardTitle { +"Login" }
 
-            label("form-control w-full") {
-                div("label") {
-                    span("label-text") { +"Email" }
+            mFormControl("w-full") {
+                mLabel {
+                    mLabelText { +"Email" }
                 }
-                input(type = InputType.email, name = "email", classes = "input input-bordered w-full") {
+                mInput(type = InputType.email, classes = "w-full") {
+                    name = "email"
                     required = true
                     attributes["x-model"] = "email"
                 }
             }
 
-            label("form-control w-full") {
-                div("label") {
-                    span("label-text") { +"Password" }
+            mFormControl("w-full") {
+                mLabel {
+                    mLabelText { +"Password" }
                 }
-                input(type = InputType.password, name = "password", classes = "input input-bordered w-full") {
+                mInput(type = InputType.password, classes = "w-full") {
+                    name = "password"
                     required = true
                     attributes["x-model"] = "password"
                 }
@@ -393,21 +383,23 @@ mCard("w-96 bg-base-100 shadow-xl") {
         mCardBody {
             mCardTitle { +"Login" }
 
-            label("form-control w-full") {
-                div("label") {
-                    span("label-text") { +"Email" }
+            mFormControl("w-full") {
+                mLabel {
+                    mLabelText { +"Email" }
                 }
-                input(type = InputType.email, name = "email", classes = "input input-bordered w-full") {
+                mInput(type = InputType.email, classes = "w-full") {
+                    name = "email"
                     required = true
                     attributes["data-model"] = "email"
                 }
             }
 
-            label("form-control w-full") {
-                div("label") {
-                    span("label-text") { +"Password" }
+            mFormControl("w-full") {
+                mLabel {
+                    mLabelText { +"Password" }
                 }
-                input(type = InputType.password, name = "password", classes = "input input-bordered w-full") {
+                mInput(type = InputType.password, classes = "w-full") {
+                    name = "password"
                     required = true
                     attributes["data-model"] = "password"
                 }
@@ -536,55 +528,43 @@ fun Application.module() {
                             mCardBody {
                                 mCardTitle { +"Create account" }
 
-                                label("form-control w-full") {
-                                    div("label") {
-                                        span("label-text") { +"Name" }
+                                mFormControl("w-full") {
+                                    mLabel {
+                                        mLabelText { +"Name" }
                                     }
-                                    input(
-                                        type = InputType.text,
-                                        name = "name",
-                                        classes = "input input-bordered w-full",
-                                    ) {
+                                    mInput(type = InputType.text, classes = "w-full") {
+                                        name = "name"
                                         required = true
                                     }
                                 }
 
-                                label("form-control w-full") {
-                                    div("label") {
-                                        span("label-text") { +"Email" }
+                                mFormControl("w-full") {
+                                    mLabel {
+                                        mLabelText { +"Email" }
                                     }
-                                    input(
-                                        type = InputType.email,
-                                        name = "email",
-                                        classes = "input input-bordered w-full",
-                                    ) {
+                                    mInput(type = InputType.email, classes = "w-full") {
+                                        name = "email"
                                         required = true
                                     }
                                 }
 
-                                label("form-control w-full") {
-                                    div("label") {
-                                        span("label-text") { +"Password" }
+                                mFormControl("w-full") {
+                                    mLabel {
+                                        mLabelText { +"Password" }
                                     }
-                                    input(
-                                        type = InputType.password,
-                                        name = "password",
-                                        classes = "input input-bordered w-full",
-                                    ) {
+                                    mInput(type = InputType.password, classes = "w-full") {
+                                        name = "password"
                                         required = true
                                         attributes["minlength"] = "8"
                                     }
                                 }
 
-                                label("form-control w-full") {
-                                    div("label") {
-                                        span("label-text") { +"Confirm password" }
+                                mFormControl("w-full") {
+                                    mLabel {
+                                        mLabelText { +"Confirm password" }
                                     }
-                                    input(
-                                        type = InputType.password,
-                                        name = "confirm_password",
-                                        classes = "input input-bordered w-full",
-                                    ) {
+                                    mInput(type = InputType.password, classes = "w-full") {
+                                        name = "confirm_password"
                                         required = true
                                     }
                                 }
@@ -625,58 +605,46 @@ fun Application.module() {
                             mCardBody {
                                 mCardTitle { +"Create account" }
 
-                                label("form-control w-full") {
-                                    div("label") {
-                                        span("label-text") { +"Name" }
+                                mFormControl("w-full") {
+                                    mLabel {
+                                        mLabelText { +"Name" }
                                     }
-                                    input(
-                                        type = InputType.text,
-                                        name = "name",
-                                        classes = "input input-bordered w-full",
-                                    ) {
+                                    mInput(type = InputType.text, classes = "w-full") {
+                                        name = "name"
                                         required = true
                                         attributes["x-model"] = "name"
                                     }
                                 }
 
-                                label("form-control w-full") {
-                                    div("label") {
-                                        span("label-text") { +"Email" }
+                                mFormControl("w-full") {
+                                    mLabel {
+                                        mLabelText { +"Email" }
                                     }
-                                    input(
-                                        type = InputType.email,
-                                        name = "email",
-                                        classes = "input input-bordered w-full",
-                                    ) {
+                                    mInput(type = InputType.email, classes = "w-full") {
+                                        name = "email"
                                         required = true
                                         attributes["x-model"] = "email"
                                     }
                                 }
 
-                                label("form-control w-full") {
-                                    div("label") {
-                                        span("label-text") { +"Password" }
+                                mFormControl("w-full") {
+                                    mLabel {
+                                        mLabelText { +"Password" }
                                     }
-                                    input(
-                                        type = InputType.password,
-                                        name = "password",
-                                        classes = "input input-bordered w-full",
-                                    ) {
+                                    mInput(type = InputType.password, classes = "w-full") {
+                                        name = "password"
                                         required = true
                                         attributes["minlength"] = "8"
                                         attributes["x-model"] = "password"
                                     }
                                 }
 
-                                label("form-control w-full") {
-                                    div("label") {
-                                        span("label-text") { +"Confirm password" }
+                                mFormControl("w-full") {
+                                    mLabel {
+                                        mLabelText { +"Confirm password" }
                                     }
-                                    input(
-                                        type = InputType.password,
-                                        name = "confirm_password",
-                                        classes = "input input-bordered w-full",
-                                    ) {
+                                    mInput(type = InputType.password, classes = "w-full") {
+                                        name = "confirm_password"
                                         required = true
                                         attributes["x-model"] = "confirmPassword"
                                     }
@@ -715,58 +683,46 @@ fun Application.module() {
                             mCardBody {
                                 mCardTitle { +"Create account" }
 
-                                label("form-control w-full") {
-                                    div("label") {
-                                        span("label-text") { +"Name" }
+                                mFormControl("w-full") {
+                                    mLabel {
+                                        mLabelText { +"Name" }
                                     }
-                                    input(
-                                        type = InputType.text,
-                                        name = "name",
-                                        classes = "input input-bordered w-full",
-                                    ) {
+                                    mInput(type = InputType.text, classes = "w-full") {
+                                        name = "name"
                                         required = true
                                         attributes["data-model"] = "name"
                                     }
                                 }
 
-                                label("form-control w-full") {
-                                    div("label") {
-                                        span("label-text") { +"Email" }
+                                mFormControl("w-full") {
+                                    mLabel {
+                                        mLabelText { +"Email" }
                                     }
-                                    input(
-                                        type = InputType.email,
-                                        name = "email",
-                                        classes = "input input-bordered w-full",
-                                    ) {
+                                    mInput(type = InputType.email, classes = "w-full") {
+                                        name = "email"
                                         required = true
                                         attributes["data-model"] = "email"
                                     }
                                 }
 
-                                label("form-control w-full") {
-                                    div("label") {
-                                        span("label-text") { +"Password" }
+                                mFormControl("w-full") {
+                                    mLabel {
+                                        mLabelText { +"Password" }
                                     }
-                                    input(
-                                        type = InputType.password,
-                                        name = "password",
-                                        classes = "input input-bordered w-full",
-                                    ) {
+                                    mInput(type = InputType.password, classes = "w-full") {
+                                        name = "password"
                                         required = true
                                         attributes["minlength"] = "8"
                                         attributes["data-model"] = "password"
                                     }
                                 }
 
-                                label("form-control w-full") {
-                                    div("label") {
-                                        span("label-text") { +"Confirm password" }
+                                mFormControl("w-full") {
+                                    mLabel {
+                                        mLabelText { +"Confirm password" }
                                     }
-                                    input(
-                                        type = InputType.password,
-                                        name = "confirm_password",
-                                        classes = "input input-bordered w-full",
-                                    ) {
+                                    mInput(type = InputType.password, classes = "w-full") {
+                                        name = "confirm_password"
                                         required = true
                                         attributes["data-model"] = "confirmPassword"
                                     }
@@ -805,39 +761,43 @@ mCard("w-96 bg-base-100 shadow-xl") {
         mCardBody {
             mCardTitle { +"Create account" }
 
-            label("form-control w-full") {
-                div("label") {
-                    span("label-text") { +"Name" }
+            mFormControl("w-full") {
+                mLabel {
+                    mLabelText { +"Name" }
                 }
-                input(type = InputType.text, name = "name", classes = "input input-bordered w-full") {
+                mInput(type = InputType.text, classes = "w-full") {
+                    name = "name"
                     required = true
                 }
             }
 
-            label("form-control w-full") {
-                div("label") {
-                    span("label-text") { +"Email" }
+            mFormControl("w-full") {
+                mLabel {
+                    mLabelText { +"Email" }
                 }
-                input(type = InputType.email, name = "email", classes = "input input-bordered w-full") {
+                mInput(type = InputType.email, classes = "w-full") {
+                    name = "email"
                     required = true
                 }
             }
 
-            label("form-control w-full") {
-                div("label") {
-                    span("label-text") { +"Password" }
+            mFormControl("w-full") {
+                mLabel {
+                    mLabelText { +"Password" }
                 }
-                input(type = InputType.password, name = "password", classes = "input input-bordered w-full") {
+                mInput(type = InputType.password, classes = "w-full") {
+                    name = "password"
                     required = true
                     attributes["minlength"] = "8"
                 }
             }
 
-            label("form-control w-full") {
-                div("label") {
-                    span("label-text") { +"Confirm password" }
+            mFormControl("w-full") {
+                mLabel {
+                    mLabelText { +"Confirm password" }
                 }
-                input(type = InputType.password, name = "confirm_password", classes = "input input-bordered w-full") {
+                mInput(type = InputType.password, classes = "w-full") {
+                    name = "confirm_password"
                     required = true
                 }
             }
@@ -875,42 +835,46 @@ mCard("w-96 bg-base-100 shadow-xl") {
         mCardBody {
             mCardTitle { +"Create account" }
 
-            label("form-control w-full") {
-                div("label") {
-                    span("label-text") { +"Name" }
+            mFormControl("w-full") {
+                mLabel {
+                    mLabelText { +"Name" }
                 }
-                input(type = InputType.text, name = "name", classes = "input input-bordered w-full") {
+                mInput(type = InputType.text, classes = "w-full") {
+                    name = "name"
                     required = true
                     attributes["x-model"] = "name"
                 }
             }
 
-            label("form-control w-full") {
-                div("label") {
-                    span("label-text") { +"Email" }
+            mFormControl("w-full") {
+                mLabel {
+                    mLabelText { +"Email" }
                 }
-                input(type = InputType.email, name = "email", classes = "input input-bordered w-full") {
+                mInput(type = InputType.email, classes = "w-full") {
+                    name = "email"
                     required = true
                     attributes["x-model"] = "email"
                 }
             }
 
-            label("form-control w-full") {
-                div("label") {
-                    span("label-text") { +"Password" }
+            mFormControl("w-full") {
+                mLabel {
+                    mLabelText { +"Password" }
                 }
-                input(type = InputType.password, name = "password", classes = "input input-bordered w-full") {
+                mInput(type = InputType.password, classes = "w-full") {
+                    name = "password"
                     required = true
                     attributes["minlength"] = "8"
                     attributes["x-model"] = "password"
                 }
             }
 
-            label("form-control w-full") {
-                div("label") {
-                    span("label-text") { +"Confirm password" }
+            mFormControl("w-full") {
+                mLabel {
+                    mLabelText { +"Confirm password" }
                 }
-                input(type = InputType.password, name = "confirm_password", classes = "input input-bordered w-full") {
+                mInput(type = InputType.password, classes = "w-full") {
+                    name = "confirm_password"
                     required = true
                     attributes["x-model"] = "confirmPassword"
                 }
@@ -948,42 +912,46 @@ mCard("w-96 bg-base-100 shadow-xl") {
         mCardBody {
             mCardTitle { +"Create account" }
 
-            label("form-control w-full") {
-                div("label") {
-                    span("label-text") { +"Name" }
+            mFormControl("w-full") {
+                mLabel {
+                    mLabelText { +"Name" }
                 }
-                input(type = InputType.text, name = "name", classes = "input input-bordered w-full") {
+                mInput(type = InputType.text, classes = "w-full") {
+                    name = "name"
                     required = true
                     attributes["data-model"] = "name"
                 }
             }
 
-            label("form-control w-full") {
-                div("label") {
-                    span("label-text") { +"Email" }
+            mFormControl("w-full") {
+                mLabel {
+                    mLabelText { +"Email" }
                 }
-                input(type = InputType.email, name = "email", classes = "input input-bordered w-full") {
+                mInput(type = InputType.email, classes = "w-full") {
+                    name = "email"
                     required = true
                     attributes["data-model"] = "email"
                 }
             }
 
-            label("form-control w-full") {
-                div("label") {
-                    span("label-text") { +"Password" }
+            mFormControl("w-full") {
+                mLabel {
+                    mLabelText { +"Password" }
                 }
-                input(type = InputType.password, name = "password", classes = "input input-bordered w-full") {
+                mInput(type = InputType.password, classes = "w-full") {
+                    name = "password"
                     required = true
                     attributes["minlength"] = "8"
                     attributes["data-model"] = "password"
                 }
             }
 
-            label("form-control w-full") {
-                div("label") {
-                    span("label-text") { +"Confirm password" }
+            mFormControl("w-full") {
+                mLabel {
+                    mLabelText { +"Confirm password" }
                 }
-                input(type = InputType.password, name = "confirm_password", classes = "input input-bordered w-full") {
+                mInput(type = InputType.password, classes = "w-full") {
+                    name = "confirm_password"
                     required = true
                     attributes["data-model"] = "confirmPassword"
                 }

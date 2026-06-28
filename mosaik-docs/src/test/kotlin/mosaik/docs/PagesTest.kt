@@ -171,8 +171,10 @@ class PagesTest :
             // All three previews render the login form card.
             html shouldContain "Login"
             // Form inputs are present in previews.
-            html shouldContain "type=\"email\" name=\"email\""
-            html shouldContain "type=\"password\" name=\"password\""
+            html shouldContain "type=\"email\""
+            html shouldContain "name=\"email\""
+            html shouldContain "type=\"password\""
+            html shouldContain "name=\"password\""
             // Submit button is present.
             html shouldContain "Sign in"
             // Result/error display elements are present.
@@ -200,9 +202,12 @@ class PagesTest :
             // All three previews render the registration form card.
             html shouldContain "Create account"
             // Form inputs are present in previews.
-            html shouldContain "type=\"text\" name=\"name\""
-            html shouldContain "type=\"email\" name=\"email\""
-            html shouldContain "type=\"password\" name=\"password\""
+            html shouldContain "type=\"text\""
+            html shouldContain "name=\"name\""
+            html shouldContain "type=\"email\""
+            html shouldContain "name=\"email\""
+            html shouldContain "type=\"password\""
+            html shouldContain "name=\"password\""
             html shouldContain "name=\"confirm_password\""
             // Submit button is present.
             html shouldContain "Sign up"
@@ -718,8 +723,10 @@ class PagesTest :
             // All three previews render the login form card.
             html shouldContain "Login"
             // Form inputs are present in previews.
-            html shouldContain "type=\"email\" name=\"email\""
-            html shouldContain "type=\"password\" name=\"password\""
+            html shouldContain "type=\"email\""
+            html shouldContain "name=\"email\""
+            html shouldContain "type=\"password\""
+            html shouldContain "name=\"password\""
             // Submit button is present.
             html shouldContain "Sign in"
             // Result/error display elements are present.
@@ -747,9 +754,12 @@ class PagesTest :
             // All three previews render the registration form card.
             html shouldContain "Create account"
             // Form inputs are present in previews.
-            html shouldContain "type=\"text\" name=\"name\""
-            html shouldContain "type=\"email\" name=\"email\""
-            html shouldContain "type=\"password\" name=\"password\""
+            html shouldContain "type=\"text\""
+            html shouldContain "name=\"name\""
+            html shouldContain "type=\"email\""
+            html shouldContain "name=\"email\""
+            html shouldContain "type=\"password\""
+            html shouldContain "name=\"password\""
             html shouldContain "name=\"confirm_password\""
             // Submit button is present.
             html shouldContain "Sign up"
