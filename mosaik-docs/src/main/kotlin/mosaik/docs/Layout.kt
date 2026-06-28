@@ -212,6 +212,7 @@ private fun FlowContent.interactionStyleSwitcher() {
         mSelect(size = Size.Sm, classes = "w-full mt-1") {
             id = "interaction-style-switcher"
             attributes["onchange"] =
+                "document.documentElement.setAttribute('data-interaction-style', this.value);" +
                 "localStorage.setItem('mosaik-interaction-style', this.value);" +
                 "document.querySelectorAll('.tabs input[type=\"radio\"]').forEach(function(input) {" +
                 "  if (input.getAttribute('data-interaction-style') === " +
