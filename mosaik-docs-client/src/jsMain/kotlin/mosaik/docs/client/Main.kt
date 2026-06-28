@@ -85,7 +85,7 @@ fun shouldEnhanceNavigation(
     }
 
     // Don't enhance if it's not a left-click (button 0 is left-click)
-    if (event.button != 0.toShort()) {
+    if (event.button != 0) {
         return false
     }
 
