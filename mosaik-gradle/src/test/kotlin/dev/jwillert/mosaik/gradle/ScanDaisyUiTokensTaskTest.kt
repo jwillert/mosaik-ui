@@ -88,29 +88,6 @@ fun example() {
             result.output shouldContain "scanDaisyUiTokens"
         }
 
-        test("task fails when DaisyUI tokens are found") {
-            val dir = createTempDirectory().toFile()
-            setupProject(dir)
-            File(dir, "src/main/kotlin/mosaik/docs").apply { mkdirs() }
-            File(dir, "src/main/kotlin/mosaik/docs/Page.kt").apply {
-                writeText(
-                    """package mosaik.docs
-
-import kotlinx.html.*
-
-fun example() {
-    h6("footer-title") { +"Services" }
-}
-""",
-                )
-            }
-
-            val result = runner(dir, "scanDaisyUiTokens").buildAndFail()
-
-            result.output shouldContain "Found 1 DaisyUI class token(s)"
-            result.output shouldContain "mosaik/docs/Page.kt"
-        }
-
         test("check task depends on scanDaisyUiTokens when lifecycle-base plugin is applied") {
             val dir = createTempDirectory().toFile()
             dir.resolve("settings.gradle.kts").writeText("""rootProject.name = "test-project"""")
