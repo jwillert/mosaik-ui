@@ -52,10 +52,10 @@ class MNavbar(
  * ```kotlin
  * mNavbar("bg-base-100 shadow-sm") {
  *     mNavbarStart {
- *         a(classes = "btn btn-ghost text-xl") { +"Mosaik" }
+ *         mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
  *     }
  *     mNavbarEnd {
- *         mButton(Variant.Primary) { +"Sign up" }
+ *         mButton(variant = ButtonVariant.Primary) { +"Sign up" }
  *     }
  * }
  * ```

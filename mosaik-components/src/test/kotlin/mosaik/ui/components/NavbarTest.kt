@@ -61,7 +61,7 @@ class NavbarTest :
                 render {
                     mNavbar("bg-base-100 shadow-sm") {
                         mNavbarStart {
-                            a(classes = "btn btn-ghost text-xl") { +"Mosaik" }
+                            mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
                         }
                         mNavbarCenter {
                             a { +"Docs" }
@@ -73,7 +73,9 @@ class NavbarTest :
                 }
 
             html shouldContain "<div class=\"navbar bg-base-100 shadow-sm\">" +
-                "<div class=\"navbar-start\"><a class=\"btn btn-ghost text-xl\">Mosaik</a></div>" +
+                "<div class=\"navbar-start\">" +
+                "<a href=\"/\" class=\"btn btn-neutral btn-ghost text-xl\">Mosaik</a>" +
+                "</div>" +
                 "<div class=\"navbar-center\"><a>Docs</a></div>" +
                 "<div class=\"navbar-end\"><button class=\"btn btn-primary\">Sign up</button></div>" +
                 "</div>"
