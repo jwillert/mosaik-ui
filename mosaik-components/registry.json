@@ -4,73 +4,135 @@
       "name": "theme",
       "description": "Shared foundation: Variant and Size enums and the buildClasses utility. Installed automatically with the first component.",
       "files": ["Theme.kt"],
-      "dependencies": []
+      "dependencies": [],
+      "api": [
+        { "name": "Variant", "kind": "enum" },
+        { "name": "Size", "kind": "enum" },
+        { "name": "buildClasses", "kind": "function" }
+      ]
     },
     {
       "name": "button",
       "description": "DaisyUI button with variant, size, custom classes, and delegated HTML attributes (id, name, type, disabled).",
       "files": ["Button.kt"],
-      "dependencies": ["theme"]
+      "dependencies": ["theme"],
+      "api": [
+        { "name": "ButtonVariant", "kind": "enum" },
+        { "name": "ButtonStyle", "kind": "enum" },
+        { "name": "ButtonShape", "kind": "enum" },
+        { "name": "ButtonWidth", "kind": "enum" },
+        { "name": "mButton", "kind": "function" },
+        { "name": "mButtonLink", "kind": "function" }
+      ]
     },
     {
       "name": "card",
       "description": "DaisyUI card container with no variant or size, plus the mCardBody, mCardTitle, and mCardActions sub-components (all in Card.kt) mirroring card-body/card-title/card-actions.",
       "files": ["Card.kt"],
-      "dependencies": ["theme"]
+      "dependencies": ["theme"],
+      "api": [
+        { "name": "MCard", "kind": "type" },
+        { "name": "mCard", "kind": "function" },
+        { "name": "mCardBody", "kind": "function" },
+        { "name": "mCardTitle", "kind": "function" },
+        { "name": "mCardActions", "kind": "function" }
+      ]
     },
     {
       "name": "navbar",
       "description": "DaisyUI navbar container with no variant or size, plus the mNavbarStart, mNavbarCenter, and mNavbarEnd slot sub-components (all in Navbar.kt) mirroring navbar-start/navbar-center/navbar-end.",
       "files": ["Navbar.kt"],
-      "dependencies": ["theme"]
+      "dependencies": ["theme"],
+      "api": [
+        { "name": "MNavbar", "kind": "type" },
+        { "name": "mNavbar", "kind": "function" },
+        { "name": "mNavbarStart", "kind": "function" },
+        { "name": "mNavbarCenter", "kind": "function" },
+        { "name": "mNavbarEnd", "kind": "function" }
+      ]
     },
     {
       "name": "footer",
       "description": "DaisyUI footer container with no variant, size, or sub-components — a simple wrapper around the footer classes, styled by the utility classes the caller passes.",
       "files": ["Footer.kt"],
-      "dependencies": ["theme"]
+      "dependencies": ["theme"],
+      "api": [
+        { "name": "mFooter", "kind": "function" }
+      ]
     },
     {
       "name": "badge",
       "description": "DaisyUI badge with its own BadgeVariant palette (primary, secondary, accent, ghost, info, success, warning, error, neutral, outline), size, and custom classes.",
       "files": ["Badge.kt"],
-      "dependencies": ["theme"]
+      "dependencies": ["theme"],
+      "api": [
+        { "name": "BadgeVariant", "kind": "enum" },
+        { "name": "mBadge", "kind": "function" }
+      ]
     },
     {
       "name": "alert",
       "description": "DaisyUI alert with its own AlertVariant palette (info, success, warning, error), custom classes, and a default role=\"alert\" for assistive tech.",
       "files": ["Alert.kt"],
-      "dependencies": ["theme"]
+      "dependencies": ["theme"],
+      "api": [
+        { "name": "AlertVariant", "kind": "enum" },
+        { "name": "mAlert", "kind": "function" }
+      ]
     },
     {
       "name": "loading",
       "description": "DaisyUI loading indicator with its own LoadingType palette (spinner, dots, ring, ball, bars, infinity), size, and custom classes. Composable content for buttons and other components.",
       "files": ["Loading.kt"],
-      "dependencies": ["theme"]
+      "dependencies": ["theme"],
+      "api": [
+        { "name": "LoadingType", "kind": "enum" },
+        { "name": "mLoading", "kind": "function" }
+      ]
     },
     {
       "name": "menu",
       "description": "DaisyUI menu navigation container with no variant or size, plus the mMenuItem and mMenuTitle sub-components (all in Menu.kt) for type-safe navigation links and section headers.",
       "files": ["Menu.kt"],
-      "dependencies": ["theme"]
+      "dependencies": ["theme"],
+      "api": [
+        { "name": "MMenu", "kind": "type" },
+        { "name": "mMenu", "kind": "function" },
+        { "name": "mMenuItem", "kind": "function" },
+        { "name": "mMenuTitle", "kind": "function" }
+      ]
     },
     {
       "name": "table",
       "description": "DaisyUI table with zebra modifier for striped rows. Preserves normal HTML table structure (thead, tbody, tr, th, td).",
       "files": ["Table.kt"],
-      "dependencies": ["theme"]
+      "dependencies": ["theme"],
+      "api": [
+        { "name": "mTable", "kind": "function" }
+      ]
     },
     {
       "name": "tabs",
       "description": "DaisyUI tabs component for navigation and content switching. Supports radio-based tabs with content areas.",
       "files": ["Tabs.kt"],
-      "dependencies": ["theme"]
+      "dependencies": ["theme"],
+      "api": [
+        { "name": "mTabs", "kind": "function" },
+        { "name": "mTab", "kind": "function" }
+      ]
     },
     {
       "name": "form",
       "description": "DaisyUI form components: mFormControl (form-control wrapper), mLabel (label container), mLabelText (label-text span), mInput (input with bordered/size modifiers), and mSelect (select with bordered/size modifiers). All expose raw HTML elements for native attribute access.",
       "files": ["Form.kt"],
-      "dependencies": ["theme"]
+      "dependencies": ["theme"],
+      "api": [
+        { "name": "mFormControl", "kind": "function" },
+        { "name": "mLabel", "kind": "function" },
+        { "name": "mLabelText", "kind": "function" },
+        { "name": "mInput", "kind": "function" },
+        { "name": "mSelect", "kind": "function" }
+      ]
     }
   ]
 }

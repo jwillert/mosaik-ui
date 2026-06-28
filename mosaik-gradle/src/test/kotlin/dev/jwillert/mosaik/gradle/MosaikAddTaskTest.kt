@@ -111,4 +111,37 @@ class MosaikAddTaskTest :
             result.output shouldContain "[x] theme"
             result.output shouldContain "[ ] button"
         }
+
+        test("mosaikAdd writes .mosaik/components.json inventory after installing") {
+            val dir = createTempDirectory().toFile()
+            setupProject(dir)
+
+            runner(dir, "mosaikAdd", "--component=button").build()
+
+            val inventory = dir.resolve(".mosaik/components.json")
+            inventory.exists() shouldBe true
+
+            val json = inventory.readText()
+            json shouldContain "\"schemaVersion\": \"1\""
+            json shouldContain "\"package\": \"com.example.ui\""
+            json shouldContain "\"prefix\": \"m\""
+            json shouldContain "\"theme\""
+            json shouldContain "\"button\""
+            json shouldContain "Theme.kt"
+            json shouldContain "Button.kt"
+        }
+
+        test("mosaikAdd updates existing inventory when adding more components") {
+            val dir = createTempDirectory().toFile()
+            setupProject(dir)
+
+            runner(dir, "mosaikAdd", "--component=button").build()
+            runner(dir, "mosaikAdd", "--component=card").build()
+
+            val inventory = dir.resolve(".mosaik/components.json")
+            val json = inventory.readText()
+            json shouldContain "\"button\""
+            json shouldContain "\"card\""
+            json shouldContain "\"theme\""
+        }
     })
