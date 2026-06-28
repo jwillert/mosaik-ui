@@ -3,11 +3,12 @@ package mosaik.ui.components
 import kotlinx.html.*
 
 /**
- * DSL context for [mFooter]. Provides access to footer child functions
- * ([mFooterTitle], [mLink]) and ordinary HTML through [FlowContent]. Common
- * HTML attributes ([id], [style], [title]) delegate to the underlying [FOOTER];
- * other attributes are accessible via [attributes]. Marked with [MosaikDsl] to
- * prevent child functions from leaking into nested ordinary HTML blocks.
+ * DSL context for [mFooter]. Delegates to the underlying [FOOTER] through
+ * [FlowContent], so ordinary HTML and Mosaik's [FlowContent] extensions
+ * ([mFooterTitle], [mLink]) work natively. Common HTML attributes ([id],
+ * [style], [title]) are exposed as properties; other attributes are accessible
+ * via [attributes]. Marked with [MosaikDsl] for consistency with other compound
+ * components and to support potential future footer-scoped child functions.
  */
 @MosaikDsl
 class MFooter(
