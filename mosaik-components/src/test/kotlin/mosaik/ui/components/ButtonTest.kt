@@ -308,4 +308,18 @@ class ButtonTest :
             html shouldContain "hx-target=\"#content\""
             html shouldContain "class=\"btn btn-neutral btn-ghost\""
         }
+
+        test("mButtonLink supports shape and width modifiers") {
+            val html =
+                render {
+                    mButtonLink(
+                        href = "/icon",
+                        shape = ButtonShape.Square,
+                        width = ButtonWidth.Block,
+                    ) { +"□" }
+                }
+
+            html shouldContain "href=\"/icon\""
+            html shouldContain "class=\"btn btn-neutral btn-square btn-block\""
+        }
     })
