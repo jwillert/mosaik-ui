@@ -34,12 +34,23 @@ class ShellNavigationTest :
                 embeddedServer(Netty, port = testPort, host = "127.0.0.1", module = Application::module)
                     .start(wait = false)
 
-            // Give the server time to start
-            Thread.sleep(1000)
-
             // Launch Playwright browser
             playwright = Playwright.create()
             browser = playwright.chromium().launch(BrowserType.LaunchOptions().setHeadless(true))
+
+            // Wait for server to be ready by attempting to connect
+            val page = browser.newPage()
+            var attempts = 0
+            while (attempts < 10) {
+                try {
+                    page.navigate("http://127.0.0.1:$testPort/")
+                    break
+                } catch (e: Exception) {
+                    attempts++
+                    Thread.sleep(100)
+                }
+            }
+            page.close()
         }
 
         afterSpec {
@@ -198,26 +209,30 @@ class ShellNavigationTest :
             forwardContent!! shouldContain "mCard"
         }
 
-        test("shell navigation does not intercept external links") {
+        test("isInternalDocsLink filters out external and /_examples links") {
             page.navigate("http://127.0.0.1:$testPort/")
 
-            // Set a marker to check if it persists
-            page.evaluate("() => { window.testMarker = 'initial'; }")
-
-            // If we had an external link, it would not be enhanced
-            // This test documents the expected behavior for external navigation
-            // Since our current sidebar only has internal links, we verify
-            // that the isInternalDocsLink function would exclude external links
-            val isExternal =
+            val externalIsExternal =
                 page.evaluate(
                     """() => {
-                        const testLink = document.createElement('a');
-                        testLink.href = 'https://example.com';
-                        return !testLink.href.startsWith(window.location.origin);
+                        const externalLink = document.createElement('a');
+                        externalLink.href = 'https://example.com';
+                        return !externalLink.href.startsWith(window.location.origin);
                     }
                     """,
                 )
-            isExternal shouldBe true
+            externalIsExternal shouldBe true
+
+            val examplesContainsExamples =
+                page.evaluate(
+                    """() => {
+                        const examplesLink = document.createElement('a');
+                        examplesLink.href = '/_examples/test';
+                        return examplesLink.href.includes('/_examples/');
+                    }
+                    """,
+                )
+            examplesContainsExamples shouldBe true
         }
 
         test("shell navigation falls back to normal navigation on fetch error") {

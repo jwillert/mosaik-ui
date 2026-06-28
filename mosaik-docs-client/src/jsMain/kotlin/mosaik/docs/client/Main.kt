@@ -119,21 +119,15 @@ fun navigateToPage(
  * Updates the active sidebar menu item to match the current [url].
  */
 fun updateActiveSidebarItem(url: String) {
-    // Remove active class from all sidebar links
-    document.querySelectorAll(".menu a").asList().forEach { link ->
-        if (link is HTMLAnchorElement) {
-            link.classList.remove("menu-active")
-        }
-    }
+    val currentPath = URL(url).pathname.trimEnd('/')
 
-    // Add active class to the matching link
     document.querySelectorAll(".menu a").asList().forEach { link ->
         if (link is HTMLAnchorElement) {
-            // Compare pathnames to handle both with and without trailing slash
-            val linkPath = URL(link.href).pathname
-            val currentPath = URL(url).pathname
+            val linkPath = URL(link.href).pathname.trimEnd('/')
             if (linkPath == currentPath) {
                 link.classList.add("menu-active")
+            } else {
+                link.classList.remove("menu-active")
             }
         }
     }
