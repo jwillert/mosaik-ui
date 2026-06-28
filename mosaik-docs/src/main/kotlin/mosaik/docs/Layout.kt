@@ -3,10 +3,10 @@ package mosaik.docs
 import kotlinx.html.*
 import kotlinx.html.stream.appendHTML
 import mosaik.ui.components.Size
-import mosaik.ui.components.mSelect
 import mosaik.ui.components.mMenu
 import mosaik.ui.components.mMenuItem
 import mosaik.ui.components.mMenuTitle
+import mosaik.ui.components.mSelect
 
 /**
  * The theme the server renders before any client-side preference is applied. The
