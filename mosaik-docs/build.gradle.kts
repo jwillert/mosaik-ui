@@ -40,6 +40,19 @@ val copyDatastar by tasks.registering(Copy::class) {
     outputs.file("src/main/resources/static/vendor/datastar.js")
 }
 
+val copyDocsClient by tasks.registering(Copy::class) {
+    val clientProject = project(":mosaik-docs-client")
+    val jsBundle =
+        clientProject.layout.buildDirectory.file(
+            "kotlin-webpack/js/productionExecutable/mosaik-docs-client.js",
+        )
+    dependsOn(clientProject.tasks.named("jsBrowserProductionWebpack"))
+    from(jsBundle)
+    into("src/main/resources/static")
+    inputs.file(jsBundle)
+    outputs.file("src/main/resources/static/mosaik-docs-client.js")
+}
+
 tasks.named("processResources") {
-    dependsOn("buildCss", copyDatastar)
+    dependsOn("buildCss", copyDatastar, copyDocsClient)
 }

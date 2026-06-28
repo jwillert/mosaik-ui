@@ -5,6 +5,7 @@ build/
 
 # Kotlin
 .kotlin/
+kotlin-js-store/
 
 # IDE
 .idea/
@@ -22,5 +23,6 @@ npm-debug.log*
 # Generated docs static assets
 mosaik-docs/src/main/resources/static/output.css
 mosaik-docs/src/main/resources/static/vendor/
+mosaik-docs/src/main/resources/static/mosaik-docs-client.js
 
 .sandcastle/worktrees/

@@ -21,6 +21,7 @@ include(
     ":mosaik-gradle",
     ":mosaik-components",
     ":mosaik-docs",
+    ":mosaik-docs-client",
     ":ktor-vrt",
     ":ktor-vrt-gradle-plugin",
 )
