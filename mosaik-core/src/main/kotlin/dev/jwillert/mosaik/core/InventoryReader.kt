@@ -44,7 +44,14 @@ object InventoryReader {
                             dependencies =
                                 obj["dependencies"]?.jsonArray?.map { it.jsonPrimitive.content }
                                     ?: emptyList(),
-                            api = emptyList(),
+                            api =
+                                obj["api"]?.jsonArray?.map { apiElement ->
+                                    val apiObj = apiElement.jsonObject
+                                    ApiMetadata(
+                                        name = apiObj["name"]?.jsonPrimitive?.content ?: "",
+                                        kind = apiObj["kind"]?.jsonPrimitive?.content ?: "",
+                                    )
+                                } ?: emptyList(),
                         )
                 }.filterKeys { it.isNotEmpty() }
         } catch (e: Exception) {
