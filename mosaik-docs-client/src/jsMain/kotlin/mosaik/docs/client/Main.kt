@@ -103,6 +103,9 @@ fun navigateToPage(
                 // Re-run syntax highlighting on the new content
                 js("if (typeof hljs !== 'undefined') hljs.highlightAll();")
 
+                // Rehydrate interactive previews after shell content swap.
+                rehydrateInteractivePreviews()
+
                 // Sync preference controls after shell content swap.
                 syncPreferenceControls()
 
@@ -139,6 +142,33 @@ fun updateActiveSidebarItem(url: String) {
             }
         }
     }
+}
+
+/**
+ * Rehydrates interactive previews after shell content swaps. This ensures that
+ * Alpine.js and Datastar properly initialize on dynamically loaded content.
+ *
+ * htmx automatically handles new content via its MutationObserver, so no manual
+ * intervention is needed. Alpine.js requires calling Alpine.initTree() on new
+ * elements with x-data. Datastar uses the Datastar.load() API to apply plugins
+ * to new content where supported.
+ */
+fun rehydrateInteractivePreviews() {
+    // Alpine.js rehydration: call initTree() on the main content element to initialize all children
+    js(
+        "if (typeof Alpine !== 'undefined' && Alpine.initTree) { " +
+            "var mainContent = document.getElementById('main-content'); " +
+            "if (mainContent) { Alpine.initTree(mainContent); } " +
+            "}",
+    )
+
+    // Datastar rehydration: check if Datastar.load() is available
+    js(
+        "if (typeof Datastar !== 'undefined' && Datastar.load) { " +
+            "var mainContent = document.getElementById('main-content'); " +
+            "if (mainContent) Datastar.load(mainContent); " +
+            "}",
+    )
 }
 
 /**
