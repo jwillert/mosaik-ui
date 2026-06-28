@@ -120,11 +120,24 @@ fun layout(
             body(classes = "min-h-screen bg-base-100 text-base-content") {
                 div("flex min-h-screen") {
                     sidebar(active.path)
-                    main(classes = "flex-1 p-8 prose max-w-none") { content() }
+                    main(classes = "flex-1 p-8 prose max-w-none") {
+                        id = "main-content"
+                        content()
+                    }
                 }
                 syncPreferenceControlsScript()
             }
         }
+    }
+
+/**
+ * Renders just the page [content] without the full document shell. Used for
+ * progressive shell navigation where the client fetches and swaps only the main
+ * content area instead of reloading the entire page.
+ */
+fun partialContent(content: FlowContent.() -> Unit): String =
+    buildString {
+        appendHTML(prettyPrint = false).div("contents") { content() }
     }
 
 /**
