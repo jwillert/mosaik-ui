@@ -19,6 +19,8 @@ A ShadCN-inspired component toolkit for the Kotlin/Ktor/Gradle ecosystem. Compon
 - **Placeholder Package** — `mosaik.ui.components` — the package used in component source templates. Rewritten to the user's package at install time.
 - **Prefix** — `m` — the function name prefix for all components (`mButton`, `mCard`). Fixed in v1, not configurable.
 - **Install** — The act of copying a component's source file(s) into the user's project via `mosaikAdd`. After installation, the user owns the code.
+- **Installed Component Inventory** — A project-local machine-readable record of the Mosaik components installed into a consuming project, their files, package name, and prefix. The primary consumer is an agent or tool; in v1 the preferred location is `.mosaik/components.json`.
+- **Consumer Skill** — A portable agent skill that teaches coding agents how to use Mosaik UI inside downstream source-installed projects. It is shipped from this repo as a reusable artifact and can be copied into an agent's global skills directory.
 - **Golden** — A baseline screenshot used by ktor-vrt for visual regression comparison.
 - **Scenario** — A data class in ktor-vrt describing a single visual test case: a name, a render function, and optional pre-screenshot JavaScript.
 - **Preview** — A rendered, working documentation example shown next to a code snippet. For interactive examples, the preview exercises the same interaction style being documented and calls valid docs-app routes when network requests are involved. See ADR 0008.
