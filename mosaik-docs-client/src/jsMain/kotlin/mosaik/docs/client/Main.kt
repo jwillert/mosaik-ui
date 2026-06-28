@@ -3,11 +3,11 @@ package mosaik.docs.client
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.w3c.dom.HTMLAnchorElement
+import org.w3c.dom.HTMLInputElement
+import org.w3c.dom.HTMLSelectElement
 import org.w3c.dom.asList
 import org.w3c.dom.parsing.DOMParser
 import org.w3c.dom.url.URL
-import org.w3c.dom.HTMLInputElement
-import org.w3c.dom.HTMLSelectElement
 import org.w3c.fetch.RequestInit
 
 const val DEFAULT_INTERACTION_STYLE = "htmx"
