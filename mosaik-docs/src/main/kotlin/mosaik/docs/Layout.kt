@@ -2,6 +2,8 @@ package mosaik.docs
 
 import kotlinx.html.*
 import kotlinx.html.stream.appendHTML
+import mosaik.ui.components.Size
+import mosaik.ui.components.mSelect
 
 /**
  * The theme the server renders before any client-side preference is applied. The
@@ -167,7 +169,7 @@ private fun FlowContent.themeSwitcher() {
             attributes["for"] = "theme-switcher"
             +"Theme"
         }
-        select(classes = "select select-sm select-bordered w-full mt-1") {
+        mSelect(size = Size.Sm, classes = "w-full mt-1") {
             id = "theme-switcher"
             attributes["onchange"] =
                 "document.documentElement.setAttribute('data-theme', this.value);" +
@@ -195,7 +197,7 @@ private fun FlowContent.interactionStyleSwitcher() {
             attributes["for"] = "interaction-style-switcher"
             +"Interaction Style"
         }
-        select(classes = "select select-sm select-bordered w-full mt-1") {
+        mSelect(size = Size.Sm, classes = "w-full mt-1") {
             id = "interaction-style-switcher"
             attributes["onchange"] =
                 "localStorage.setItem('mosaik-interaction-style', this.value);" +
