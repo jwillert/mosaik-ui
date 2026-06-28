@@ -1,6 +1,7 @@
 package dev.jwillert.mosaik.core
 
 import java.io.File
+import java.security.MessageDigest
 
 /**
  * Writes the installed component inventory to `.mosaik/components.json` in the user's project.
@@ -28,13 +29,18 @@ class InventoryWriter(
                     entry.api.joinToString(",\n        ") { api ->
                         """{ "name": "${api.name}", "kind": "${api.kind}" }"""
                     }
+                val checksums =
+                    entry.checksums.entries.joinToString(",\n        ") { (file, checksum) ->
+                        """"$file": "$checksum""""
+                    }
                 """
                 {
                   "name": "${entry.name}",
                   "description": "${escapeJson(entry.description)}",
                   "files": [$files],
                   "dependencies": [$deps],
-                  "api": [${if (apis.isNotEmpty()) "\n        $apis\n      " else ""}]
+                  "api": [${if (apis.isNotEmpty()) "\n        $apis\n      " else ""}],
+                  "checksums": {${if (checksums.isNotEmpty()) "\n        $checksums\n      " else ""}}
                 }
                 """.trimIndent()
             }
@@ -76,5 +82,16 @@ $components
         val inventoryFile = mosaikDir.resolve("components.json")
         inventoryFile.writeText(generate(installedComponents))
         return inventoryFile
+    }
+
+    companion object {
+        /**
+         * Computes a deterministic SHA-256 checksum of the given [content].
+         */
+        fun computeChecksum(content: String): String {
+            val digest = MessageDigest.getInstance("SHA-256")
+            val hash = digest.digest(content.toByteArray())
+            return hash.joinToString("") { "%02x".format(it) }
+        }
     }
 }

@@ -16,7 +16,8 @@ data class ApiMetadata(
 /**
  * A single component definition from the registry: its [name], human-readable [description],
  * the source [files] that make it up, the names of the components it [dependencies] on,
- * and optional [api] metadata for public functions and types.
+ * optional [api] metadata for public functions and types, and optional [checksums] mapping
+ * file names to their SHA-256 checksums.
  */
 data class ComponentEntry(
     val name: String,
@@ -24,6 +25,7 @@ data class ComponentEntry(
     val files: List<String>,
     val dependencies: List<String>,
     val api: List<ApiMetadata> = emptyList(),
+    val checksums: Map<String, String> = emptyMap(),
 )
 
 /**

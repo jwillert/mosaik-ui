@@ -52,6 +52,10 @@ object InventoryReader {
                                         kind = apiObj["kind"]?.jsonPrimitive?.content ?: "",
                                     )
                                 } ?: emptyList(),
+                            checksums =
+                                obj["checksums"]?.jsonObject?.entries?.associate { (file, checksumElement) ->
+                                    file to (checksumElement.jsonPrimitive.content)
+                                } ?: emptyMap(),
                         )
                 }.filterKeys { it.isNotEmpty() }
         } catch (e: Exception) {

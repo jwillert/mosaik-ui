@@ -86,11 +86,29 @@ abstract class MosaikAddTask : DefaultTask() {
         }
         logger.lifecycle("Done. $created installed, $overwritten overwritten, $present already present.")
 
-        // Update the installed component inventory.
+        // Update the installed component inventory with checksums.
         val projectRoot = project.projectDir
         val existing = InventoryReader.read(projectRoot)
         val allInstalled = (existing.values + resolved).distinctBy { it.name }
+
+        // Compute checksums for all installed files
+        val withChecksums =
+            allInstalled.map { entry ->
+                val checksums =
+                    entry.files
+                        .associateWith { fileName ->
+                            val file = File(packageDir, fileName)
+                            if (file.exists()) {
+                                InventoryWriter.computeChecksum(file.readText())
+                            } else {
+                                ""
+                            }
+                        }.filterValues { it.isNotEmpty() }
+
+                entry.copy(checksums = checksums)
+            }
+
         val inventoryWriter = InventoryWriter(pkg)
-        inventoryWriter.write(projectRoot, allInstalled)
+        inventoryWriter.write(projectRoot, withChecksums)
     }
 }
