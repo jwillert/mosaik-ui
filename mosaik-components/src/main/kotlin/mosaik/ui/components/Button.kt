@@ -102,3 +102,46 @@ fun FlowContent.mButton(
         block = block,
     )
 }
+
+/**
+ * A DaisyUI button rendered as an anchor (`<a>`), combining navigational
+ * semantics with button styling. Use this for navbar links, tabs, or other
+ * navigational UI that should look like a button while preserving anchor
+ * behavior (href, target, rel).
+ *
+ * Per ADR-0003 and ADR-0013, this hides the DaisyUI `btn` token behind a
+ * type-safe API while exposing the raw kotlinx.html [A] element, so HTML
+ * attributes and third-party extensions (e.g. htmx, Alpine) work natively.
+ *
+ * ```kotlin
+ * mButtonLink(
+ *     href = "/docs",
+ *     style = ButtonStyle.Ghost,
+ *     classes = "text-xl",
+ * ) {
+ *     hxBoost = "true"   // htmx extension — works natively
+ *     +"Documentation"
+ * }
+ * ```
+ */
+fun FlowContent.mButtonLink(
+    href: String,
+    variant: ButtonVariant = ButtonVariant.Neutral,
+    style: ButtonStyle? = null,
+    size: Size = Size.Md,
+    classes: String? = null,
+    block: A.() -> Unit = {},
+) {
+    a(
+        href = href,
+        classes =
+            buildClasses(
+                "btn",
+                "btn-${variant.token}",
+                style?.let { "btn-${it.token}" },
+                size.token?.let { "btn-$it" },
+                classes,
+            ),
+        block = block,
+    )
+}

@@ -1,8 +1,10 @@
 package mosaik.docs
 
 import kotlinx.html.*
+import mosaik.ui.components.ButtonStyle
 import mosaik.ui.components.ButtonVariant
 import mosaik.ui.components.mButton
+import mosaik.ui.components.mButtonLink
 import mosaik.ui.components.mNavbar
 import mosaik.ui.components.mNavbarCenter
 import mosaik.ui.components.mNavbarEnd
@@ -56,11 +58,13 @@ fun navbarPage(): String =
             import mosaik.ui.components.mNavbarStart
             import mosaik.ui.components.mNavbarEnd
             import mosaik.ui.components.mButton
-            import mosaik.ui.components.Variant
+            import mosaik.ui.components.mButtonLink
+            import mosaik.ui.components.ButtonStyle
+            import mosaik.ui.components.ButtonVariant
 
             mNavbar("bg-base-100 shadow-sm") {
                 mNavbarStart {
-                    a(classes = "btn btn-ghost text-xl") { +"Mosaik" }
+                    mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
                 }
                 mNavbarEnd {
                     mButton(variant = ButtonVariant.Primary) { +"Sign up" }
@@ -81,7 +85,7 @@ fun navbarPage(): String =
             div("not-prose") {
                 mNavbar("bg-base-100 shadow-sm rounded-box") {
                     mNavbarStart {
-                        a(classes = "btn btn-ghost text-xl") { +"Mosaik" }
+                        mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
                     }
                     mNavbarEnd {
                         mButton(variant = ButtonVariant.Primary) { +"Sign up" }
@@ -92,7 +96,7 @@ fun navbarPage(): String =
                 """
                 mNavbar("bg-base-100 shadow-sm") {
                     mNavbarStart {
-                        a(classes = "btn btn-ghost text-xl") { +"Mosaik" }
+                        mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
                     }
                     mNavbarEnd {
                         mButton(variant = ButtonVariant.Primary) { +"Sign up" }
@@ -112,7 +116,7 @@ fun navbarPage(): String =
             div("not-prose") {
                 mNavbar("bg-base-100 shadow-sm rounded-box") {
                     mNavbarCenter {
-                        a(classes = "btn btn-ghost text-xl") { +"Mosaik" }
+                        mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
                     }
                 }
             }
@@ -120,7 +124,7 @@ fun navbarPage(): String =
                 """
                 mNavbar("bg-base-100 shadow-sm") {
                     mNavbarCenter {
-                        a(classes = "btn btn-ghost text-xl") { +"Mosaik" }
+                        mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
                     }
                 }
                 """.trimIndent(),
@@ -136,10 +140,10 @@ fun navbarPage(): String =
             div("not-prose") {
                 mNavbar("bg-base-100 shadow-sm rounded-box") {
                     mNavbarStart {
-                        a(classes = "btn btn-ghost text-xl") { +"Mosaik" }
+                        mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
                     }
                     mNavbarCenter("hidden lg:flex") {
-                        a(classes = "btn btn-ghost") { +"Docs" }
+                        mButtonLink(href = "/docs", style = ButtonStyle.Ghost) { +"Docs" }
                     }
                     mNavbarEnd {
                         mButton(variant = ButtonVariant.Primary) { +"Sign up" }
@@ -150,10 +154,10 @@ fun navbarPage(): String =
                 """
                 mNavbar("bg-base-100 shadow-sm") {
                     mNavbarStart {
-                        a(classes = "btn btn-ghost text-xl") { +"Mosaik" }
+                        mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
                     }
                     mNavbarCenter("hidden lg:flex") {
-                        a(classes = "btn btn-ghost") { +"Docs" }
+                        mButtonLink(href = "/docs", style = ButtonStyle.Ghost) { +"Docs" }
                     }
                     mNavbarEnd {
                         mButton(variant = ButtonVariant.Primary) { +"Sign up" }
@@ -175,11 +179,11 @@ fun navbarPage(): String =
                     mNavbar("bg-base-100 shadow-sm") {
                         attributes["hx-boost"] = "true"
                         mNavbarStart {
-                            a(href = "#", classes = "btn btn-ghost") {
+                            mButtonLink(href = "#", style = ButtonStyle.Ghost) {
                                 attributes["hx-push-url"] = "false"
                                 +"Home"
                             }
-                            a(href = "#", classes = "btn btn-ghost") {
+                            mButtonLink(href = "#", style = ButtonStyle.Ghost) {
                                 attributes["hx-push-url"] = "false"
                                 +"Docs"
                             }
@@ -190,12 +194,12 @@ fun navbarPage(): String =
                     mNavbar("bg-base-100 shadow-sm") {
                         attributes["x-data"] = "{ active: '/' }"
                         mNavbarStart {
-                            a(href = "#", classes = "btn btn-ghost") {
+                            mButtonLink(href = "#", style = ButtonStyle.Ghost) {
                                 attributes["x-bind:class"] = "active === '/' ? 'btn-active' : ''"
                                 attributes["x-on:click.prevent"] = "active = '/'"
                                 +"Home"
                             }
-                            a(href = "#", classes = "btn btn-ghost") {
+                            mButtonLink(href = "#", style = ButtonStyle.Ghost) {
                                 attributes["x-bind:class"] = "active === '/docs' ? 'btn-active' : ''"
                                 attributes["x-on:click.prevent"] = "active = '/docs'"
                                 +"Docs"
@@ -207,12 +211,12 @@ fun navbarPage(): String =
                     mNavbar("bg-base-100 shadow-sm") {
                         attributes["data-signals"] = "{ active: '/' }"
                         mNavbarStart {
-                            a(href = "#", classes = "btn btn-ghost") {
+                            mButtonLink(href = "#", style = ButtonStyle.Ghost) {
                                 attributes["data-bind-class-btn-active"] = "\$active === '/'"
                                 attributes["data-on-click"] = "event.preventDefault(); \$active='/'"
                                 +"Home"
                             }
-                            a(href = "#", classes = "btn btn-ghost") {
+                            mButtonLink(href = "#", style = ButtonStyle.Ghost) {
                                 attributes["data-bind-class-btn-active"] = "\$active === '/docs'"
                                 attributes["data-on-click"] = "event.preventDefault(); \$active='/docs'"
                                 +"Docs"
@@ -225,11 +229,11 @@ fun navbarPage(): String =
                     mNavbar("bg-base-100 shadow-sm") {
                         attributes["hx-boost"] = "true"
                         mNavbarStart {
-                            a(href = "/", classes = "btn btn-ghost") {
+                            mButtonLink(href = "/", style = ButtonStyle.Ghost) {
                                 attributes["hx-push-url"] = "true"
                                 +"Home"
                             }
-                            a(href = "/docs", classes = "btn btn-ghost") {
+                            mButtonLink(href = "/docs", style = ButtonStyle.Ghost) {
                                 attributes["hx-push-url"] = "true"
                                 +"Docs"
                             }
@@ -241,12 +245,12 @@ fun navbarPage(): String =
                     mNavbar("bg-base-100 shadow-sm") {
                         attributes["x-data"] = "{ active: '/' }"
                         mNavbarStart {
-                            a(href = "/", classes = "btn btn-ghost") {
+                            mButtonLink(href = "/", style = ButtonStyle.Ghost) {
                                 attributes["x-bind:class"] = "active === '/' ? 'btn-active' : ''"
                                 attributes["x-on:click"] = "active = '/'"
                                 +"Home"
                             }
-                            a(href = "/docs", classes = "btn btn-ghost") {
+                            mButtonLink(href = "/docs", style = ButtonStyle.Ghost) {
                                 attributes["x-bind:class"] = "active === '/docs' ? 'btn-active' : ''"
                                 attributes["x-on:click"] = "active = '/docs'"
                                 +"Docs"
@@ -259,12 +263,12 @@ fun navbarPage(): String =
                     mNavbar("bg-base-100 shadow-sm") {
                         attributes["data-signals"] = "{ active: '/' }"
                         mNavbarStart {
-                            a(href = "/", classes = "btn btn-ghost") {
+                            mButtonLink(href = "/", style = ButtonStyle.Ghost) {
                                 attributes["data-bind-class-btn-active"] = "${'$'}active === '/'"
                                 attributes["data-on-click"] = "${'$'}active='/'"
                                 +"Home"
                             }
-                            a(href = "/docs", classes = "btn btn-ghost") {
+                            mButtonLink(href = "/docs", style = ButtonStyle.Ghost) {
                                 attributes["data-bind-class-btn-active"] = "${'$'}active === '/docs'"
                                 attributes["data-on-click"] = "${'$'}active='/docs'"
                                 +"Docs"
