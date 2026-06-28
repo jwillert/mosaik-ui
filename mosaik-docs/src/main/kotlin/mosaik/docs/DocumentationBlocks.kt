@@ -1,7 +1,10 @@
 package mosaik.docs
 
 import kotlinx.html.*
+import mosaik.ui.components.TabsStyle
+import mosaik.ui.components.mTab
 import mosaik.ui.components.mTable
+import mosaik.ui.components.mTabs
 
 /** A row in an [apiReference] table: one component parameter. */
 data class ApiParam(
@@ -78,17 +81,16 @@ fun FlowContent.interactivityTabs(
     alpinePreview: (FlowContent.() -> Unit)? = null,
     datastarPreview: (FlowContent.() -> Unit)? = null,
 ) {
-    div("tabs tabs-lifted not-prose") {
-        attributes["role"] = "tablist"
-
-        // htmx tab (checked by default)
-        input(type = InputType.radio, name = id, classes = "tab") {
-            this.id = "$id-htmx"
-            checked = true
-            attributes["aria-label"] = "htmx"
-            attributes["data-interaction-style"] = "htmx"
-        }
-        div("tab-content bg-base-200 rounded-box p-4") {
+    mTabs(style = TabsStyle.Lifted, classes = "not-prose") {
+        mTab(
+            name = id,
+            id = "$id-htmx",
+            label = "htmx",
+            checked = true,
+            tabConfig = {
+                attributes["data-interaction-style"] = "htmx"
+            },
+        ) {
             if (htmxPreview != null) {
                 div("mb-4 not-prose") {
                     htmxPreview()
@@ -99,13 +101,14 @@ fun FlowContent.interactivityTabs(
             }
         }
 
-        // Alpine.js tab
-        input(type = InputType.radio, name = id, classes = "tab") {
-            this.id = "$id-alpine"
-            attributes["aria-label"] = "Alpine.js"
-            attributes["data-interaction-style"] = "alpine"
-        }
-        div("tab-content bg-base-200 rounded-box p-4") {
+        mTab(
+            name = id,
+            id = "$id-alpine",
+            label = "Alpine.js",
+            tabConfig = {
+                attributes["data-interaction-style"] = "alpine"
+            },
+        ) {
             if (alpinePreview != null) {
                 div("mb-4 not-prose") {
                     alpinePreview()
@@ -116,13 +119,14 @@ fun FlowContent.interactivityTabs(
             }
         }
 
-        // Datastar tab
-        input(type = InputType.radio, name = id, classes = "tab") {
-            this.id = "$id-datastar"
-            attributes["aria-label"] = "Datastar"
-            attributes["data-interaction-style"] = "datastar"
-        }
-        div("tab-content bg-base-200 rounded-box p-4") {
+        mTab(
+            name = id,
+            id = "$id-datastar",
+            label = "Datastar",
+            tabConfig = {
+                attributes["data-interaction-style"] = "datastar"
+            },
+        ) {
             if (datastarPreview != null) {
                 div("mb-4 not-prose") {
                     datastarPreview()

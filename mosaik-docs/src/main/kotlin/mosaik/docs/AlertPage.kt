@@ -2,7 +2,10 @@ package mosaik.docs
 
 import kotlinx.html.*
 import mosaik.ui.components.AlertVariant
+import mosaik.ui.components.ButtonStyle
+import mosaik.ui.components.Size
 import mosaik.ui.components.mAlert
+import mosaik.ui.components.mButton
 
 /**
  * Alert page, following the five-section component template: title +
@@ -86,7 +89,7 @@ fun alertPage(): String =
                 htmxPreview = {
                     mAlert(AlertVariant.Success) {
                         +"Your changes have been saved."
-                        button(classes = "btn btn-sm btn-ghost") {
+                        mButton(style = ButtonStyle.Ghost, size = Size.Sm) {
                             attributes["hx-on:click"] = "this.closest('.alert').remove()"
                             +"Dismiss"
                         }
@@ -98,7 +101,7 @@ fun alertPage(): String =
                         mAlert(AlertVariant.Success) {
                             attributes["x-show"] = "show"
                             +"Your changes have been saved."
-                            button(classes = "btn btn-sm btn-ghost") {
+                            mButton(style = ButtonStyle.Ghost, size = Size.Sm) {
                                 attributes["x-on:click"] = "show = false"
                                 +"Dismiss"
                             }
@@ -111,7 +114,7 @@ fun alertPage(): String =
                         mAlert(AlertVariant.Success) {
                             attributes["data-show"] = "\$show"
                             +"Your changes have been saved."
-                            button(classes = "btn btn-sm btn-ghost") {
+                            mButton(style = ButtonStyle.Ghost, size = Size.Sm) {
                                 attributes["data-on-click"] = "\$show=false"
                                 +"Dismiss"
                             }
@@ -122,7 +125,7 @@ fun alertPage(): String =
                     """
                     mAlert(AlertVariant.Success) {
                         +"Your changes have been saved."
-                        button(classes = "btn btn-sm btn-ghost") {
+                        mButton(style = ButtonStyle.Ghost, size = Size.Sm) {
                             attributes["hx-on:click"] = "this.closest('.alert').remove()"
                             +"Dismiss"
                         }
@@ -135,7 +138,7 @@ fun alertPage(): String =
                         mAlert(AlertVariant.Success) {
                             attributes["x-show"] = "show"
                             +"Your changes have been saved."
-                            button(classes = "btn btn-sm btn-ghost") {
+                            mButton(style = ButtonStyle.Ghost, size = Size.Sm) {
                                 attributes["x-on:click"] = "show = false"
                                 +"Dismiss"
                             }
@@ -149,7 +152,7 @@ fun alertPage(): String =
                         mAlert(AlertVariant.Success) {
                             attributes["data-show"] = "${'$'}show"
                             +"Your changes have been saved."
-                            button(classes = "btn btn-sm btn-ghost") {
+                            mButton(style = ButtonStyle.Ghost, size = Size.Sm) {
                                 attributes["data-on-click"] = "${'$'}show=false"
                                 +"Dismiss"
                             }
