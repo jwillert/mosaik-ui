@@ -112,6 +112,8 @@ fun layout(
                         +"hljs.highlightAll();"
                     }
                 }
+                // Kotlin/JS docs client bundle (generated at build time).
+                script(src = "/static/mosaik-docs-client.js") {}
             }
             body(classes = "min-h-screen bg-base-100 text-base-content") {
                 div("flex min-h-screen") {

@@ -26,6 +26,12 @@ class PagesTest :
             }
         }
 
+        test("every page links the generated Kotlin/JS docs client asset") {
+            listOf(landingPage(), buttonPage()).forEach { html ->
+                html shouldContain "/static/mosaik-docs-client.js"
+            }
+        }
+
         test("every page renders the sidebar theme switcher and the inline JS that drives it") {
             listOf(landingPage(), buttonPage()).forEach { html ->
                 html shouldContain "id=\"theme-switcher\""
