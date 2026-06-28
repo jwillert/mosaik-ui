@@ -125,7 +125,6 @@ fun layout(
                         content()
                     }
                 }
-                syncPreferenceControlsScript()
             }
         }
     }
@@ -249,33 +248,6 @@ private fun HEAD.preferenceRestoreScript() {
                   if (theme) { document.documentElement.setAttribute('data-theme', theme); }
                   document.documentElement.dataset.interactionStyle =
                     localStorage.getItem('mosaik-interaction-style') || '$DEFAULT_INTERACTION_STYLE';
-                })();
-                """.trimIndent()
-        }
-    }
-}
-
-/**
- * Syncs controls and tab radios to the preferences already restored in the head.
- */
-private fun FlowContent.syncPreferenceControlsScript() {
-    script {
-        unsafe {
-            +
-                """
-                (function () {
-                  var sel = document.getElementById('theme-switcher');
-                  if (sel) { sel.value = document.documentElement.getAttribute('data-theme'); }
-
-                  var interactionStyle = document.documentElement.dataset.interactionStyle || '$DEFAULT_INTERACTION_STYLE';
-                  var styleSel = document.getElementById('interaction-style-switcher');
-                  if (styleSel) { styleSel.value = interactionStyle; }
-
-                  document.querySelectorAll('.tabs input[type="radio"]').forEach(function(input) {
-                    if (input.getAttribute('data-interaction-style') === interactionStyle) {
-                      input.checked = true;
-                    }
-                  });
                 })();
                 """.trimIndent()
         }
