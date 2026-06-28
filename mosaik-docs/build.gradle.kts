@@ -10,6 +10,9 @@ dependencies {
     // picked up immediately when iterating on the docs app — see PRD user story 22.
     implementation(project(":mosaik-components"))
     implementation(libs.kotlinx.html)
+
+    // Browser testing for shell navigation
+    testImplementation(libs.playwright)
 }
 
 application {
