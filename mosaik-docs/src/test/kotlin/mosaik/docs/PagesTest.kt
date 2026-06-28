@@ -506,9 +506,9 @@ class PagesTest :
 
         test("the footer page includes an API reference table for every mFooter parameter") {
             val html = footerPage()
-            html shouldContain "API reference"
-            // The block param documents the raw FOOTER receiver (> is HTML-escaped in the cell).
-            html shouldContain "FOOTER.()"
+            html shouldContain "API"
+            // The block param documents the MFooter receiver (> is HTML-escaped in the cell).
+            html shouldContain "MFooter.()"
             listOf("classes", "block").forEach { param ->
                 html shouldContain param
             }

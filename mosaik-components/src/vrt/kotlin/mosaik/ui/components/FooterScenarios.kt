@@ -1,9 +1,7 @@
 package mosaik.ui.components
 
 import dev.jwillert.ktor.vrt.Scenario
-import kotlinx.html.a
 import kotlinx.html.aside
-import kotlinx.html.h6
 import kotlinx.html.nav
 import kotlinx.html.p
 
@@ -23,14 +21,14 @@ object FooterScenarios {
         Scenario("footer-columns") {
             mFooter("bg-base-200 text-base-content p-10") {
                 nav {
-                    h6("footer-title") { +"Services" }
-                    a(href = "#", classes = "link link-hover") { +"Branding" }
-                    a(href = "#", classes = "link link-hover") { +"Design" }
+                    mFooterTitle { +"Services" }
+                    mLink(href = "#") { +"Branding" }
+                    mLink(href = "#") { +"Design" }
                 }
                 nav {
-                    h6("footer-title") { +"Company" }
-                    a(href = "#", classes = "link link-hover") { +"About us" }
-                    a(href = "#", classes = "link link-hover") { +"Contact" }
+                    mFooterTitle { +"Company" }
+                    mLink(href = "#") { +"About us" }
+                    mLink(href = "#") { +"Contact" }
                 }
             }
         }
