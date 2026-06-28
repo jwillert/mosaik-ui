@@ -2,6 +2,8 @@ package mosaik.docs
 
 import kotlinx.html.*
 import mosaik.ui.components.mFooter
+import mosaik.ui.components.mFooterTitle
+import mosaik.ui.components.mLink
 
 /**
  * Footer page, following the five-section component template: title +
@@ -26,11 +28,18 @@ fun footerPage(): String =
             +"library extension (e.g. htmx) works natively (ADR-0003)."
         }
         p {
-            +"Footer has no sub-components: its content is plain kotlinx.html. DaisyUI's "
+            +"Mosaik provides "
+            code { +"mFooterTitle" }
+            +" and "
+            code { +"mLink" }
+            +" to hide DaisyUI's "
             code { +"footer-title" }
-            +" is just a utility class applied to a heading inside a "
+            +" and "
+            code { +"link link-hover" }
+            +" class tokens. These functions work anywhere in kotlinx.html, including "
+            +"inside "
             code { +"nav" }
-            +" column — there is no wrapper to learn."
+            +" columns within the footer."
         }
 
         installSection("footer")
@@ -77,21 +86,21 @@ fun footerPage(): String =
             p {
                 +"Group links into "
                 code { +"nav" }
-                +" columns, each headed by a "
-                code { +"footer-title" }
+                +" columns, each headed by "
+                code { +"mFooterTitle" }
                 +" — DaisyUI's sitemap footer."
             }
             div("not-prose") {
                 mFooter("bg-base-200 text-base-content p-10 rounded-box") {
                     nav {
-                        h6("footer-title") { +"Services" }
-                        a(href = "#", classes = "link link-hover") { +"Branding" }
-                        a(href = "#", classes = "link link-hover") { +"Design" }
+                        mFooterTitle { +"Services" }
+                        mLink(href = "#") { +"Branding" }
+                        mLink(href = "#") { +"Design" }
                     }
                     nav {
-                        h6("footer-title") { +"Company" }
-                        a(href = "#", classes = "link link-hover") { +"About us" }
-                        a(href = "#", classes = "link link-hover") { +"Contact" }
+                        mFooterTitle { +"Company" }
+                        mLink(href = "#") { +"About us" }
+                        mLink(href = "#") { +"Contact" }
                     }
                 }
             }
@@ -99,34 +108,78 @@ fun footerPage(): String =
                 """
                 mFooter("bg-base-200 text-base-content p-10") {
                     nav {
-                        h6("footer-title") { +"Services" }
-                        a(href = "#", classes = "link link-hover") { +"Branding" }
-                        a(href = "#", classes = "link link-hover") { +"Design" }
+                        mFooterTitle { +"Services" }
+                        mLink(href = "#") { +"Branding" }
+                        mLink(href = "#") { +"Design" }
                     }
                     nav {
-                        h6("footer-title") { +"Company" }
-                        a(href = "#", classes = "link link-hover") { +"About us" }
-                        a(href = "#", classes = "link link-hover") { +"Contact" }
+                        mFooterTitle { +"Company" }
+                        mLink(href = "#") { +"About us" }
+                        mLink(href = "#") { +"Contact" }
                     }
                 }
                 """.trimIndent(),
             )
         }
 
-        apiReference(
-            listOf(
-                ApiParam(
-                    "classes",
-                    "String?",
-                    "null",
-                    "Extra CSS classes appended after the generated footer classes (e.g. footer-center bg-base-200 p-4).",
+        section {
+            h2 { +"API" }
+            h3 { +"mFooter" }
+            apiReference(
+                listOf(
+                    ApiParam(
+                        "classes",
+                        "String?",
+                        "null",
+                        "Extra CSS classes appended after the generated footer classes (e.g. footer-center bg-base-200 p-4).",
+                    ),
+                    ApiParam(
+                        "block",
+                        "MFooter.() -> Unit",
+                        "{}",
+                        "Receiver block on the MFooter context wrapping the kotlinx.html FOOTER element — nest nav columns, an aside, attributes, or library extensions.",
+                    ),
                 ),
-                ApiParam(
-                    "block",
-                    "FOOTER.() -> Unit",
-                    "{}",
-                    "Receiver block on the raw kotlinx.html FOOTER element — nest nav columns, an aside, attributes, or library extensions.",
+            )
+            h3 { +"mFooterTitle" }
+            apiReference(
+                listOf(
+                    ApiParam(
+                        "classes",
+                        "String?",
+                        "null",
+                        "Extra CSS classes appended after footer-title.",
+                    ),
+                    ApiParam(
+                        "block",
+                        "H6.() -> Unit",
+                        "{}",
+                        "Receiver block on the raw kotlinx.html H6 element.",
+                    ),
                 ),
-            ),
-        )
+            )
+            h3 { +"mLink" }
+            apiReference(
+                listOf(
+                    ApiParam(
+                        "href",
+                        "String",
+                        "required",
+                        "The link destination URL.",
+                    ),
+                    ApiParam(
+                        "classes",
+                        "String?",
+                        "null",
+                        "Extra CSS classes appended after link link-hover.",
+                    ),
+                    ApiParam(
+                        "block",
+                        "A.() -> Unit",
+                        "{}",
+                        "Receiver block on the raw kotlinx.html A element.",
+                    ),
+                ),
+            )
+        }
     }
