@@ -107,10 +107,17 @@ class MosaikUiPlugin : Plugin<Project> {
         val group = "mosaik quality"
         val sourceRoot = project.layout.projectDirectory.dir("src")
 
-        project.tasks.register("scanDaisyUiTokens", ScanDaisyUiTokensTask::class.java) { task ->
-            task.group = group
-            task.description = "Report raw DaisyUI class tokens outside component implementations (ADR 0013)."
-            task.sourceRoot.set(sourceRoot)
+        val scanDaisyUiTokens =
+            project.tasks.register("scanDaisyUiTokens", ScanDaisyUiTokensTask::class.java) { task ->
+                task.group = group
+                task.description = "Report raw DaisyUI class tokens outside component implementations (ADR 0013)."
+                task.sourceRoot.set(sourceRoot)
+            }
+
+        project.plugins.withId("lifecycle-base") {
+            project.tasks.named("check") {
+                it.dependsOn(scanDaisyUiTokens)
+            }
         }
     }
 }
