@@ -3,6 +3,7 @@ package mosaik.docs
 import kotlinx.html.*
 import mosaik.ui.components.TabsStyle
 import mosaik.ui.components.mTab
+import mosaik.ui.components.mTable
 import mosaik.ui.components.mTabs
 
 /** A row in an [apiReference] table: one component parameter. */
@@ -36,7 +37,7 @@ fun FlowContent.codeBlock(code: String) {
 fun FlowContent.apiReference(params: List<ApiParam>) {
     h2 { +"API reference" }
     div("overflow-x-auto") {
-        table("table table-zebra") {
+        mTable(zebra = true) {
             thead {
                 tr {
                     th { +"Parameter" }

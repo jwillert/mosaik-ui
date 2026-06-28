@@ -10,6 +10,7 @@ import mosaik.ui.components.mCardActions
 import mosaik.ui.components.mCardBody
 import mosaik.ui.components.mCardTitle
 import mosaik.ui.components.mLoading
+import mosaik.ui.components.mTable
 
 /**
  * The interactivity guide: how to add client-side behavior (htmx, Alpine.js,
@@ -1135,7 +1136,7 @@ mCard("w-96 bg-base-100 shadow-xl") {
             +"Choosing between htmx, Alpine.js, and Datastar depends on your app's needs."
         }
         div("overflow-x-auto") {
-            table("table table-zebra") {
+            mTable(zebra = true) {
                 thead {
                     tr {
                         th { +"Library" }
