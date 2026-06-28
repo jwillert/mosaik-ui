@@ -49,6 +49,12 @@
       "dependencies": ["theme"]
     },
     {
+      "name": "menu",
+      "description": "DaisyUI menu navigation container with no variant or size, plus the mMenuItem and mMenuTitle sub-components (all in Menu.kt) for type-safe navigation links and section headers.",
+      "files": ["Menu.kt"],
+      "dependencies": ["theme"]
+    },
+    {
       "name": "table",
       "description": "DaisyUI table with zebra modifier for striped rows. Preserves normal HTML table structure (thead, tbody, tr, th, td).",
       "files": ["Table.kt"],

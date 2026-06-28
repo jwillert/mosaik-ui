@@ -6,7 +6,11 @@ import org.w3c.dom.HTMLAnchorElement
 import org.w3c.dom.asList
 import org.w3c.dom.parsing.DOMParser
 import org.w3c.dom.url.URL
+import org.w3c.dom.HTMLInputElement
+import org.w3c.dom.HTMLSelectElement
 import org.w3c.fetch.RequestInit
+
+const val DEFAULT_INTERACTION_STYLE = "htmx"
 
 /**
  * Entry point for the Mosaik docs browser client.
@@ -16,6 +20,7 @@ import org.w3c.fetch.RequestInit
 fun main() {
     console.log("Mosaik docs client initialized")
     setupShellNavigation()
+    syncPreferenceControls()
 }
 
 /**
@@ -98,6 +103,9 @@ fun navigateToPage(
                 // Re-run syntax highlighting on the new content
                 js("if (typeof hljs !== 'undefined') hljs.highlightAll();")
 
+                // Sync preference controls after shell content swap.
+                syncPreferenceControls()
+
                 // Focus on the main content area for accessibility
                 mainContent.setAttribute("tabindex", "-1")
                 mainContent.asDynamic().focus()
@@ -128,6 +136,44 @@ fun updateActiveSidebarItem(url: String) {
                 link.classList.add("menu-active")
             } else {
                 link.classList.remove("menu-active")
+            }
+        }
+    }
+}
+
+/**
+ * Synchronizes the theme selector, interaction style selector, and interactivity
+ * tab radios to match the preferences already restored by the inline head script.
+ * Called on initial load and after shell content swaps to ensure controls reflect
+ * the current state.
+ */
+fun syncPreferenceControls() {
+    val docElement = document.documentElement ?: return
+
+    // Sync theme selector to the current data-theme attribute.
+    val themeSwitcher = document.getElementById("theme-switcher")
+    if (themeSwitcher is HTMLSelectElement) {
+        val currentTheme = docElement.getAttribute("data-theme")
+        if (currentTheme != null) {
+            themeSwitcher.value = currentTheme
+        }
+    }
+
+    // Sync interaction style selector to the current data-interaction-style attribute.
+    val interactionStyle = docElement.getAttribute("data-interaction-style") ?: DEFAULT_INTERACTION_STYLE
+    val styleSwitcher = document.getElementById("interaction-style-switcher")
+    if (styleSwitcher is HTMLSelectElement) {
+        styleSwitcher.value = interactionStyle
+    }
+
+    // Sync interactivity tab radios to the current interaction style.
+    val radios = document.querySelectorAll(".tabs input[type=\"radio\"]")
+    for (i in 0 until radios.length) {
+        val element = radios.item(i)
+        if (element is HTMLInputElement) {
+            val tabStyle = element.getAttribute("data-interaction-style")
+            if (tabStyle == interactionStyle) {
+                element.checked = true
             }
         }
     }

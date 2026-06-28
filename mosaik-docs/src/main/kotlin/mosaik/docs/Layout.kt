@@ -3,6 +3,9 @@ package mosaik.docs
 import kotlinx.html.*
 import kotlinx.html.stream.appendHTML
 import mosaik.ui.components.Size
+import mosaik.ui.components.mMenu
+import mosaik.ui.components.mMenuItem
+import mosaik.ui.components.mMenuTitle
 import mosaik.ui.components.mSelect
 
 /**
@@ -125,7 +128,6 @@ fun layout(
                         content()
                     }
                 }
-                syncPreferenceControlsScript()
             }
         }
     }
@@ -147,26 +149,19 @@ fun partialContent(content: FlowContent.() -> Unit): String =
 private fun FlowContent.sidebar(activePath: String) {
     aside(classes = "w-64 shrink-0 bg-base-200 p-4") {
         h1("text-xl font-bold px-2 pb-4") { +"Mosaik UI" }
-        ul("menu w-full") {
-            navLink(HOME, activePath)
-            li("menu-title") { +"Components" }
-            COMPONENTS.forEach { navLink(it, activePath) }
-            li("menu-title") { +"Guides" }
-            GUIDES.forEach { navLink(it, activePath) }
+        mMenu("w-full") {
+            mMenuItem(HOME.path, active = HOME.path == activePath) { +HOME.label }
+            mMenuTitle { +"Components" }
+            COMPONENTS.forEach { item ->
+                mMenuItem(item.path, active = item.path == activePath) { +item.label }
+            }
+            mMenuTitle { +"Guides" }
+            GUIDES.forEach { item ->
+                mMenuItem(item.path, active = item.path == activePath) { +item.label }
+            }
         }
         themeSwitcher()
         interactionStyleSwitcher()
-    }
-}
-
-private fun UL.navLink(
-    item: NavItem,
-    activePath: String,
-) {
-    li {
-        // DaisyUI marks the current menu entry with `menu-active`.
-        val active = if (item.path == activePath) "menu-active" else ""
-        a(href = item.path, classes = active) { +item.label }
     }
 }
 
@@ -213,6 +208,7 @@ private fun FlowContent.interactionStyleSwitcher() {
         mSelect(size = Size.Sm, classes = "w-full mt-1") {
             id = "interaction-style-switcher"
             attributes["onchange"] =
+                "document.documentElement.setAttribute('data-interaction-style', this.value);" +
                 "localStorage.setItem('mosaik-interaction-style', this.value);" +
                 "document.querySelectorAll('.tabs input[type=\"radio\"]').forEach(function(input) {" +
                 "  if (input.getAttribute('data-interaction-style') === " +
@@ -249,33 +245,6 @@ private fun HEAD.preferenceRestoreScript() {
                   if (theme) { document.documentElement.setAttribute('data-theme', theme); }
                   document.documentElement.dataset.interactionStyle =
                     localStorage.getItem('mosaik-interaction-style') || '$DEFAULT_INTERACTION_STYLE';
-                })();
-                """.trimIndent()
-        }
-    }
-}
-
-/**
- * Syncs controls and tab radios to the preferences already restored in the head.
- */
-private fun FlowContent.syncPreferenceControlsScript() {
-    script {
-        unsafe {
-            +
-                """
-                (function () {
-                  var sel = document.getElementById('theme-switcher');
-                  if (sel) { sel.value = document.documentElement.getAttribute('data-theme'); }
-
-                  var interactionStyle = document.documentElement.dataset.interactionStyle || '$DEFAULT_INTERACTION_STYLE';
-                  var styleSel = document.getElementById('interaction-style-switcher');
-                  if (styleSel) { styleSel.value = interactionStyle; }
-
-                  document.querySelectorAll('.tabs input[type="radio"]').forEach(function(input) {
-                    if (input.getAttribute('data-interaction-style') === interactionStyle) {
-                      input.checked = true;
-                    }
-                  });
                 })();
                 """.trimIndent()
         }
