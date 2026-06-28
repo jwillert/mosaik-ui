@@ -5,31 +5,32 @@ data class NavItem(
     val path: String,
     val label: String,
     val render: () -> String,
+    val renderPartial: () -> String,
 )
 
 /** The landing page. */
-val HOME = NavItem("/", "Home", ::landingPage)
+val HOME = NavItem("/", "Home", ::landingPage, ::landingPagePartial)
 
 /** The Button documentation page. */
-val BUTTON = NavItem("/components/button", "Button", ::buttonPage)
+val BUTTON = NavItem("/components/button", "Button", ::buttonPage, ::buttonPagePartial)
 
 /** The Card documentation page. */
-val CARD = NavItem("/components/card", "Card", ::cardPage)
+val CARD = NavItem("/components/card", "Card", ::cardPage, ::cardPagePartial)
 
 /** The Navbar documentation page. */
-val NAVBAR = NavItem("/components/navbar", "Navbar", ::navbarPage)
+val NAVBAR = NavItem("/components/navbar", "Navbar", ::navbarPage, ::navbarPagePartial)
 
 /** The Footer documentation page. */
-val FOOTER = NavItem("/components/footer", "Footer", ::footerPage)
+val FOOTER = NavItem("/components/footer", "Footer", ::footerPage, ::footerPagePartial)
 
 /** The Badge documentation page. */
-val BADGE = NavItem("/components/badge", "Badge", ::badgePage)
+val BADGE = NavItem("/components/badge", "Badge", ::badgePage, ::badgePagePartial)
 
 /** The Alert documentation page. */
-val ALERT = NavItem("/components/alert", "Alert", ::alertPage)
+val ALERT = NavItem("/components/alert", "Alert", ::alertPage, ::alertPagePartial)
 
 /** The Interactivity guide page. */
-val INTERACTIVITY = NavItem("/guides/interactivity", "Interactivity", ::interactivityPage)
+val INTERACTIVITY = NavItem("/guides/interactivity", "Interactivity", ::interactivityPage, ::interactivityPagePartial)
 
 /**
  * Every component documentation page. Together with [HOME] and [GUIDES] this is

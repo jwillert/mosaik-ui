@@ -23,6 +23,8 @@ fun Application.module() {
         // One route per nav item, so the sidebar and the routing table can't drift.
         (listOf(HOME) + COMPONENTS + GUIDES).forEach { page ->
             get(page.path) { call.respondText(page.render(), ContentType.Text.Html) }
+            // Partial content routes for progressive shell navigation.
+            get("${page.path}?partial=true") { call.respondText(page.renderPartial(), ContentType.Text.Html) }
         }
 
         // Live interactivity demo endpoints — namespaced under /_examples per ADR-0007.

@@ -967,4 +967,10 @@ class PagesTest :
                 html shouldContain "highlightAll"
             }
         }
+
+        test("every page marks the main content area with an id for shell navigation") {
+            listOf(landingPage(), buttonPage(), cardPage()).forEach { html ->
+                html shouldContain "id=\"main-content\""
+            }
+        }
     })
