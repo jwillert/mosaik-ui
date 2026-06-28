@@ -15,6 +15,7 @@ class MosaikUiPlugin : Plugin<Project> {
         val extension = project.extensions.create("mosaikUi", MosaikUiExtension::class.java)
         registerInstallTasks(project, extension)
         registerCssTasks(project, extension)
+        registerQualityTasks(project)
     }
 
     /** The component install pipeline backed by mosaik-core and the bundled registry. */
@@ -99,6 +100,17 @@ class MosaikUiPlugin : Plugin<Project> {
             task.minify.set(false)
             task.watch.set(true)
             task.dependsOn(install, generate)
+        }
+    }
+
+    private fun registerQualityTasks(project: Project) {
+        val group = "mosaik quality"
+        val sourceRoot = project.layout.projectDirectory.dir("src")
+
+        project.tasks.register("scanDaisyUiTokens", ScanDaisyUiTokensTask::class.java) { task ->
+            task.group = group
+            task.description = "Report raw DaisyUI class tokens outside component implementations (ADR 0013)."
+            task.sourceRoot.set(sourceRoot)
         }
     }
 }
