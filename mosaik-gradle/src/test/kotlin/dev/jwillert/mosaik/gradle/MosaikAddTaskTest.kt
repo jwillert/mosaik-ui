@@ -2,6 +2,7 @@ package dev.jwillert.mosaik.gradle
 
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
 import org.gradle.testkit.runner.GradleRunner
@@ -143,5 +144,97 @@ class MosaikAddTaskTest :
             json shouldContain "\"button\""
             json shouldContain "\"card\""
             json shouldContain "\"theme\""
+        }
+
+        test("mosaikAdd generates checksums for installed files") {
+            val dir = createTempDirectory().toFile()
+            setupProject(dir)
+
+            runner(dir, "mosaikAdd", "--component=button").build()
+
+            val inventory = dir.resolve(".mosaik/components.json")
+            val json = inventory.readText()
+
+            // Should have a checksums section with Button.kt
+            json shouldContain "\"checksums\":"
+            json shouldContain "\"Button.kt\":"
+            // Checksum should be a 64-character SHA-256 hex string
+            val checksumPattern = Regex(""""Button\.kt":\s*"([0-9a-f]{64})"""")
+            val match = checksumPattern.find(json)
+            match shouldNotBe null
+        }
+
+        test("mosaikAdd checksums are deterministic") {
+            val dir = createTempDirectory().toFile()
+            setupProject(dir)
+
+            runner(dir, "mosaikAdd", "--component=button").build()
+            val firstInventory = dir.resolve(".mosaik/components.json").readText()
+
+            // Extract the checksum from first install
+            val checksumPattern = Regex(""""Button\.kt":\s*"([0-9a-f]{64})"""")
+            val firstChecksum = checksumPattern.find(firstInventory)?.groupValues?.get(1)
+
+            // Remove and reinstall
+            dir.resolve(".mosaik/components.json").delete()
+            runner(dir, "mosaikAdd", "--component=button", "--force").build()
+            val secondInventory = dir.resolve(".mosaik/components.json").readText()
+
+            val secondChecksum = checksumPattern.find(secondInventory)?.groupValues?.get(1)
+
+            // Checksums should be the same
+            firstChecksum shouldNotBe null
+            secondChecksum shouldNotBe null
+            firstChecksum shouldBe secondChecksum
+        }
+
+        test("mosaikStatus detects modified files via checksum drift") {
+            val dir = createTempDirectory().toFile()
+            setupProject(dir)
+
+            runner(dir, "mosaikAdd", "--component=button").build()
+
+            // Modify the installed file
+            val button = dir.resolve("src/main/kotlin/com/example/ui/Button.kt")
+            button.appendText("\n// user modification")
+
+            val result = runner(dir, "mosaikStatus").build()
+
+            // Status should show drift
+            result.output shouldContain "[~] button - modified: Button.kt"
+        }
+
+        test("mosaikStatus is read-only and does not modify inventory") {
+            val dir = createTempDirectory().toFile()
+            setupProject(dir)
+
+            runner(dir, "mosaikAdd", "--component=button").build()
+
+            val inventoryBefore = dir.resolve(".mosaik/components.json").readText()
+            val modTimeBefore = dir.resolve(".mosaik/components.json").lastModified()
+
+            // Wait a moment to ensure timestamp would change if file was written
+            Thread.sleep(100)
+
+            runner(dir, "mosaikStatus").build()
+
+            val inventoryAfter = dir.resolve(".mosaik/components.json").readText()
+            val modTimeAfter = dir.resolve(".mosaik/components.json").lastModified()
+
+            inventoryBefore shouldBe inventoryAfter
+            modTimeBefore shouldBe modTimeAfter
+        }
+
+        test("mosaikStatus shows clean status for unmodified components") {
+            val dir = createTempDirectory().toFile()
+            setupProject(dir)
+
+            runner(dir, "mosaikAdd", "--component=button").build()
+
+            val result = runner(dir, "mosaikStatus").build()
+
+            // Should show as installed without drift markers
+            result.output shouldContain "[x] button"
+            result.output shouldNotContain "[~] button"
         }
     })

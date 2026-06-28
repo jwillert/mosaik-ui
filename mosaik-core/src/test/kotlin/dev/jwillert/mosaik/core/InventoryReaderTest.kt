@@ -105,4 +105,68 @@ class InventoryReaderTest :
             inventory["button"]?.api?.get(1)?.name shouldBe "ButtonVariant"
             inventory["button"]?.api?.get(1)?.kind shouldBe "enum"
         }
+
+        test("reads checksums from inventory") {
+            val dir = createTempDirectory().toFile()
+            val mosaikDir = dir.resolve(".mosaik")
+            mosaikDir.mkdirs()
+            val inventoryFile = mosaikDir.resolve("components.json")
+            inventoryFile.writeText(
+                """
+                {
+                  "schemaVersion": "1",
+                  "generatedBy": { "tool": "mosaik-gradle", "version": "1.0.0" },
+                  "project": { "package": "com.example.ui", "prefix": "m", "sourceSet": "main" },
+                  "agentHints": { "description": "Hints", "prefix": "All start with m" },
+                  "components": [
+                    {
+                      "name": "button",
+                      "description": "DaisyUI button",
+                      "files": ["Button.kt"],
+                      "dependencies": ["theme"],
+                      "api": [],
+                      "checksums": {
+                        "Button.kt": "abc123def456"
+                      }
+                    }
+                  ]
+                }
+                """.trimIndent(),
+            )
+
+            val inventory = InventoryReader.read(dir)
+
+            inventory["button"]?.checksums?.size shouldBe 1
+            inventory["button"]?.checksums?.get("Button.kt") shouldBe "abc123def456"
+        }
+
+        test("handles missing checksums field gracefully") {
+            val dir = createTempDirectory().toFile()
+            val mosaikDir = dir.resolve(".mosaik")
+            mosaikDir.mkdirs()
+            val inventoryFile = mosaikDir.resolve("components.json")
+            inventoryFile.writeText(
+                """
+                {
+                  "schemaVersion": "1",
+                  "generatedBy": { "tool": "mosaik-gradle", "version": "1.0.0" },
+                  "project": { "package": "com.example.ui", "prefix": "m", "sourceSet": "main" },
+                  "agentHints": { "description": "Hints", "prefix": "All start with m" },
+                  "components": [
+                    {
+                      "name": "button",
+                      "description": "DaisyUI button",
+                      "files": ["Button.kt"],
+                      "dependencies": ["theme"],
+                      "api": []
+                    }
+                  ]
+                }
+                """.trimIndent(),
+            )
+
+            val inventory = InventoryReader.read(dir)
+
+            inventory["button"]?.checksums?.size shouldBe 0
+        }
     })
