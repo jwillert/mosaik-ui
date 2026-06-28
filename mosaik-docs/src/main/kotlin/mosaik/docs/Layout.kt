@@ -137,7 +137,7 @@ fun layout(
  */
 fun partialContent(content: FlowContent.() -> Unit): String =
     buildString {
-        appendHTML(prettyPrint = false).div { content() }
+        appendHTML(prettyPrint = false).div("contents") { content() }
     }
 
 /**

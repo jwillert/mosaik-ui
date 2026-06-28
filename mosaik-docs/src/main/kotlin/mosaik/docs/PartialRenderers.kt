@@ -8,16 +8,16 @@ package mosaik.docs
 
 fun landingPagePartial(): String = partialContent { landingPageContent() }
 
-fun buttonPagePartial(): String = buttonPage()
+fun buttonPagePartial(): String = partialContent { buttonPageContent() }
 
-fun cardPagePartial(): String = cardPage()
+fun cardPagePartial(): String = partialContent { cardPageContent() }
 
-fun navbarPagePartial(): String = navbarPage()
+fun navbarPagePartial(): String = partialContent { navbarPageContent() }
 
-fun footerPagePartial(): String = footerPage()
+fun footerPagePartial(): String = partialContent { footerPageContent() }
 
-fun badgePagePartial(): String = badgePage()
+fun badgePagePartial(): String = partialContent { badgePageContent() }
 
-fun alertPagePartial(): String = alertPage()
+fun alertPagePartial(): String = partialContent { alertPageContent() }
 
-fun interactivityPagePartial(): String = interactivityPage()
+fun interactivityPagePartial(): String = partialContent { interactivityPageContent() }

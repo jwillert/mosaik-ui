@@ -17,41 +17,37 @@ import mosaik.ui.components.mLoading
 import mosaik.ui.components.mTable
 
 /**
- * The interactivity guide: how to add client-side behavior (htmx, Alpine.js,
- * Datastar) to components without writing new Kotlin code. Each example shows
- * the same feature implemented in all three libraries, toggled by DaisyUI CSS
- * radio tabs (ADR-0006).
+ * Interactivity page content block for use in both full-page and partial renders.
  */
-fun interactivityPage(): String =
-    layout(INTERACTIVITY) {
-        h1 { +"Interactivity" }
-        p {
-            +"Mosaik components are CSS-only — they carry no built-in JavaScript. To "
-            +"add client-side behavior (form validation, dropdown menus, live search) "
-            +"you reach for a JavaScript library. This guide shows the same examples "
-            +"built with htmx, Alpine.js, and Datastar, so you can compare patterns and "
-            +"pick the one that fits."
-        }
+fun FlowContent.interactivityPageContent() {
+    h1 { +"Interactivity" }
+    p {
+        +"Mosaik components are CSS-only — they carry no built-in JavaScript. To "
+        +"add client-side behavior (form validation, dropdown menus, live search) "
+        +"you reach for a JavaScript library. This guide shows the same examples "
+        +"built with htmx, Alpine.js, and Datastar, so you can compare patterns and "
+        +"pick the one that fits."
+    }
 
-        section {
-            h2 { +"Login form" }
-            p {
-                +"A login form built with "
-                code { +"mCard" }
-                +", "
-                code { +"mButton" }
-                +", and raw HTML form inputs. Each library wires client-side behavior "
-                +"(async submit, loading state, error display) onto the same Kotlin code."
-            }
-            p {
-                +"The htmx example posts to "
-                code { +"/api/login" }
-                +". Here's the corresponding Ktor route:"
-            }
-            pre {
-                code {
-                    +
-                        """
+    section {
+        h2 { +"Login form" }
+        p {
+            +"A login form built with "
+            code { +"mCard" }
+            +", "
+            code { +"mButton" }
+            +", and raw HTML form inputs. Each library wires client-side behavior "
+            +"(async submit, loading state, error display) onto the same Kotlin code."
+        }
+        p {
+            +"The htmx example posts to "
+            code { +"/api/login" }
+            +". Here's the corresponding Ktor route:"
+        }
+        pre {
+            code {
+                +
+                    """
 fun Application.module() {
     routing {
         post("/api/login") {
@@ -70,16 +66,16 @@ fun Application.module() {
         }
     }
 }
-                        """.trimIndent()
-                }
+                    """.trimIndent()
             }
-            p {
-                +"The Alpine.js and Datastar examples expect JSON. Here's the route for those:"
-            }
-            pre {
-                code {
-                    +
-                        """
+        }
+        p {
+            +"The Alpine.js and Datastar examples expect JSON. Here's the route for those:"
+        }
+        pre {
+            code {
+                +
+                    """
 @Serializable
 data class LoginRequest(val email: String, val password: String)
 
@@ -99,175 +95,175 @@ fun Application.module() {
         }
     }
 }
-                        """.trimIndent()
-                }
+                    """.trimIndent()
             }
-            interactivityTabs(
-                id = "login-form",
-                htmxPreview = {
-                    mCard("w-96 bg-base-100 shadow-xl") {
-                        form {
-                            attributes["hx-post"] = "/_examples/login"
-                            attributes["hx-target"] = "#login-result"
-                            attributes["hx-indicator"] = "#login-spinner"
+        }
+        interactivityTabs(
+            id = "login-form",
+            htmxPreview = {
+                mCard("w-96 bg-base-100 shadow-xl") {
+                    form {
+                        attributes["hx-post"] = "/_examples/login"
+                        attributes["hx-target"] = "#login-result"
+                        attributes["hx-indicator"] = "#login-spinner"
 
-                            mCardBody {
-                                mCardTitle { +"Login" }
+                        mCardBody {
+                            mCardTitle { +"Login" }
 
-                                mFormControl("w-full") {
-                                    mLabel {
-                                        mLabelText { +"Email" }
-                                    }
-                                    mInput(type = InputType.email, classes = "w-full") {
-                                        name = "email"
-                                        required = true
-                                    }
+                            mFormControl("w-full") {
+                                mLabel {
+                                    mLabelText { +"Email" }
                                 }
-
-                                mFormControl("w-full") {
-                                    mLabel {
-                                        mLabelText { +"Password" }
-                                    }
-                                    mInput(type = InputType.password, classes = "w-full") {
-                                        name = "password"
-                                        required = true
-                                    }
+                                mInput(type = InputType.email, classes = "w-full") {
+                                    name = "email"
+                                    required = true
                                 }
+                            }
 
-                                div("mt-2") {
-                                    id = "login-result"
-                                    attributes["role"] = "region"
-                                    attributes["aria-live"] = "polite"
+                            mFormControl("w-full") {
+                                mLabel {
+                                    mLabelText { +"Password" }
                                 }
+                                mInput(type = InputType.password, classes = "w-full") {
+                                    name = "password"
+                                    required = true
+                                }
+                            }
 
-                                mCardActions("justify-end") {
-                                    mButton(variant = ButtonVariant.Primary) {
-                                        type = ButtonType.submit
-                                        span { +"Sign in" }
-                                        mLoading(LoadingType.Spinner, Size.Sm, "htmx-indicator") {
-                                            id = "login-spinner"
-                                            attributes["style"] = "display:none;"
-                                        }
+                            div("mt-2") {
+                                id = "login-result"
+                                attributes["role"] = "region"
+                                attributes["aria-live"] = "polite"
+                            }
+
+                            mCardActions("justify-end") {
+                                mButton(variant = ButtonVariant.Primary) {
+                                    type = ButtonType.submit
+                                    span { +"Sign in" }
+                                    mLoading(LoadingType.Spinner, Size.Sm, "htmx-indicator") {
+                                        id = "login-spinner"
+                                        attributes["style"] = "display:none;"
                                     }
                                 }
                             }
                         }
                     }
-                },
-                alpinePreview = {
-                    mCard("w-96 bg-base-100 shadow-xl") {
-                        form {
-                            attributes["x-data"] = "{ email: '', password: '', loading: false, error: '' }"
-                            attributes["x-on:submit.prevent"] =
-                                "loading = true; error = ''; " +
-                                "fetch('/_examples/login', { method: 'POST', " +
-                                "headers: { 'Content-Type': 'application/json' }, " +
-                                "body: JSON.stringify({ email, password }) })" +
-                                ".then(r => r.ok ? alert('Login successful!') : r.text().then(t => error = t))" +
-                                ".catch(e => error = 'Network error').finally(() => loading = false)"
+                }
+            },
+            alpinePreview = {
+                mCard("w-96 bg-base-100 shadow-xl") {
+                    form {
+                        attributes["x-data"] = "{ email: '', password: '', loading: false, error: '' }"
+                        attributes["x-on:submit.prevent"] =
+                            "loading = true; error = ''; " +
+                            "fetch('/_examples/login', { method: 'POST', " +
+                            "headers: { 'Content-Type': 'application/json' }, " +
+                            "body: JSON.stringify({ email, password }) })" +
+                            ".then(r => r.ok ? alert('Login successful!') : r.text().then(t => error = t))" +
+                            ".catch(e => error = 'Network error').finally(() => loading = false)"
 
-                            mCardBody {
-                                mCardTitle { +"Login" }
+                        mCardBody {
+                            mCardTitle { +"Login" }
 
-                                mFormControl("w-full") {
-                                    mLabel {
-                                        mLabelText { +"Email" }
-                                    }
-                                    mInput(type = InputType.email, classes = "w-full") {
-                                        name = "email"
-                                        required = true
-                                        attributes["x-model"] = "email"
-                                    }
+                            mFormControl("w-full") {
+                                mLabel {
+                                    mLabelText { +"Email" }
                                 }
-
-                                mFormControl("w-full") {
-                                    mLabel {
-                                        mLabelText { +"Password" }
-                                    }
-                                    mInput(type = InputType.password, classes = "w-full") {
-                                        name = "password"
-                                        required = true
-                                        attributes["x-model"] = "password"
-                                    }
+                                mInput(type = InputType.email, classes = "w-full") {
+                                    name = "email"
+                                    required = true
+                                    attributes["x-model"] = "email"
                                 }
+                            }
 
-                                div("mt-2 text-error text-sm") {
-                                    attributes["x-show"] = "error"
-                                    attributes["x-text"] = "error"
-                                    attributes["role"] = "alert"
+                            mFormControl("w-full") {
+                                mLabel {
+                                    mLabelText { +"Password" }
                                 }
+                                mInput(type = InputType.password, classes = "w-full") {
+                                    name = "password"
+                                    required = true
+                                    attributes["x-model"] = "password"
+                                }
+                            }
 
-                                mCardActions("justify-end") {
-                                    mButton(variant = ButtonVariant.Primary) {
-                                        attributes["x-bind:disabled"] = "loading"
-                                        span {
-                                            attributes["x-show"] = "!loading"
-                                            +"Sign in"
-                                        }
-                                        mLoading(LoadingType.Spinner, Size.Sm) {
-                                            attributes["x-show"] = "loading"
-                                        }
+                            div("mt-2 text-error text-sm") {
+                                attributes["x-show"] = "error"
+                                attributes["x-text"] = "error"
+                                attributes["role"] = "alert"
+                            }
+
+                            mCardActions("justify-end") {
+                                mButton(variant = ButtonVariant.Primary) {
+                                    attributes["x-bind:disabled"] = "loading"
+                                    span {
+                                        attributes["x-show"] = "!loading"
+                                        +"Sign in"
+                                    }
+                                    mLoading(LoadingType.Spinner, Size.Sm) {
+                                        attributes["x-show"] = "loading"
                                     }
                                 }
                             }
                         }
                     }
-                },
-                datastarPreview = {
-                    mCard("w-96 bg-base-100 shadow-xl") {
-                        form {
-                            attributes["data-on-submit"] = "\$\$post('/_examples/login')"
-                            attributes["data-signals"] = "{ email: '', password: '', loading: false, error: '' }"
+                }
+            },
+            datastarPreview = {
+                mCard("w-96 bg-base-100 shadow-xl") {
+                    form {
+                        attributes["data-on-submit"] = "\$\$post('/_examples/login')"
+                        attributes["data-signals"] = "{ email: '', password: '', loading: false, error: '' }"
 
-                            mCardBody {
-                                mCardTitle { +"Login" }
+                        mCardBody {
+                            mCardTitle { +"Login" }
 
-                                mFormControl("w-full") {
-                                    mLabel {
-                                        mLabelText { +"Email" }
-                                    }
-                                    mInput(type = InputType.email, classes = "w-full") {
-                                        name = "email"
-                                        required = true
-                                        attributes["data-model"] = "email"
-                                    }
+                            mFormControl("w-full") {
+                                mLabel {
+                                    mLabelText { +"Email" }
                                 }
-
-                                mFormControl("w-full") {
-                                    mLabel {
-                                        mLabelText { +"Password" }
-                                    }
-                                    mInput(type = InputType.password, classes = "w-full") {
-                                        name = "password"
-                                        required = true
-                                        attributes["data-model"] = "password"
-                                    }
+                                mInput(type = InputType.email, classes = "w-full") {
+                                    name = "email"
+                                    required = true
+                                    attributes["data-model"] = "email"
                                 }
+                            }
 
-                                div("mt-2 text-error text-sm") {
-                                    attributes["data-show"] = "\$error"
-                                    attributes["data-text"] = "\$error"
-                                    attributes["role"] = "alert"
+                            mFormControl("w-full") {
+                                mLabel {
+                                    mLabelText { +"Password" }
                                 }
+                                mInput(type = InputType.password, classes = "w-full") {
+                                    name = "password"
+                                    required = true
+                                    attributes["data-model"] = "password"
+                                }
+                            }
 
-                                mCardActions("justify-end") {
-                                    mButton(variant = ButtonVariant.Primary) {
-                                        attributes["data-bind-disabled"] = "\$loading"
-                                        span {
-                                            attributes["data-show"] = "!\$loading"
-                                            +"Sign in"
-                                        }
-                                        mLoading(LoadingType.Spinner, Size.Sm) {
-                                            attributes["data-show"] = "\$loading"
-                                        }
+                            div("mt-2 text-error text-sm") {
+                                attributes["data-show"] = "\$error"
+                                attributes["data-text"] = "\$error"
+                                attributes["role"] = "alert"
+                            }
+
+                            mCardActions("justify-end") {
+                                mButton(variant = ButtonVariant.Primary) {
+                                    attributes["data-bind-disabled"] = "\$loading"
+                                    span {
+                                        attributes["data-show"] = "!\$loading"
+                                        +"Sign in"
+                                    }
+                                    mLoading(LoadingType.Spinner, Size.Sm) {
+                                        attributes["data-show"] = "\$loading"
                                     }
                                 }
                             }
                         }
                     }
-                },
-                htmxCode =
-                    """
+                }
+            },
+            htmxCode =
+                """
 mCard("w-96 bg-base-100 shadow-xl") {
     form {
         attributes["hx-post"] = "/api/login"
@@ -315,9 +311,9 @@ mCard("w-96 bg-base-100 shadow-xl") {
         }
     }
 }
-                    """.trimIndent(),
-                alpineCode =
-                    """
+                """.trimIndent(),
+            alpineCode =
+                """
 mCard("w-96 bg-base-100 shadow-xl") {
     form {
         attributes["x-data"] = "{ email: '', password: '', loading: false, error: '' }"
@@ -372,9 +368,9 @@ mCard("w-96 bg-base-100 shadow-xl") {
         }
     }
 }
-                    """.trimIndent(),
-                datastarCode =
-                    """
+                """.trimIndent(),
+            datastarCode =
+                """
 mCard("w-96 bg-base-100 shadow-xl") {
     form {
         attributes["data-on-submit"] = "${'$'}${'$'}post('/api/login')"
@@ -426,29 +422,29 @@ mCard("w-96 bg-base-100 shadow-xl") {
         }
     }
 }
-                    """.trimIndent(),
-            )
-        }
+                """.trimIndent(),
+        )
+    }
 
-        section {
-            h2 { +"Register form" }
-            p {
-                +"A registration form with multiple fields, validation, and error "
-                +"handling. Built with "
-                code { +"mCard" }
-                +" and "
-                code { +"mButton" }
-                +", the form wiring is identical to Login — only the fields change."
-            }
-            p {
-                +"The htmx example posts to "
-                code { +"/api/register" }
-                +". Here's the corresponding Ktor route:"
-            }
-            pre {
-                code {
-                    +
-                        """
+    section {
+        h2 { +"Register form" }
+        p {
+            +"A registration form with multiple fields, validation, and error "
+            +"handling. Built with "
+            code { +"mCard" }
+            +" and "
+            code { +"mButton" }
+            +", the form wiring is identical to Login — only the fields change."
+        }
+        p {
+            +"The htmx example posts to "
+            code { +"/api/register" }
+            +". Here's the corresponding Ktor route:"
+        }
+        pre {
+            code {
+                +
+                    """
 fun Application.module() {
     routing {
         post("/api/register") {
@@ -480,16 +476,16 @@ fun Application.module() {
         }
     }
 }
-                        """.trimIndent()
-                }
+                    """.trimIndent()
             }
-            p {
-                +"The Alpine.js and Datastar examples expect JSON. Here's the route for those:"
-            }
-            pre {
-                code {
-                    +
-                        """
+        }
+        p {
+            +"The Alpine.js and Datastar examples expect JSON. Here's the route for those:"
+        }
+        pre {
+            code {
+                +
+                    """
 @Serializable
 data class RegisterRequest(val name: String, val email: String, val password: String)
 
@@ -513,245 +509,245 @@ fun Application.module() {
         }
     }
 }
-                        """.trimIndent()
-                }
+                    """.trimIndent()
             }
-            interactivityTabs(
-                id = "register-form",
-                htmxPreview = {
-                    mCard("w-96 bg-base-100 shadow-xl") {
-                        form {
-                            attributes["hx-post"] = "/_examples/register"
-                            attributes["hx-target"] = "#register-result"
-                            attributes["hx-indicator"] = "#register-spinner"
+        }
+        interactivityTabs(
+            id = "register-form",
+            htmxPreview = {
+                mCard("w-96 bg-base-100 shadow-xl") {
+                    form {
+                        attributes["hx-post"] = "/_examples/register"
+                        attributes["hx-target"] = "#register-result"
+                        attributes["hx-indicator"] = "#register-spinner"
 
-                            mCardBody {
-                                mCardTitle { +"Create account" }
+                        mCardBody {
+                            mCardTitle { +"Create account" }
 
-                                mFormControl("w-full") {
-                                    mLabel {
-                                        mLabelText { +"Name" }
-                                    }
-                                    mInput(type = InputType.text, classes = "w-full") {
-                                        name = "name"
-                                        required = true
-                                    }
+                            mFormControl("w-full") {
+                                mLabel {
+                                    mLabelText { +"Name" }
                                 }
-
-                                mFormControl("w-full") {
-                                    mLabel {
-                                        mLabelText { +"Email" }
-                                    }
-                                    mInput(type = InputType.email, classes = "w-full") {
-                                        name = "email"
-                                        required = true
-                                    }
+                                mInput(type = InputType.text, classes = "w-full") {
+                                    name = "name"
+                                    required = true
                                 }
+                            }
 
-                                mFormControl("w-full") {
-                                    mLabel {
-                                        mLabelText { +"Password" }
-                                    }
-                                    mInput(type = InputType.password, classes = "w-full") {
-                                        name = "password"
-                                        required = true
-                                        attributes["minlength"] = "8"
-                                    }
+                            mFormControl("w-full") {
+                                mLabel {
+                                    mLabelText { +"Email" }
                                 }
-
-                                mFormControl("w-full") {
-                                    mLabel {
-                                        mLabelText { +"Confirm password" }
-                                    }
-                                    mInput(type = InputType.password, classes = "w-full") {
-                                        name = "confirm_password"
-                                        required = true
-                                    }
+                                mInput(type = InputType.email, classes = "w-full") {
+                                    name = "email"
+                                    required = true
                                 }
+                            }
 
-                                div("mt-2") {
-                                    id = "register-result"
-                                    attributes["role"] = "region"
-                                    attributes["aria-live"] = "polite"
+                            mFormControl("w-full") {
+                                mLabel {
+                                    mLabelText { +"Password" }
                                 }
+                                mInput(type = InputType.password, classes = "w-full") {
+                                    name = "password"
+                                    required = true
+                                    attributes["minlength"] = "8"
+                                }
+                            }
 
-                                mCardActions("justify-end") {
-                                    mButton(variant = ButtonVariant.Primary) {
-                                        span { +"Sign up" }
-                                        mLoading(LoadingType.Spinner, Size.Sm, "htmx-indicator") {
-                                            id = "register-spinner"
-                                            attributes["style"] = "display:none;"
-                                        }
+                            mFormControl("w-full") {
+                                mLabel {
+                                    mLabelText { +"Confirm password" }
+                                }
+                                mInput(type = InputType.password, classes = "w-full") {
+                                    name = "confirm_password"
+                                    required = true
+                                }
+                            }
+
+                            div("mt-2") {
+                                id = "register-result"
+                                attributes["role"] = "region"
+                                attributes["aria-live"] = "polite"
+                            }
+
+                            mCardActions("justify-end") {
+                                mButton(variant = ButtonVariant.Primary) {
+                                    span { +"Sign up" }
+                                    mLoading(LoadingType.Spinner, Size.Sm, "htmx-indicator") {
+                                        id = "register-spinner"
+                                        attributes["style"] = "display:none;"
                                     }
                                 }
                             }
                         }
                     }
-                },
-                alpinePreview = {
-                    mCard("w-96 bg-base-100 shadow-xl") {
-                        form {
-                            attributes["x-data"] =
-                                "{ name: '', email: '', password: '', confirmPassword: '', loading: false, error: '' }"
-                            attributes["x-on:submit.prevent"] =
-                                "if (password !== confirmPassword) { error = 'Passwords do not match'; return; } " +
-                                "loading = true; error = ''; " +
-                                "fetch('/_examples/register', { method: 'POST', " +
-                                "headers: { 'Content-Type': 'application/json' }, " +
-                                "body: JSON.stringify({ name, email, password }) })" +
-                                ".then(r => r.ok ? alert('Registration successful!') : r.text().then(t => error = t))" +
-                                ".catch(e => error = 'Network error').finally(() => loading = false)"
+                }
+            },
+            alpinePreview = {
+                mCard("w-96 bg-base-100 shadow-xl") {
+                    form {
+                        attributes["x-data"] =
+                            "{ name: '', email: '', password: '', confirmPassword: '', loading: false, error: '' }"
+                        attributes["x-on:submit.prevent"] =
+                            "if (password !== confirmPassword) { error = 'Passwords do not match'; return; } " +
+                            "loading = true; error = ''; " +
+                            "fetch('/_examples/register', { method: 'POST', " +
+                            "headers: { 'Content-Type': 'application/json' }, " +
+                            "body: JSON.stringify({ name, email, password }) })" +
+                            ".then(r => r.ok ? alert('Registration successful!') : r.text().then(t => error = t))" +
+                            ".catch(e => error = 'Network error').finally(() => loading = false)"
 
-                            mCardBody {
-                                mCardTitle { +"Create account" }
+                        mCardBody {
+                            mCardTitle { +"Create account" }
 
-                                mFormControl("w-full") {
-                                    mLabel {
-                                        mLabelText { +"Name" }
-                                    }
-                                    mInput(type = InputType.text, classes = "w-full") {
-                                        name = "name"
-                                        required = true
-                                        attributes["x-model"] = "name"
-                                    }
+                            mFormControl("w-full") {
+                                mLabel {
+                                    mLabelText { +"Name" }
                                 }
-
-                                mFormControl("w-full") {
-                                    mLabel {
-                                        mLabelText { +"Email" }
-                                    }
-                                    mInput(type = InputType.email, classes = "w-full") {
-                                        name = "email"
-                                        required = true
-                                        attributes["x-model"] = "email"
-                                    }
+                                mInput(type = InputType.text, classes = "w-full") {
+                                    name = "name"
+                                    required = true
+                                    attributes["x-model"] = "name"
                                 }
+                            }
 
-                                mFormControl("w-full") {
-                                    mLabel {
-                                        mLabelText { +"Password" }
-                                    }
-                                    mInput(type = InputType.password, classes = "w-full") {
-                                        name = "password"
-                                        required = true
-                                        attributes["minlength"] = "8"
-                                        attributes["x-model"] = "password"
-                                    }
+                            mFormControl("w-full") {
+                                mLabel {
+                                    mLabelText { +"Email" }
                                 }
-
-                                mFormControl("w-full") {
-                                    mLabel {
-                                        mLabelText { +"Confirm password" }
-                                    }
-                                    mInput(type = InputType.password, classes = "w-full") {
-                                        name = "confirm_password"
-                                        required = true
-                                        attributes["x-model"] = "confirmPassword"
-                                    }
+                                mInput(type = InputType.email, classes = "w-full") {
+                                    name = "email"
+                                    required = true
+                                    attributes["x-model"] = "email"
                                 }
+                            }
 
-                                div("mt-2 text-error text-sm") {
-                                    attributes["x-show"] = "error"
-                                    attributes["x-text"] = "error"
-                                    attributes["role"] = "alert"
+                            mFormControl("w-full") {
+                                mLabel {
+                                    mLabelText { +"Password" }
                                 }
+                                mInput(type = InputType.password, classes = "w-full") {
+                                    name = "password"
+                                    required = true
+                                    attributes["minlength"] = "8"
+                                    attributes["x-model"] = "password"
+                                }
+                            }
 
-                                mCardActions("justify-end") {
-                                    mButton(variant = ButtonVariant.Primary) {
-                                        attributes["x-bind:disabled"] = "loading"
-                                        span {
-                                            attributes["x-show"] = "!loading"
-                                            +"Sign up"
-                                        }
-                                        mLoading(LoadingType.Spinner, Size.Sm) {
-                                            attributes["x-show"] = "loading"
-                                        }
+                            mFormControl("w-full") {
+                                mLabel {
+                                    mLabelText { +"Confirm password" }
+                                }
+                                mInput(type = InputType.password, classes = "w-full") {
+                                    name = "confirm_password"
+                                    required = true
+                                    attributes["x-model"] = "confirmPassword"
+                                }
+                            }
+
+                            div("mt-2 text-error text-sm") {
+                                attributes["x-show"] = "error"
+                                attributes["x-text"] = "error"
+                                attributes["role"] = "alert"
+                            }
+
+                            mCardActions("justify-end") {
+                                mButton(variant = ButtonVariant.Primary) {
+                                    attributes["x-bind:disabled"] = "loading"
+                                    span {
+                                        attributes["x-show"] = "!loading"
+                                        +"Sign up"
+                                    }
+                                    mLoading(LoadingType.Spinner, Size.Sm) {
+                                        attributes["x-show"] = "loading"
                                     }
                                 }
                             }
                         }
                     }
-                },
-                datastarPreview = {
-                    mCard("w-96 bg-base-100 shadow-xl") {
-                        form {
-                            attributes["data-on-submit"] =
-                                "if (\$password !== \$confirmPassword) { \$error = 'Passwords do not match'; return; } \$\$post('/_examples/register')"
-                            attributes["data-signals"] =
-                                "{ name: '', email: '', password: '', confirmPassword: '', loading: false, error: '' }"
+                }
+            },
+            datastarPreview = {
+                mCard("w-96 bg-base-100 shadow-xl") {
+                    form {
+                        attributes["data-on-submit"] =
+                            "if (\$password !== \$confirmPassword) { \$error = 'Passwords do not match'; return; } \$\$post('/_examples/register')"
+                        attributes["data-signals"] =
+                            "{ name: '', email: '', password: '', confirmPassword: '', loading: false, error: '' }"
 
-                            mCardBody {
-                                mCardTitle { +"Create account" }
+                        mCardBody {
+                            mCardTitle { +"Create account" }
 
-                                mFormControl("w-full") {
-                                    mLabel {
-                                        mLabelText { +"Name" }
-                                    }
-                                    mInput(type = InputType.text, classes = "w-full") {
-                                        name = "name"
-                                        required = true
-                                        attributes["data-model"] = "name"
-                                    }
+                            mFormControl("w-full") {
+                                mLabel {
+                                    mLabelText { +"Name" }
                                 }
-
-                                mFormControl("w-full") {
-                                    mLabel {
-                                        mLabelText { +"Email" }
-                                    }
-                                    mInput(type = InputType.email, classes = "w-full") {
-                                        name = "email"
-                                        required = true
-                                        attributes["data-model"] = "email"
-                                    }
+                                mInput(type = InputType.text, classes = "w-full") {
+                                    name = "name"
+                                    required = true
+                                    attributes["data-model"] = "name"
                                 }
+                            }
 
-                                mFormControl("w-full") {
-                                    mLabel {
-                                        mLabelText { +"Password" }
-                                    }
-                                    mInput(type = InputType.password, classes = "w-full") {
-                                        name = "password"
-                                        required = true
-                                        attributes["minlength"] = "8"
-                                        attributes["data-model"] = "password"
-                                    }
+                            mFormControl("w-full") {
+                                mLabel {
+                                    mLabelText { +"Email" }
                                 }
-
-                                mFormControl("w-full") {
-                                    mLabel {
-                                        mLabelText { +"Confirm password" }
-                                    }
-                                    mInput(type = InputType.password, classes = "w-full") {
-                                        name = "confirm_password"
-                                        required = true
-                                        attributes["data-model"] = "confirmPassword"
-                                    }
+                                mInput(type = InputType.email, classes = "w-full") {
+                                    name = "email"
+                                    required = true
+                                    attributes["data-model"] = "email"
                                 }
+                            }
 
-                                div("mt-2 text-error text-sm") {
-                                    attributes["data-show"] = "\$error"
-                                    attributes["data-text"] = "\$error"
-                                    attributes["role"] = "alert"
+                            mFormControl("w-full") {
+                                mLabel {
+                                    mLabelText { +"Password" }
                                 }
+                                mInput(type = InputType.password, classes = "w-full") {
+                                    name = "password"
+                                    required = true
+                                    attributes["minlength"] = "8"
+                                    attributes["data-model"] = "password"
+                                }
+                            }
 
-                                mCardActions("justify-end") {
-                                    mButton(variant = ButtonVariant.Primary) {
-                                        attributes["data-bind-disabled"] = "\$loading"
-                                        span {
-                                            attributes["data-show"] = "!\$loading"
-                                            +"Sign up"
-                                        }
-                                        mLoading(LoadingType.Spinner, Size.Sm) {
-                                            attributes["data-show"] = "\$loading"
-                                        }
+                            mFormControl("w-full") {
+                                mLabel {
+                                    mLabelText { +"Confirm password" }
+                                }
+                                mInput(type = InputType.password, classes = "w-full") {
+                                    name = "confirm_password"
+                                    required = true
+                                    attributes["data-model"] = "confirmPassword"
+                                }
+                            }
+
+                            div("mt-2 text-error text-sm") {
+                                attributes["data-show"] = "\$error"
+                                attributes["data-text"] = "\$error"
+                                attributes["role"] = "alert"
+                            }
+
+                            mCardActions("justify-end") {
+                                mButton(variant = ButtonVariant.Primary) {
+                                    attributes["data-bind-disabled"] = "\$loading"
+                                    span {
+                                        attributes["data-show"] = "!\$loading"
+                                        +"Sign up"
+                                    }
+                                    mLoading(LoadingType.Spinner, Size.Sm) {
+                                        attributes["data-show"] = "\$loading"
                                     }
                                 }
                             }
                         }
                     }
-                },
-                htmxCode =
-                    """
+                }
+            },
+            htmxCode =
+                """
 mCard("w-96 bg-base-100 shadow-xl") {
     form {
         attributes["hx-post"] = "/api/register"
@@ -820,9 +816,9 @@ mCard("w-96 bg-base-100 shadow-xl") {
         }
     }
 }
-                    """.trimIndent(),
-                alpineCode =
-                    """
+                """.trimIndent(),
+            alpineCode =
+                """
 mCard("w-96 bg-base-100 shadow-xl") {
     form {
         attributes["x-data"] = "{ name: '', email: '', password: '', confirmPassword: '', loading: false, error: '' }"
@@ -901,9 +897,9 @@ mCard("w-96 bg-base-100 shadow-xl") {
         }
     }
 }
-                    """.trimIndent(),
-                datastarCode =
-                    """
+                """.trimIndent(),
+            datastarCode =
+                """
 mCard("w-96 bg-base-100 shadow-xl") {
     form {
         attributes["data-on-submit"] = "if (${'$'}password !== ${'$'}confirmPassword) { ${'$'}error = 'Passwords do not match'; return; } ${'$'}${'$'}post('/api/register')"
@@ -978,168 +974,176 @@ mCard("w-96 bg-base-100 shadow-xl") {
         }
     }
 }
-                    """.trimIndent(),
-            )
-        }
-        h2 { +"Building blocks" }
-        p {
-            +"Before diving into examples, here's an overview of each library's core primitives, "
-            +"best-fit use cases, and limitations."
-        }
+                """.trimIndent(),
+        )
+    }
+    h2 { +"Building blocks" }
+    p {
+        +"Before diving into examples, here's an overview of each library's core primitives, "
+        +"best-fit use cases, and limitations."
+    }
 
-        h3 { +"htmx" }
-        p {
-            +"htmx extends HTML with attributes that trigger AJAX requests and swap content. "
-            +"Server-driven: the server renders HTML fragments, htmx swaps them into the DOM."
+    h3 { +"htmx" }
+    p {
+        +"htmx extends HTML with attributes that trigger AJAX requests and swap content. "
+        +"Server-driven: the server renders HTML fragments, htmx swaps them into the DOM."
+    }
+    ul {
+        li {
+            strong { +"Core primitives: " }
+            code { +"hx-get" }
+            +", "
+            code { +"hx-post" }
+            +", "
+            code { +"hx-target" }
+            +", "
+            code { +"hx-swap" }
+            +", "
+            code { +"hx-trigger" }
         }
-        ul {
-            li {
-                strong { +"Core primitives: " }
-                code { +"hx-get" }
-                +", "
-                code { +"hx-post" }
-                +", "
-                code { +"hx-target" }
-                +", "
-                code { +"hx-swap" }
-                +", "
-                code { +"hx-trigger" }
-            }
-            li {
-                strong { +"Best for: " }
-                +"Server-rendered apps, progressive enhancement, form submissions, live search"
-            }
-            li {
-                strong { +"Script size: " }
-                +"~14KB minified + gzipped"
-            }
-            li {
-                strong { +"Limitations: " }
-                +"Requires server endpoints for every interaction; not ideal for complex client-side state"
-            }
+        li {
+            strong { +"Best for: " }
+            +"Server-rendered apps, progressive enhancement, form submissions, live search"
         }
-        p {
-            +"Note: This project uses Ktor 3.1.3, so htmx attributes are set via the raw attributes map. "
-            +"Ktor 3.2 adds typed extensions."
+        li {
+            strong { +"Script size: " }
+            +"~14KB minified + gzipped"
         }
-        pre("bg-base-200 rounded-box p-4 overflow-x-auto") {
-            code {
-                +
-                    """
-                    // Ktor 3.1.3 syntax
-                    attributes["hx-post"] = "/endpoint"
+        li {
+            strong { +"Limitations: " }
+            +"Requires server endpoints for every interaction; not ideal for complex client-side state"
+        }
+    }
+    p {
+        +"Note: This project uses Ktor 3.1.3, so htmx attributes are set via the raw attributes map. "
+        +"Ktor 3.2 adds typed extensions."
+    }
+    pre("bg-base-200 rounded-box p-4 overflow-x-auto") {
+        code {
+            +
+                """
+                // Ktor 3.1.3 syntax
+                attributes["hx-post"] = "/endpoint"
 
-                    // Ktor 3.2+ syntax
-                    hxPost = "/endpoint"
-                    """.trimIndent()
-            }
+                // Ktor 3.2+ syntax
+                hxPost = "/endpoint"
+                """.trimIndent()
         }
+    }
 
-        h3 { +"Alpine.js" }
-        p {
-            +"Alpine.js brings reactive client-side state to HTML with inline directives. "
-            +"Client-side: state lives in JavaScript, DOM updates automatically on change."
+    h3 { +"Alpine.js" }
+    p {
+        +"Alpine.js brings reactive client-side state to HTML with inline directives. "
+        +"Client-side: state lives in JavaScript, DOM updates automatically on change."
+    }
+    ul {
+        li {
+            strong { +"Core primitives: " }
+            code { +"x-data" }
+            +", "
+            code { +"x-show" }
+            +", "
+            code { +"x-on" }
+            +", "
+            code { +"x-bind" }
+            +", "
+            code { +"x-model" }
         }
-        ul {
-            li {
-                strong { +"Core primitives: " }
-                code { +"x-data" }
-                +", "
-                code { +"x-show" }
-                +", "
-                code { +"x-on" }
-                +", "
-                code { +"x-bind" }
-                +", "
-                code { +"x-model" }
-            }
-            li {
-                strong { +"Best for: " }
-                +"Dropdowns, modals, tabs, toggles, form validation — anything with local UI state"
-            }
-            li {
-                strong { +"Script size: " }
-                +"~15KB minified + gzipped"
-            }
-            li {
-                strong { +"Limitations: " }
-                +"Not built for cross-component or persistent state; no built-in server sync"
-            }
+        li {
+            strong { +"Best for: " }
+            +"Dropdowns, modals, tabs, toggles, form validation — anything with local UI state"
         }
+        li {
+            strong { +"Script size: " }
+            +"~15KB minified + gzipped"
+        }
+        li {
+            strong { +"Limitations: " }
+            +"Not built for cross-component or persistent state; no built-in server sync"
+        }
+    }
 
-        h3 { +"Datastar" }
-        p {
-            +"Datastar merges server-driven updates with client-side reactivity via Server-Sent Events (SSE). "
-            +"Hybrid: server pushes HTML fragments over a persistent connection, client-side store reacts to changes."
+    h3 { +"Datastar" }
+    p {
+        +"Datastar merges server-driven updates with client-side reactivity via Server-Sent Events (SSE). "
+        +"Hybrid: server pushes HTML fragments over a persistent connection, client-side store reacts to changes."
+    }
+    ul {
+        li {
+            strong { +"Core primitives: " }
+            code { +"data-signals" }
+            +", "
+            code { +"data-on" }
+            +", "
+            code { +"data-bind" }
+            +", SSE fragments"
         }
-        ul {
-            li {
-                strong { +"Core primitives: " }
-                code { +"data-signals" }
-                +", "
-                code { +"data-on" }
-                +", "
-                code { +"data-bind" }
-                +", SSE fragments"
-            }
-            li {
-                strong { +"Best for: " }
-                +"Real-time dashboards, live notifications, collaborative editing, streaming updates"
-            }
-            li {
-                strong { +"Script size: " }
-                +"~20KB minified + gzipped"
-            }
-            li {
-                strong { +"Limitations: " }
-                +"Requires SSE server-side support; less mature ecosystem than htmx or Alpine"
-            }
+        li {
+            strong { +"Best for: " }
+            +"Real-time dashboards, live notifications, collaborative editing, streaming updates"
         }
-        p {
-            +"Note: Datastar requires a Server-Sent Events endpoint on the server to push updates."
+        li {
+            strong { +"Script size: " }
+            +"~20KB minified + gzipped"
         }
+        li {
+            strong { +"Limitations: " }
+            +"Requires SSE server-side support; less mature ecosystem than htmx or Alpine"
+        }
+    }
+    p {
+        +"Note: Datastar requires a Server-Sent Events endpoint on the server to push updates."
+    }
 
-        h2 { +"Comparison" }
-        p {
-            +"Choosing between htmx, Alpine.js, and Datastar depends on your app's needs."
-        }
-        div("overflow-x-auto") {
-            mTable(zebra = true) {
-                thead {
-                    tr {
-                        th { +"Library" }
-                        th { +"Paradigm" }
-                        th { +"Server requirement" }
-                        th { +"Script size" }
-                        th { +"When to choose" }
-                    }
+    h2 { +"Comparison" }
+    p {
+        +"Choosing between htmx, Alpine.js, and Datastar depends on your app's needs."
+    }
+    div("overflow-x-auto") {
+        mTable(zebra = true) {
+            thead {
+                tr {
+                    th { +"Library" }
+                    th { +"Paradigm" }
+                    th { +"Server requirement" }
+                    th { +"Script size" }
+                    th { +"When to choose" }
                 }
-                tbody {
-                    tr {
-                        td { strong { +"htmx" } }
-                        td { +"Server-driven" }
-                        td { +"HTML endpoints" }
-                        td { +"~14KB" }
-                        td { +"Server renders everything; progressive enhancement; no complex client state" }
-                    }
-                    tr {
-                        td { strong { +"Alpine.js" } }
-                        td { +"Client-side" }
-                        td { +"None (static HTML)" }
-                        td { +"~15KB" }
-                        td { +"Local UI state (dropdowns, modals, toggles); no server round-trips needed" }
-                    }
-                    tr {
-                        td { strong { +"Datastar" } }
-                        td { +"Hybrid (SSE-based)" }
-                        td { +"SSE endpoints" }
-                        td { +"~20KB" }
-                        td { +"Real-time updates; server pushes changes; collaborative or live-data features" }
-                    }
+            }
+            tbody {
+                tr {
+                    td { strong { +"htmx" } }
+                    td { +"Server-driven" }
+                    td { +"HTML endpoints" }
+                    td { +"~14KB" }
+                    td { +"Server renders everything; progressive enhancement; no complex client state" }
+                }
+                tr {
+                    td { strong { +"Alpine.js" } }
+                    td { +"Client-side" }
+                    td { +"None (static HTML)" }
+                    td { +"~15KB" }
+                    td { +"Local UI state (dropdowns, modals, toggles); no server round-trips needed" }
+                }
+                tr {
+                    td { strong { +"Datastar" } }
+                    td { +"Hybrid (SSE-based)" }
+                    td { +"SSE endpoints" }
+                    td { +"~20KB" }
+                    td { +"Real-time updates; server pushes changes; collaborative or live-data features" }
                 }
             }
         }
     }
+}
+
+/**
+ * The interactivity guide: how to add client-side behavior (htmx, Alpine.js,
+ * Datastar) to components without writing new Kotlin code. Each example shows
+ * the same feature implemented in all three libraries, toggled by DaisyUI CSS
+ * radio tabs (ADR-0006).
+ */
+fun interactivityPage(): String = layout(INTERACTIVITY) { interactivityPageContent() }
 
 /**
  * A test page that renders the [interactivityTabs] helper with example code
