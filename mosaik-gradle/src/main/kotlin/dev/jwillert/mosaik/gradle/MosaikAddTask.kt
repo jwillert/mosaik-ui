@@ -1,6 +1,8 @@
 package dev.jwillert.mosaik.gradle
 
 import dev.jwillert.mosaik.core.FileWriter
+import dev.jwillert.mosaik.core.InventoryReader
+import dev.jwillert.mosaik.core.InventoryWriter
 import dev.jwillert.mosaik.core.Resolver
 import dev.jwillert.mosaik.core.WriteOutcome
 import org.gradle.api.DefaultTask
@@ -83,5 +85,12 @@ abstract class MosaikAddTask : DefaultTask() {
             }
         }
         logger.lifecycle("Done. $created installed, $overwritten overwritten, $present already present.")
+
+        // Update the installed component inventory.
+        val projectRoot = project.projectDir
+        val existing = InventoryReader.read(projectRoot)
+        val allInstalled = (existing.values + resolved).distinctBy { it.name }
+        val inventoryWriter = InventoryWriter(pkg)
+        inventoryWriter.write(projectRoot, allInstalled)
     }
 }

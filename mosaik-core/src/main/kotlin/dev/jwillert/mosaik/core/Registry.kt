@@ -6,14 +6,24 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 
 /**
+ * API metadata for a single public function or type in a component.
+ */
+data class ApiMetadata(
+    val name: String,
+    val kind: String,
+)
+
+/**
  * A single component definition from the registry: its [name], human-readable [description],
- * the source [files] that make it up, and the names of the components it [dependencies] on.
+ * the source [files] that make it up, the names of the components it [dependencies] on,
+ * and optional [api] metadata for public functions and types.
  */
 data class ComponentEntry(
     val name: String,
     val description: String,
     val files: List<String>,
     val dependencies: List<String>,
+    val api: List<ApiMetadata> = emptyList(),
 )
 
 /**
@@ -55,6 +65,18 @@ class Registry private constructor(
                         description = obj["description"]?.jsonPrimitive?.content ?: "",
                         files = obj["files"]?.jsonArray?.map { it.jsonPrimitive.content } ?: emptyList(),
                         dependencies = obj["dependencies"]?.jsonArray?.map { it.jsonPrimitive.content } ?: emptyList(),
+                        api =
+                            obj["api"]?.jsonArray?.map { apiElement ->
+                                val apiObj = apiElement.jsonObject
+                                ApiMetadata(
+                                    name =
+                                        apiObj["name"]?.jsonPrimitive?.content
+                                            ?: throw IllegalArgumentException("An API entry is missing its 'name'"),
+                                    kind =
+                                        apiObj["kind"]?.jsonPrimitive?.content
+                                            ?: throw IllegalArgumentException("An API entry is missing its 'kind'"),
+                                )
+                            } ?: emptyList(),
                     )
                 }
             // Preserve declaration order for listing while keeping name lookups O(1).
