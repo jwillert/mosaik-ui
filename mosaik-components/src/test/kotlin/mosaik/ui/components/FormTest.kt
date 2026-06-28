@@ -128,6 +128,7 @@ class FormTest :
                     Size.Xs to "input-xs",
                     Size.Sm to "input-sm",
                     Size.Lg to "input-lg",
+                    Size.Xl to "input-xl",
                 )
 
             expected.forEach { (size, css) ->
@@ -207,6 +208,7 @@ class FormTest :
                     Size.Xs to "select-xs",
                     Size.Sm to "select-sm",
                     Size.Lg to "select-lg",
+                    Size.Xl to "select-xl",
                 )
 
             expected.forEach { (size, css) ->
