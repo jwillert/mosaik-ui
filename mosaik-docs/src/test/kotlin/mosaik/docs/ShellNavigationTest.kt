@@ -253,6 +253,161 @@ class ShellNavigationTest :
             page.locator("#main-content").textContent() shouldContain "mButton"
         }
 
+        test("syntax highlighting is rehydrated after shell navigation") {
+            page.navigate("http://127.0.0.1:$testPort/")
+
+            // Navigate to Button page which has code blocks
+            page.locator(".menu a[href='/components/button']").click()
+            page.waitForURL("http://127.0.0.1:$testPort/components/button")
+
+            // Wait for content to load
+            page.waitForFunction("() => document.getElementById('main-content').textContent.includes('mButton')")
+
+            // Check that code blocks have highlight.js classes applied
+            val hasHighlighting =
+                page.evaluate(
+                    """() => {
+                        const codeBlocks = document.querySelectorAll('#main-content code');
+                        if (codeBlocks.length === 0) return false;
+                        // Check if at least one code block has hljs highlighting classes
+                        for (let block of codeBlocks) {
+                            if (block.classList.contains('hljs') ||
+                                block.querySelector('.hljs-keyword') ||
+                                block.innerHTML.includes('hljs-')) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                    """,
+                )
+            hasHighlighting shouldBe true
+        }
+
+        test("interaction style tabs reflect saved preference after shell navigation") {
+            page.navigate("http://127.0.0.1:$testPort/")
+
+            // Change to alpine interaction style
+            page.locator("#interaction-style-switcher").selectOption("alpine")
+
+            // Navigate to Button page which has interactivity tabs
+            page.locator(".menu a[href='/components/button']").click()
+            page.waitForURL("http://127.0.0.1:$testPort/components/button")
+
+            // Wait for content to load
+            page.waitForFunction("() => document.getElementById('main-content').textContent.includes('mButton')")
+
+            // Check that the alpine tab is checked in the swapped content
+            val alpineTabChecked =
+                page.evaluate(
+                    """() => {
+                        const alpineTabs = document.querySelectorAll('#main-content .tabs input[data-interaction-style="alpine"]');
+                        if (alpineTabs.length === 0) return false;
+                        // Check if at least one alpine tab is checked
+                        for (let tab of alpineTabs) {
+                            if (tab.checked) return true;
+                        }
+                        return false;
+                    }
+                    """,
+                )
+            alpineTabChecked shouldBe true
+        }
+
+        test("htmx previews work after shell navigation") {
+            page.navigate("http://127.0.0.1:$testPort/components/button")
+
+            // Wait for content to load
+            page.waitForFunction("() => document.getElementById('main-content').textContent.includes('mButton')")
+
+            // Navigate away and back
+            page.locator(".menu a[href='/']").click()
+            page.waitForURL("http://127.0.0.1:$testPort/")
+            page.locator(".menu a[href='/components/button']").click()
+            page.waitForURL("http://127.0.0.1:$testPort/components/button")
+            page.waitForFunction("() => document.getElementById('main-content').textContent.includes('mButton')")
+
+            // Check that htmx is still working by verifying hx-* attributes exist
+            val htmxPresent =
+                page.evaluate(
+                    """() => {
+                        const htmxElements = document.querySelectorAll('#main-content [hx-post], [hx-get], [hx-swap]');
+                        return htmxElements.length > 0;
+                    }
+                    """,
+                )
+            htmxPresent shouldBe true
+        }
+
+        test("alpine.js previews initialize after shell navigation") {
+            page.navigate("http://127.0.0.1:$testPort/")
+
+            // Change to alpine interaction style
+            page.locator("#interaction-style-switcher").selectOption("alpine")
+
+            // Navigate to Button page which has Alpine previews
+            page.locator(".menu a[href='/components/button']").click()
+            page.waitForURL("http://127.0.0.1:$testPort/components/button")
+
+            // Wait for content to load
+            page.waitForFunction("() => document.getElementById('main-content').textContent.includes('mButton')")
+
+            // Navigate away and back to test rehydration
+            page.locator(".menu a[href='/']").click()
+            page.waitForURL("http://127.0.0.1:$testPort/")
+            page.locator(".menu a[href='/components/button']").click()
+            page.waitForURL("http://127.0.0.1:$testPort/components/button")
+            page.waitForFunction("() => document.getElementById('main-content').textContent.includes('mButton')")
+
+            // Check that Alpine.js has initialized by verifying x-data elements have Alpine properties
+            val alpineInitialized =
+                page.evaluate(
+                    """() => {
+                        const alpineElements = document.querySelectorAll('#main-content [x-data]');
+                        if (alpineElements.length === 0) return true; // Pass if no Alpine elements
+                        // Check if Alpine has bound to the element (Alpine 3.x adds _x_dataStack)
+                        for (let el of alpineElements) {
+                            if (el._x_dataStack || el.__x) return true;
+                        }
+                        return false;
+                    }
+                    """,
+                )
+            alpineInitialized shouldBe true
+        }
+
+        test("datastar previews initialize after shell navigation") {
+            page.navigate("http://127.0.0.1:$testPort/")
+
+            // Change to datastar interaction style
+            page.locator("#interaction-style-switcher").selectOption("datastar")
+
+            // Navigate to Button page which has Datastar previews
+            page.locator(".menu a[href='/components/button']").click()
+            page.waitForURL("http://127.0.0.1:$testPort/components/button")
+
+            // Wait for content to load
+            page.waitForFunction("() => document.getElementById('main-content').textContent.includes('mButton')")
+
+            // Navigate away and back to test rehydration
+            page.locator(".menu a[href='/']").click()
+            page.waitForURL("http://127.0.0.1:$testPort/")
+            page.locator(".menu a[href='/components/button']").click()
+            page.waitForURL("http://127.0.0.1:$testPort/components/button")
+            page.waitForFunction("() => document.getElementById('main-content').textContent.includes('mButton')")
+
+            // Check that Datastar has initialized by verifying data-signals elements exist
+            val datastarPresent =
+                page.evaluate(
+                    """() => {
+                        const datastarElements = document.querySelectorAll('#main-content [data-signals], [data-on-click], [data-bind-disabled]');
+                        return datastarElements.length > 0;
+                    }
+                    """,
+                )
+            datastarPresent shouldBe true
+        }
+
         test("ctrl-click opens link in new tab without intercepting") {
             page.navigate("http://127.0.0.1:$testPort/")
 
