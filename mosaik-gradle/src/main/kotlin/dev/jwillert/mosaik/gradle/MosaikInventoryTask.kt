@@ -43,17 +43,11 @@ abstract class MosaikInventoryTask : DefaultTask() {
             val allFilesExist = entry.files.isNotEmpty() && entry.files.all { File(packageDir, it).exists() }
 
             if (allFilesExist) {
-                // Compute checksums for all files
                 val checksums =
-                    entry.files
-                        .associateWith { fileName ->
-                            val file = File(packageDir, fileName)
-                            if (file.exists()) {
-                                InventoryWriter.computeChecksum(file.readText())
-                            } else {
-                                ""
-                            }
-                        }.filterValues { it.isNotEmpty() }
+                    entry.files.associateWith { fileName ->
+                        val file = File(packageDir, fileName)
+                        InventoryWriter.computeChecksum(file.readText())
+                    }
 
                 installedComponents.add(entry.copy(checksums = checksums))
             }
