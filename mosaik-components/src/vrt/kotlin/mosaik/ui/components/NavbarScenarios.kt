@@ -1,7 +1,6 @@
 package mosaik.ui.components
 
 import dev.jwillert.ktor.vrt.Scenario
-import kotlinx.html.a
 
 object NavbarScenarios {
     /** Brand on the left, actions on the right — the most common two-slot navbar. */
@@ -9,7 +8,7 @@ object NavbarScenarios {
         Scenario("navbar-start-end") {
             mNavbar("bg-base-100 shadow-sm") {
                 mNavbarStart {
-                    a(classes = "btn btn-ghost text-xl") { +"Mosaik" }
+                    mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
                 }
                 mNavbarEnd {
                     mButton(variant = ButtonVariant.Primary) { +"Sign up" }
@@ -22,7 +21,7 @@ object NavbarScenarios {
         Scenario("navbar-center-only") {
             mNavbar("bg-base-100 shadow-sm") {
                 mNavbarCenter {
-                    a(classes = "btn btn-ghost text-xl") { +"Mosaik" }
+                    mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
                 }
             }
         }
@@ -32,10 +31,10 @@ object NavbarScenarios {
         Scenario("navbar-all-slots") {
             mNavbar("bg-base-100 shadow-sm") {
                 mNavbarStart {
-                    a(classes = "btn btn-ghost text-xl") { +"Mosaik" }
+                    mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
                 }
                 mNavbarCenter("hidden lg:flex") {
-                    a(classes = "btn btn-ghost") { +"Docs" }
+                    mButtonLink(href = "/docs", style = ButtonStyle.Ghost) { +"Docs" }
                 }
                 mNavbarEnd {
                     mButton(variant = ButtonVariant.Primary) { +"Sign up" }

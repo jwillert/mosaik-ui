@@ -26,6 +26,12 @@ class PagesTest :
             }
         }
 
+        test("every page links the generated Kotlin/JS docs client asset") {
+            listOf(landingPage(), buttonPage()).forEach { html ->
+                html shouldContain "/static/mosaik-docs-client.js"
+            }
+        }
+
         test("every page renders the sidebar theme switcher and the inline JS that drives it") {
             listOf(landingPage(), buttonPage()).forEach { html ->
                 html shouldContain "id=\"theme-switcher\""
@@ -165,8 +171,10 @@ class PagesTest :
             // All three previews render the login form card.
             html shouldContain "Login"
             // Form inputs are present in previews.
-            html shouldContain "type=\"email\" name=\"email\""
-            html shouldContain "type=\"password\" name=\"password\""
+            html shouldContain "type=\"email\""
+            html shouldContain "name=\"email\""
+            html shouldContain "type=\"password\""
+            html shouldContain "name=\"password\""
             // Submit button is present.
             html shouldContain "Sign in"
             // Result/error display elements are present.
@@ -194,9 +202,12 @@ class PagesTest :
             // All three previews render the registration form card.
             html shouldContain "Create account"
             // Form inputs are present in previews.
-            html shouldContain "type=\"text\" name=\"name\""
-            html shouldContain "type=\"email\" name=\"email\""
-            html shouldContain "type=\"password\" name=\"password\""
+            html shouldContain "type=\"text\""
+            html shouldContain "name=\"name\""
+            html shouldContain "type=\"email\""
+            html shouldContain "name=\"email\""
+            html shouldContain "type=\"password\""
+            html shouldContain "name=\"password\""
             html shouldContain "name=\"confirm_password\""
             // Submit button is present.
             html shouldContain "Sign up"
@@ -500,9 +511,9 @@ class PagesTest :
 
         test("the footer page includes an API reference table for every mFooter parameter") {
             val html = footerPage()
-            html shouldContain "API reference"
-            // The block param documents the raw FOOTER receiver (> is HTML-escaped in the cell).
-            html shouldContain "FOOTER.()"
+            html shouldContain "API"
+            // The block param documents the MFooter receiver (> is HTML-escaped in the cell).
+            html shouldContain "MFooter.()"
             listOf("classes", "block").forEach { param ->
                 html shouldContain param
             }
@@ -712,8 +723,10 @@ class PagesTest :
             // All three previews render the login form card.
             html shouldContain "Login"
             // Form inputs are present in previews.
-            html shouldContain "type=\"email\" name=\"email\""
-            html shouldContain "type=\"password\" name=\"password\""
+            html shouldContain "type=\"email\""
+            html shouldContain "name=\"email\""
+            html shouldContain "type=\"password\""
+            html shouldContain "name=\"password\""
             // Submit button is present.
             html shouldContain "Sign in"
             // Result/error display elements are present.
@@ -741,9 +754,12 @@ class PagesTest :
             // All three previews render the registration form card.
             html shouldContain "Create account"
             // Form inputs are present in previews.
-            html shouldContain "type=\"text\" name=\"name\""
-            html shouldContain "type=\"email\" name=\"email\""
-            html shouldContain "type=\"password\" name=\"password\""
+            html shouldContain "type=\"text\""
+            html shouldContain "name=\"name\""
+            html shouldContain "type=\"email\""
+            html shouldContain "name=\"email\""
+            html shouldContain "type=\"password\""
+            html shouldContain "name=\"password\""
             html shouldContain "name=\"confirm_password\""
             // Submit button is present.
             html shouldContain "Sign up"
@@ -949,6 +965,12 @@ class PagesTest :
             listOf(landingPage(), buttonPage()).forEach { html ->
                 html shouldContain "highlight.js"
                 html shouldContain "highlightAll"
+            }
+        }
+
+        test("every page marks the main content area with an id for shell navigation") {
+            listOf(landingPage(), buttonPage(), cardPage()).forEach { html ->
+                html shouldContain "id=\"main-content\""
             }
         }
     })

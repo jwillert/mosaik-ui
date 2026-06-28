@@ -239,4 +239,87 @@ class ButtonTest :
 
             html shouldContain "class=\"btn btn-primary btn-outline btn-square btn-block btn-lg shadow-lg\""
         }
+
+        // mButtonLink tests - anchor-compatible button API
+
+        test("mButtonLink renders an anchor with button classes") {
+            val html = render { mButtonLink(href = "/docs") { +"Docs" } }
+
+            html shouldContain "<a href=\"/docs\" class=\"btn btn-neutral\">Docs</a>"
+        }
+
+        test("mButtonLink supports all ButtonVariant options") {
+            val html = render { mButtonLink(href = "/home", variant = ButtonVariant.Primary) { +"Home" } }
+
+            html shouldContain "class=\"btn btn-primary\""
+            html shouldContain "href=\"/home\""
+        }
+
+        test("mButtonLink supports ButtonStyle including ghost") {
+            val html = render { mButtonLink(href = "/", style = ButtonStyle.Ghost) { +"Brand" } }
+
+            html shouldContain "class=\"btn btn-neutral btn-ghost\""
+        }
+
+        test("mButtonLink combines variant, style, size, and classes") {
+            val html =
+                render {
+                    mButtonLink(
+                        href = "/about",
+                        variant = ButtonVariant.Primary,
+                        style = ButtonStyle.Ghost,
+                        size = Size.Lg,
+                        classes = "text-xl",
+                    ) { +"About" }
+                }
+
+            html shouldContain "href=\"/about\""
+            html shouldContain "class=\"btn btn-primary btn-ghost btn-lg text-xl\""
+        }
+
+        test("mButtonLink receives the raw anchor element so html attributes apply natively") {
+            val html =
+                render {
+                    mButtonLink(href = "/search") {
+                        id = "search-link"
+                        target = "_blank"
+                        rel = "noopener"
+                        +"Search"
+                    }
+                }
+
+            html shouldContain "href=\"/search\""
+            html shouldContain "id=\"search-link\""
+            html shouldContain "target=\"_blank\""
+            html shouldContain "rel=\"noopener\""
+        }
+
+        test("mButtonLink supports arbitrary attributes via the raw element") {
+            val html =
+                render {
+                    mButtonLink(href = "/nav", style = ButtonStyle.Ghost) {
+                        attributes["hx-get"] = "/api/nav"
+                        attributes["hx-target"] = "#content"
+                        +"Navigation"
+                    }
+                }
+
+            html shouldContain "hx-get=\"/api/nav\""
+            html shouldContain "hx-target=\"#content\""
+            html shouldContain "class=\"btn btn-neutral btn-ghost\""
+        }
+
+        test("mButtonLink supports shape and width modifiers") {
+            val html =
+                render {
+                    mButtonLink(
+                        href = "/icon",
+                        shape = ButtonShape.Square,
+                        width = ButtonWidth.Block,
+                    ) { +"□" }
+                }
+
+            html shouldContain "href=\"/icon\""
+            html shouldContain "class=\"btn btn-neutral btn-square btn-block\""
+        }
     })

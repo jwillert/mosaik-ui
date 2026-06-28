@@ -2,6 +2,8 @@ package mosaik.docs
 
 import kotlinx.html.*
 import kotlinx.html.stream.appendHTML
+import mosaik.ui.components.Size
+import mosaik.ui.components.mSelect
 import mosaik.ui.components.mMenu
 import mosaik.ui.components.mMenuItem
 import mosaik.ui.components.mMenuTitle
@@ -115,15 +117,30 @@ fun layout(
                         +"hljs.highlightAll();"
                     }
                 }
+                // Kotlin/JS docs client bundle (generated at build time).
+                script(src = "/static/mosaik-docs-client.js") {}
             }
             body(classes = "min-h-screen bg-base-100 text-base-content") {
                 div("flex min-h-screen") {
                     sidebar(active.path)
-                    main(classes = "flex-1 p-8 prose max-w-none") { content() }
+                    main(classes = "flex-1 p-8 prose max-w-none") {
+                        id = "main-content"
+                        content()
+                    }
                 }
                 syncPreferenceControlsScript()
             }
         }
+    }
+
+/**
+ * Renders just the page [content] without the full document shell. Used for
+ * progressive shell navigation where the client fetches and swaps only the main
+ * content area instead of reloading the entire page.
+ */
+fun partialContent(content: FlowContent.() -> Unit): String =
+    buildString {
+        appendHTML(prettyPrint = false).div("contents") { content() }
     }
 
 /**
@@ -161,7 +178,7 @@ private fun FlowContent.themeSwitcher() {
             attributes["for"] = "theme-switcher"
             +"Theme"
         }
-        select(classes = "select select-sm select-bordered w-full mt-1") {
+        mSelect(size = Size.Sm, classes = "w-full mt-1") {
             id = "theme-switcher"
             attributes["onchange"] =
                 "document.documentElement.setAttribute('data-theme', this.value);" +
@@ -189,7 +206,7 @@ private fun FlowContent.interactionStyleSwitcher() {
             attributes["for"] = "interaction-style-switcher"
             +"Interaction Style"
         }
-        select(classes = "select select-sm select-bordered w-full mt-1") {
+        mSelect(size = Size.Sm, classes = "w-full mt-1") {
             id = "interaction-style-switcher"
             attributes["onchange"] =
                 "localStorage.setItem('mosaik-interaction-style', this.value);" +

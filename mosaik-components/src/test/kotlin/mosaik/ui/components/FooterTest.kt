@@ -34,8 +34,8 @@ class FooterTest :
                 render {
                     mFooter("bg-base-200 p-10") {
                         nav {
-                            h6("footer-title") { +"Services" }
-                            a(href = "/branding", classes = "link link-hover") { +"Branding" }
+                            mFooterTitle { +"Services" }
+                            mLink(href = "/branding") { +"Branding" }
                         }
                     }
                 }
@@ -45,7 +45,10 @@ class FooterTest :
             html shouldContain "<a href=\"/branding\" class=\"link link-hover\">Branding</a>"
         }
 
-        test("the footer block receives the raw footer element so its html attributes apply natively") {
+        test(
+            "the footer block receives a DSL context wrapping the footer element " +
+                "so its html attributes apply natively",
+        ) {
             val html =
                 render {
                     mFooter {
@@ -57,5 +60,60 @@ class FooterTest :
             html shouldContain "id=\"site-footer\""
             html shouldContain "hx-get=\"/footer\""
             html shouldContain "class=\"footer\""
+        }
+
+        test("mFooterTitle renders an h6 with footer-title class") {
+            val html =
+                render {
+                    mFooter {
+                        mFooterTitle { +"Services" }
+                    }
+                }
+
+            html shouldContain "<h6 class=\"footer-title\">Services</h6>"
+        }
+
+        test("mFooterTitle accepts extra classes") {
+            val html =
+                render {
+                    mFooter {
+                        mFooterTitle("opacity-50") { +"Services" }
+                    }
+                }
+
+            html shouldContain "<h6 class=\"footer-title opacity-50\">Services</h6>"
+        }
+
+        test("mLink renders an anchor with link and link-hover classes") {
+            val html =
+                render {
+                    mFooter {
+                        mLink(href = "/about") { +"About us" }
+                    }
+                }
+
+            html shouldContain "<a href=\"/about\" class=\"link link-hover\">About us</a>"
+        }
+
+        test("mLink accepts extra classes") {
+            val html =
+                render {
+                    mFooter {
+                        mLink(href = "/contact", classes = "font-bold") { +"Contact" }
+                    }
+                }
+
+            html shouldContain "<a href=\"/contact\" class=\"link link-hover font-bold\">Contact</a>"
+        }
+
+        test("mLink href parameter is required") {
+            val html =
+                render {
+                    mFooter {
+                        mLink(href = "#") { +"Placeholder" }
+                    }
+                }
+
+            html shouldContain "<a href=\"#\" class=\"link link-hover\">Placeholder</a>"
         }
     })
