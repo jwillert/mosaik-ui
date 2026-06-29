@@ -46,7 +46,11 @@ fun setupShellNavigation() {
 
     // Handle browser back/forward navigation.
     window.addEventListener("popstate", {
-        navigateToPage(window.location.href, pushState = false)
+        navigateToPage(
+            window.location.href,
+            pushState = false,
+            applySoftPageVariantPreference = false,
+        )
     })
 }
 
@@ -113,8 +117,14 @@ fun shouldEnhanceNavigation(
 fun navigateToPage(
     url: String,
     pushState: Boolean = true,
+    applySoftPageVariantPreference: Boolean = true,
 ) {
-    val resolvedUrl = urlWithSoftPageVariantPreference(url)
+    val resolvedUrl =
+        if (applySoftPageVariantPreference) {
+            urlWithSoftPageVariantPreference(url)
+        } else {
+            url
+        }
     val partialUrl = partialUrlFor(resolvedUrl)
 
     window

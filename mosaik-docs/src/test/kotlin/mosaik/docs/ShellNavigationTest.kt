@@ -331,6 +331,45 @@ class ShellNavigationTest :
             alpineVariantRendered shouldBe true
         }
 
+        test("browser history preserves exact Page Variant URLs") {
+            page.navigate("http://127.0.0.1:$testPort/")
+            page.evaluate("() => window.localStorage.clear()")
+
+            page.locator(".menu a[href='/components/button']").click()
+            page.waitForURL("http://127.0.0.1:$testPort/components/button")
+            page.waitForFunction("() => document.getElementById('main-content').textContent.includes('mButton')")
+
+            page.locator("#main-content a[data-page-variant='alpine']").click()
+            page.waitForURL("http://127.0.0.1:$testPort/components/button?variant=alpine")
+            page.waitForFunction(
+                """
+                () => document
+                    .querySelector('#main-content a[data-page-variant="alpine"]')
+                    ?.getAttribute('aria-current') === 'page'
+                """.trimIndent(),
+            )
+
+            page.goBack()
+            page.waitForURL("http://127.0.0.1:$testPort/components/button")
+            page.waitForFunction(
+                """
+                () => document
+                    .querySelector('#main-content a[data-page-variant="htmx"]')
+                    ?.getAttribute('aria-current') === 'page'
+                """.trimIndent(),
+            )
+
+            val htmxVariantRendered =
+                page.evaluate(
+                    """() => {
+                        return document.querySelectorAll('#main-content [hx-post]').length > 0 &&
+                            document.querySelectorAll('#main-content [x-data], #main-content [x-on\\:click]').length === 0;
+                    }
+                    """,
+                )
+            htmxVariantRendered shouldBe true
+        }
+
         test("htmx previews work after shell navigation") {
             page.navigate("http://127.0.0.1:$testPort/components/button")
 
