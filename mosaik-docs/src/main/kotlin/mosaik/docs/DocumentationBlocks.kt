@@ -1,7 +1,11 @@
 package mosaik.docs
 
 import kotlinx.html.*
+import mosaik.ui.components.ButtonStyle
+import mosaik.ui.components.ButtonVariant
+import mosaik.ui.components.Size
 import mosaik.ui.components.TabsStyle
+import mosaik.ui.components.mButton
 import mosaik.ui.components.mTab
 import mosaik.ui.components.mTable
 import mosaik.ui.components.mTabs
@@ -29,7 +33,56 @@ fun FlowContent.usageSection(code: String) {
 /** A fenced, monospaced code block. Text is escaped by kotlinx.html. */
 fun FlowContent.codeBlock(code: String) {
     pre("bg-base-200 rounded-box p-4 overflow-x-auto") {
-        code { +code }
+        code("language-kotlin") { +code }
+    }
+}
+
+/**
+ * A reusable preview-first documentation card. The rendered preview is visible
+ * immediately; the matching Kotlin snippet stays collapsed behind a View code
+ * disclosure by default and includes a copy button.
+ */
+fun FlowContent.exampleCard(
+    code: String,
+    title: String? = null,
+    preview: FlowContent.() -> Unit,
+) {
+    div("not-prose card border border-base-300 bg-base-100 shadow-sm mb-6") {
+        attributes["data-docs-example-card"] = "true"
+        if (title != null) {
+            div("card-body pb-0") {
+                h3("card-title text-base") { +title }
+            }
+        }
+        div("p-6 border-b border-base-300") {
+            preview()
+        }
+        details("group") {
+            summary("cursor-pointer list-none px-6 py-3 font-medium hover:bg-base-200") {
+                span("inline-block group-open:hidden") { +"View code" }
+                span("hidden group-open:inline-block") { +"Hide code" }
+            }
+            div("border-t border-base-300 bg-base-200") {
+                div("flex justify-end p-2") {
+                    mButton(
+                        variant = ButtonVariant.Neutral,
+                        style = ButtonStyle.Ghost,
+                        size = Size.Sm,
+                        classes = "copy-code-button",
+                    ) {
+                        type = ButtonType.button
+                        attributes["onclick"] =
+                            "navigator.clipboard.writeText(" +
+                            "this.closest('[data-docs-example-card]').querySelector('pre code').innerText" +
+                            ")"
+                        +"Copy"
+                    }
+                }
+                pre("m-0 rounded-none overflow-x-auto p-4") {
+                    code("language-kotlin") { +code }
+                }
+            }
+        }
     }
 }
 

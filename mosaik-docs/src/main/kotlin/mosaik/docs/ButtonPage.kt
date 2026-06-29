@@ -36,40 +36,48 @@ fun FlowContent.buttonPageContent() {
 
     installSection("button")
 
-    usageSection(
-        """
-        import mosaik.ui.components.mButton
-        import mosaik.ui.components.ButtonVariant
-        import mosaik.ui.components.Size
+    h2 { +"Basic usage" }
+    exampleCard(
+        code =
+            """
+            import mosaik.ui.components.mButton
+            import mosaik.ui.components.ButtonVariant
+            import mosaik.ui.components.Size
 
+            mButton(variant = ButtonVariant.Primary, size = Size.Md) {
+                +"Save"
+            }
+            """.trimIndent(),
+    ) {
         mButton(variant = ButtonVariant.Primary, size = Size.Md) {
             +"Save"
         }
-        """.trimIndent(),
-    )
+    }
 
     section {
         h2 { +"Color variants" }
         p {
             +"Button supports eight color variants. Each maps to a DaisyUI color role."
         }
-        div("flex flex-wrap gap-2 not-prose mb-4") {
-            ButtonVariant.entries.forEach { v ->
-                mButton(variant = v) { +v.name }
+        exampleCard(
+            code =
+                """
+                mButton(variant = ButtonVariant.Neutral) { +"Neutral" }
+                mButton(variant = ButtonVariant.Primary) { +"Primary" }
+                mButton(variant = ButtonVariant.Secondary) { +"Secondary" }
+                mButton(variant = ButtonVariant.Accent) { +"Accent" }
+                mButton(variant = ButtonVariant.Info) { +"Info" }
+                mButton(variant = ButtonVariant.Success) { +"Success" }
+                mButton(variant = ButtonVariant.Warning) { +"Warning" }
+                mButton(variant = ButtonVariant.Error) { +"Error" }
+                """.trimIndent(),
+        ) {
+            div("flex flex-wrap gap-2") {
+                ButtonVariant.entries.forEach { v ->
+                    mButton(variant = v) { +v.name }
+                }
             }
         }
-        codeBlock(
-            """
-            mButton(variant = ButtonVariant.Neutral) { +"Neutral" }
-            mButton(variant = ButtonVariant.Primary) { +"Primary" }
-            mButton(variant = ButtonVariant.Secondary) { +"Secondary" }
-            mButton(variant = ButtonVariant.Accent) { +"Accent" }
-            mButton(variant = ButtonVariant.Info) { +"Info" }
-            mButton(variant = ButtonVariant.Success) { +"Success" }
-            mButton(variant = ButtonVariant.Warning) { +"Warning" }
-            mButton(variant = ButtonVariant.Error) { +"Error" }
-            """.trimIndent(),
-        )
     }
 
     section {
@@ -79,20 +87,22 @@ fun FlowContent.buttonPageContent() {
             code { +"Size.Md" }
             +" is the default baseline."
         }
-        div("flex flex-wrap items-center gap-2 not-prose mb-4") {
-            Size.entries.forEach { s ->
-                mButton(variant = ButtonVariant.Primary, size = s) { +s.name }
+        exampleCard(
+            code =
+                """
+                mButton(variant = ButtonVariant.Primary, size = Size.Xs) { +"Xs" }
+                mButton(variant = ButtonVariant.Primary, size = Size.Sm) { +"Sm" }
+                mButton(variant = ButtonVariant.Primary, size = Size.Md) { +"Md" }
+                mButton(variant = ButtonVariant.Primary, size = Size.Lg) { +"Lg" }
+                mButton(variant = ButtonVariant.Primary, size = Size.Xl) { +"Xl" }
+                """.trimIndent(),
+        ) {
+            div("flex flex-wrap items-center gap-2") {
+                Size.entries.forEach { s ->
+                    mButton(variant = ButtonVariant.Primary, size = s) { +s.name }
+                }
             }
         }
-        codeBlock(
-            """
-            mButton(variant = ButtonVariant.Primary, size = Size.Xs) { +"Xs" }
-            mButton(variant = ButtonVariant.Primary, size = Size.Sm) { +"Sm" }
-            mButton(variant = ButtonVariant.Primary, size = Size.Md) { +"Md" }
-            mButton(variant = ButtonVariant.Primary, size = Size.Lg) { +"Lg" }
-            mButton(variant = ButtonVariant.Primary, size = Size.Xl) { +"Xl" }
-            """.trimIndent(),
-        )
     }
 
     section {
@@ -108,20 +118,22 @@ fun FlowContent.buttonPageContent() {
             code { +"Link" }
             +"."
         }
-        div("flex flex-wrap gap-2 not-prose mb-4") {
-            mButton(variant = ButtonVariant.Primary, style = ButtonStyle.Outline) { +"Outline" }
-            mButton(variant = ButtonVariant.Primary, style = ButtonStyle.Ghost) { +"Ghost" }
-            mButton(variant = ButtonVariant.Primary, style = ButtonStyle.Link) { +"Link" }
-        }
-        codeBlock(
-            """
-            import mosaik.ui.components.ButtonStyle
+        exampleCard(
+            code =
+                """
+                import mosaik.ui.components.ButtonStyle
 
-            mButton(variant = ButtonVariant.Primary, style = ButtonStyle.Outline) { +"Outline" }
-            mButton(variant = ButtonVariant.Primary, style = ButtonStyle.Ghost) { +"Ghost" }
-            mButton(variant = ButtonVariant.Primary, style = ButtonStyle.Link) { +"Link" }
-            """.trimIndent(),
-        )
+                mButton(variant = ButtonVariant.Primary, style = ButtonStyle.Outline) { +"Outline" }
+                mButton(variant = ButtonVariant.Primary, style = ButtonStyle.Ghost) { +"Ghost" }
+                mButton(variant = ButtonVariant.Primary, style = ButtonStyle.Link) { +"Link" }
+                """.trimIndent(),
+        ) {
+            div("flex flex-wrap gap-2") {
+                mButton(variant = ButtonVariant.Primary, style = ButtonStyle.Outline) { +"Outline" }
+                mButton(variant = ButtonVariant.Primary, style = ButtonStyle.Ghost) { +"Ghost" }
+                mButton(variant = ButtonVariant.Primary, style = ButtonStyle.Link) { +"Link" }
+            }
+        }
     }
 
     section {
@@ -135,18 +147,20 @@ fun FlowContent.buttonPageContent() {
             code { +"Square" }
             +"."
         }
-        div("flex flex-wrap gap-2 not-prose mb-4") {
-            mButton(variant = ButtonVariant.Primary, shape = ButtonShape.Circle) { +"C" }
-            mButton(variant = ButtonVariant.Primary, shape = ButtonShape.Square) { +"S" }
-        }
-        codeBlock(
-            """
-            import mosaik.ui.components.ButtonShape
+        exampleCard(
+            code =
+                """
+                import mosaik.ui.components.ButtonShape
 
-            mButton(variant = ButtonVariant.Primary, shape = ButtonShape.Circle) { +"C" }
-            mButton(variant = ButtonVariant.Primary, shape = ButtonShape.Square) { +"S" }
-            """.trimIndent(),
-        )
+                mButton(variant = ButtonVariant.Primary, shape = ButtonShape.Circle) { +"C" }
+                mButton(variant = ButtonVariant.Primary, shape = ButtonShape.Square) { +"S" }
+                """.trimIndent(),
+        ) {
+            div("flex flex-wrap gap-2") {
+                mButton(variant = ButtonVariant.Primary, shape = ButtonShape.Circle) { +"C" }
+                mButton(variant = ButtonVariant.Primary, shape = ButtonShape.Square) { +"S" }
+            }
+        }
     }
 
     section {
@@ -160,18 +174,20 @@ fun FlowContent.buttonPageContent() {
             code { +"Block" }
             +"."
         }
-        div("flex flex-col gap-2 not-prose mb-4") {
-            mButton(variant = ButtonVariant.Primary, width = ButtonWidth.Wide) { +"Wide" }
-            mButton(variant = ButtonVariant.Primary, width = ButtonWidth.Block) { +"Block" }
-        }
-        codeBlock(
-            """
-            import mosaik.ui.components.ButtonWidth
+        exampleCard(
+            code =
+                """
+                import mosaik.ui.components.ButtonWidth
 
-            mButton(variant = ButtonVariant.Primary, width = ButtonWidth.Wide) { +"Wide" }
-            mButton(variant = ButtonVariant.Primary, width = ButtonWidth.Block) { +"Block" }
-            """.trimIndent(),
-        )
+                mButton(variant = ButtonVariant.Primary, width = ButtonWidth.Wide) { +"Wide" }
+                mButton(variant = ButtonVariant.Primary, width = ButtonWidth.Block) { +"Block" }
+                """.trimIndent(),
+        ) {
+            div("flex flex-col gap-2") {
+                mButton(variant = ButtonVariant.Primary, width = ButtonWidth.Wide) { +"Wide" }
+                mButton(variant = ButtonVariant.Primary, width = ButtonWidth.Block) { +"Block" }
+            }
+        }
     }
 
     section {
@@ -181,20 +197,22 @@ fun FlowContent.buttonPageContent() {
             code { +"disabled" }
             +" HTML attribute to mark a button as non-interactive."
         }
-        div("flex flex-wrap gap-2 not-prose mb-4") {
-            mButton(variant = ButtonVariant.Primary) {
-                disabled = true
-                +"Disabled"
+        exampleCard(
+            code =
+                """
+                mButton(variant = ButtonVariant.Primary) {
+                    disabled = true
+                    +"Disabled"
+                }
+                """.trimIndent(),
+        ) {
+            div("flex flex-wrap gap-2") {
+                mButton(variant = ButtonVariant.Primary) {
+                    disabled = true
+                    +"Disabled"
+                }
             }
         }
-        codeBlock(
-            """
-            mButton(variant = ButtonVariant.Primary) {
-                disabled = true
-                +"Disabled"
-            }
-            """.trimIndent(),
-        )
     }
 
     section {
@@ -202,28 +220,30 @@ fun FlowContent.buttonPageContent() {
         p {
             +"Buttons compose with icons and text. Add icons as inline content."
         }
-        div("flex flex-wrap gap-2 not-prose mb-4") {
-            mButton(variant = ButtonVariant.Primary) {
-                span { +"→" }
-                span("ml-2") { +"Next" }
-            }
-            mButton(variant = ButtonVariant.Secondary) {
-                span("mr-2") { +"←" }
-                span { +"Back" }
+        exampleCard(
+            code =
+                """
+                mButton(variant = ButtonVariant.Primary) {
+                    span { +"→" }
+                    span("ml-2") { +"Next" }
+                }
+                mButton(variant = ButtonVariant.Secondary) {
+                    span("mr-2") { +"←" }
+                    span { +"Back" }
+                }
+                """.trimIndent(),
+        ) {
+            div("flex flex-wrap gap-2") {
+                mButton(variant = ButtonVariant.Primary) {
+                    span { +"→" }
+                    span("ml-2") { +"Next" }
+                }
+                mButton(variant = ButtonVariant.Secondary) {
+                    span("mr-2") { +"←" }
+                    span { +"Back" }
+                }
             }
         }
-        codeBlock(
-            """
-            mButton(variant = ButtonVariant.Primary) {
-                span { +"→" }
-                span("ml-2") { +"Next" }
-            }
-            mButton(variant = ButtonVariant.Secondary) {
-                span("mr-2") { +"←" }
-                span { +"Back" }
-            }
-            """.trimIndent(),
-        )
     }
 
     section {
@@ -233,31 +253,33 @@ fun FlowContent.buttonPageContent() {
             code { +"mLoading" }
             +" component for loading states. It's composable content, not a button modifier."
         }
-        div("flex flex-wrap gap-2 not-prose mb-4") {
-            mButton(variant = ButtonVariant.Primary) {
-                mLoading(LoadingType.Spinner, Size.Sm, "mr-2")
-                +"Processing..."
-            }
-            mButton(variant = ButtonVariant.Secondary) {
-                mLoading(LoadingType.Dots, Size.Sm, "mr-2")
-                +"Loading..."
+        exampleCard(
+            code =
+                """
+                import mosaik.ui.components.mLoading
+                import mosaik.ui.components.LoadingType
+
+                mButton(variant = ButtonVariant.Primary) {
+                    mLoading(LoadingType.Spinner, Size.Sm, "mr-2")
+                    +"Processing..."
+                }
+                mButton(variant = ButtonVariant.Secondary) {
+                    mLoading(LoadingType.Dots, Size.Sm, "mr-2")
+                    +"Loading..."
+                }
+                """.trimIndent(),
+        ) {
+            div("flex flex-wrap gap-2") {
+                mButton(variant = ButtonVariant.Primary) {
+                    mLoading(LoadingType.Spinner, Size.Sm, "mr-2")
+                    +"Processing..."
+                }
+                mButton(variant = ButtonVariant.Secondary) {
+                    mLoading(LoadingType.Dots, Size.Sm, "mr-2")
+                    +"Loading..."
+                }
             }
         }
-        codeBlock(
-            """
-            import mosaik.ui.components.mLoading
-            import mosaik.ui.components.LoadingType
-
-            mButton(variant = ButtonVariant.Primary) {
-                mLoading(LoadingType.Spinner, Size.Sm, "mr-2")
-                +"Processing..."
-            }
-            mButton(variant = ButtonVariant.Secondary) {
-                mLoading(LoadingType.Dots, Size.Sm, "mr-2")
-                +"Loading..."
-            }
-            """.trimIndent(),
-        )
     }
 
     section {
