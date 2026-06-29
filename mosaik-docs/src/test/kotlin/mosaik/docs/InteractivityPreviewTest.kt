@@ -18,14 +18,14 @@ class InteractivityPreviewTest :
         }
 
         test("button page includes Alpine.js preview with working demo route") {
-            val html = buttonPage()
+            val html = buttonPage("alpine")
             html shouldContain "x-on:click"
             html shouldContain "/_examples/button/submit"
             html shouldContain "x-bind:disabled"
         }
 
         test("button page includes Datastar preview with working demo route") {
-            val html = buttonPage()
+            val html = buttonPage("datastar")
             html shouldContain "data-on-click"
             html shouldContain "/_examples/button/submit"
             html shouldContain "data-bind-disabled"

@@ -2,6 +2,7 @@ package mosaik.docs
 
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldNotContain
 import mosaik.ui.components.AlertVariant
 import mosaik.ui.components.BadgeVariant
 import mosaik.ui.components.ButtonVariant
@@ -214,28 +215,26 @@ class PagesTest :
             // Result/error display elements are present.
             html shouldContain "register-result"
         }
-        test("the button page has an Interactive usage section with interactivityTabs") {
+        test("the button page has URL-driven Page Variants instead of interactive tabs") {
             val html = buttonPage()
             html shouldContain "<h2>Interactive usage</h2>"
-            // The tab structure uses the button-interactive id.
-            html shouldContain "name=\"button-interactive\""
-            html shouldContain "button-interactive-htmx"
-            html shouldContain "button-interactive-alpine"
-            html shouldContain "button-interactive-datastar"
-            // Form submit example mentions hx-post for htmx.
-            html shouldContain "hx-post"
+            html shouldContain "Page variant"
+            html shouldContain "href=\"/components/button?variant=htmx\""
+            html shouldContain "href=\"/components/button?variant=alpine\""
+            html shouldContain "href=\"/components/button?variant=datastar\""
+            html shouldContain "aria-current=\"page\""
+            html shouldNotContain "name=\"button-interactive\""
+            html shouldNotContain "button-interactive-alpine"
         }
 
-        test("the button page Interactive section has working previews per style") {
-            val html = buttonPage()
-            // Preview wrapper with mb-4 not-prose class.
-            html shouldContain "class=\"mb-4 not-prose\""
-            // All three previews render the submit button.
-            html shouldContain "Submit"
-            // Preview uses /_examples/button/submit route.
+        test("the button page renders only the selected interactive Page Variant") {
+            val html = buttonPage("alpine")
+            html shouldContain "Alpine.js"
+            html shouldContain "x-data"
+            html shouldContain "x-on:click"
             html shouldContain "/_examples/button/submit"
-            // Loading spinner is present in previews.
-            html shouldContain "loading-spinner"
+            html shouldNotContain "hx-post"
+            html shouldNotContain "data-on-click"
         }
 
         test("the button page shows button styles (Outline, Ghost, Link)") {
@@ -797,28 +796,20 @@ class PagesTest :
             // Result/error display elements are present.
             html shouldContain "register-result"
         }
-        test("the button page has an Interactive usage section with interactivityTabs") {
+        test("the default button interactive Page Variant is htmx") {
             val html = buttonPage()
-            html shouldContain "<h2>Interactive usage</h2>"
-            // The tab structure uses the button-interactive id.
-            html shouldContain "name=\"button-interactive\""
-            html shouldContain "button-interactive-htmx"
-            html shouldContain "button-interactive-alpine"
-            html shouldContain "button-interactive-datastar"
-            // Form submit example mentions hx-post for htmx.
+            html shouldContain "htmx"
             html shouldContain "hx-post"
+            html shouldContain "/_examples/button/submit"
+            html shouldContain "loading-spinner"
+            html shouldNotContain "x-on:click"
+            html shouldNotContain "data-on-click"
         }
 
-        test("the button page Interactive section has working previews per style") {
-            val html = buttonPage()
-            // Preview wrapper with mb-4 not-prose class.
-            html shouldContain "class=\"mb-4 not-prose\""
-            // All three previews render the submit button.
-            html shouldContain "Submit"
-            // Preview uses /_examples/button/submit route.
-            html shouldContain "/_examples/button/submit"
-            // Loading spinner is present in previews.
-            html shouldContain "loading-spinner"
+        test("unknown button interactive Page Variant falls back to htmx") {
+            val html = buttonPage("unknown")
+            html shouldContain "hx-post"
+            html shouldNotContain "x-on:click"
         }
 
         test("the card page has an Interactive usage section with interactivityTabs") {

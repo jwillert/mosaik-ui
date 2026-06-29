@@ -33,7 +33,11 @@ fun setupShellNavigation() {
         val target = event.target
         if (target is HTMLAnchorElement && shouldEnhanceNavigation(target, event)) {
             event.preventDefault()
-            navigateToPage(target.href)
+            val variant = target.getAttribute("data-page-variant")
+            if (variant != null) {
+                window.localStorage.setItem("mosaik-interaction-style", variant)
+            }
+            navigateToPage(urlWithSoftPageVariantPreference(target.href))
         }
     })
 
@@ -107,11 +111,12 @@ fun navigateToPage(
     url: String,
     pushState: Boolean = true,
 ) {
+    val resolvedUrl = urlWithSoftPageVariantPreference(url)
     val partialUrl =
-        if (url.contains("?")) {
-            "$url&partial=true"
+        if (resolvedUrl.contains("?")) {
+            "$resolvedUrl&partial=true"
         } else {
-            "$url?partial=true"
+            "$resolvedUrl?partial=true"
         }
 
     window
@@ -139,11 +144,11 @@ fun navigateToPage(
                 mainContent.innerHTML = html
 
                 // Update active sidebar item
-                updateActiveSidebarItem(url)
+                updateActiveSidebarItem(resolvedUrl)
 
                 // Update browser history
                 if (pushState) {
-                    window.history.pushState(null, "", url)
+                    window.history.pushState(null, "", resolvedUrl)
                 }
 
                 // Re-run syntax highlighting on the new content
@@ -175,6 +180,17 @@ fun navigateToPage(
 /**
  * Updates the active sidebar menu item to match the current [url].
  */
+fun urlWithSoftPageVariantPreference(url: String): String {
+    val parsed = URL(url, window.location.origin)
+    if (parsed.pathname == "/components/button" && !parsed.searchParams.has("variant")) {
+        val preferred = window.localStorage.getItem("mosaik-interaction-style")
+        if (preferred == "htmx" || preferred == "alpine" || preferred == "datastar") {
+            parsed.searchParams.set("variant", preferred)
+        }
+    }
+    return parsed.href
+}
+
 fun updateActiveSidebarItem(url: String) {
     val currentPath = URL(url).pathname.trimEnd('/')
 

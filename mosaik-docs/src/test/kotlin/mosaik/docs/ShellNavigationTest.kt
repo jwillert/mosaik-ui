@@ -284,34 +284,28 @@ class ShellNavigationTest :
             hasHighlighting shouldBe true
         }
 
-        test("interaction style tabs reflect saved preference after shell navigation") {
+        test("button Page Variant reflects saved preference after shell navigation") {
             page.navigate("http://127.0.0.1:$testPort/")
 
             // Change to alpine interaction style
             page.locator("#interaction-style-switcher").selectOption("alpine")
 
-            // Navigate to Button page which has interactivity tabs
+            // Navigate to Button page, which applies the matching page-local variant.
             page.locator(".menu a[href='/components/button']").click()
-            page.waitForURL("http://127.0.0.1:$testPort/components/button")
+            page.waitForURL("http://127.0.0.1:$testPort/components/button?variant=alpine")
 
             // Wait for content to load
             page.waitForFunction("() => document.getElementById('main-content').textContent.includes('mButton')")
 
-            // Check that the alpine tab is checked in the swapped content
-            val alpineTabChecked =
+            val alpineVariantRendered =
                 page.evaluate(
                     """() => {
-                        const alpineTabs = document.querySelectorAll('#main-content .tabs input[data-interaction-style="alpine"]');
-                        if (alpineTabs.length === 0) return false;
-                        // Check if at least one alpine tab is checked
-                        for (let tab of alpineTabs) {
-                            if (tab.checked) return true;
-                        }
-                        return false;
+                        return document.querySelectorAll('#main-content [x-data], #main-content [x-on\\:click]').length > 0 &&
+                            document.querySelectorAll('#main-content [hx-post], #main-content [data-on-click]').length === 0;
                     }
                     """,
                 )
-            alpineTabChecked shouldBe true
+            alpineVariantRendered shouldBe true
         }
 
         test("htmx previews work after shell navigation") {
@@ -347,7 +341,7 @@ class ShellNavigationTest :
 
             // Navigate to Button page which has Alpine previews
             page.locator(".menu a[href='/components/button']").click()
-            page.waitForURL("http://127.0.0.1:$testPort/components/button")
+            page.waitForURL("http://127.0.0.1:$testPort/components/button?variant=alpine")
 
             // Wait for content to load
             page.waitForFunction("() => document.getElementById('main-content').textContent.includes('mButton')")
@@ -356,7 +350,7 @@ class ShellNavigationTest :
             page.locator(".menu a[href='/']").click()
             page.waitForURL("http://127.0.0.1:$testPort/")
             page.locator(".menu a[href='/components/button']").click()
-            page.waitForURL("http://127.0.0.1:$testPort/components/button")
+            page.waitForURL("http://127.0.0.1:$testPort/components/button?variant=alpine")
             page.waitForFunction("() => document.getElementById('main-content').textContent.includes('mButton')")
 
             // Check that Alpine.js has initialized by verifying x-data elements have Alpine properties
@@ -384,7 +378,7 @@ class ShellNavigationTest :
 
             // Navigate to Button page which has Datastar previews
             page.locator(".menu a[href='/components/button']").click()
-            page.waitForURL("http://127.0.0.1:$testPort/components/button")
+            page.waitForURL("http://127.0.0.1:$testPort/components/button?variant=datastar")
 
             // Wait for content to load
             page.waitForFunction("() => document.getElementById('main-content').textContent.includes('mButton')")
@@ -393,7 +387,7 @@ class ShellNavigationTest :
             page.locator(".menu a[href='/']").click()
             page.waitForURL("http://127.0.0.1:$testPort/")
             page.locator(".menu a[href='/components/button']").click()
-            page.waitForURL("http://127.0.0.1:$testPort/components/button")
+            page.waitForURL("http://127.0.0.1:$testPort/components/button?variant=datastar")
             page.waitForFunction("() => document.getElementById('main-content').textContent.includes('mButton')")
 
             // Check that Datastar has initialized by verifying data-signals elements exist

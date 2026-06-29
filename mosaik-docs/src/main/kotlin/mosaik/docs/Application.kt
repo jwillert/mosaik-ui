@@ -24,7 +24,14 @@ fun Application.module() {
         (listOf(HOME) + COMPONENTS + GUIDES).forEach { page ->
             get(page.path) {
                 val isPartial = call.request.queryParameters["partial"] == "true"
-                val html = if (isPartial) page.renderPartial() else page.render()
+                val variant = call.request.queryParameters["variant"]
+                val html =
+                    when {
+                        page == BUTTON && isPartial -> buttonPagePartial(variant)
+                        page == BUTTON -> buttonPage(variant)
+                        isPartial -> page.renderPartial()
+                        else -> page.render()
+                    }
                 call.respondText(html, ContentType.Text.Html)
             }
         }
