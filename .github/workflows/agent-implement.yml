@@ -198,14 +198,40 @@ jobs:
         if: steps.preflight.outputs.refused != 'true' && steps.preflight.outputs.blocked != 'true'
         run: ./gradlew --no-daemon build
 
-      - name: Run implementation agent
+      - name: Run implementation agent directly
         if: steps.preflight.outputs.refused != 'true' && steps.preflight.outputs.blocked != 'true'
         env:
           PI_MODEL: openai-codex/gpt-5.5
           PI_THINKING: medium
           BRANCH: ${{ steps.branch.outputs.name }}
           OUTPUT_DIR: ${{ runner.temp }}
-        run: npx tsx .sandcastle/agent-workflows/implement/implement.ts
+        run: |
+          set -euo pipefail
+          issue_context=$(gh issue view "$ISSUE_NUMBER" --comments || printf 'Issue #%s: %s\n' "$ISSUE_NUMBER" "$ISSUE_TITLE")
+          export ISSUE_CONTEXT="$issue_context"
+
+          python3 - <<'PY' > "${RUNNER_TEMP}/implement-prompt.md"
+          import os
+          from pathlib import Path
+
+          prompt = Path(".sandcastle/agent-workflows/implement/prompt.md").read_text()
+          for key in ("ISSUE_NUMBER", "ISSUE_TITLE", "BRANCH", "ISSUE_CONTEXT"):
+              prompt = prompt.replace("{{" + key + "}}", os.environ.get(key, ""))
+          print(prompt, end="")
+          PY
+
+          if ! timeout 80m pi -p --mode json --model "$PI_MODEL" --thinking "$PI_THINKING" < "${RUNNER_TEMP}/implement-prompt.md"; then
+            echo "Direct Pi implementation agent failed or timed out." > "${RUNNER_TEMP}/failure_reason.txt"
+            exit 1
+          fi
+
+          commits_ahead=$(git rev-list --count main..HEAD)
+          if [ "$commits_ahead" -eq 0 ]; then
+            echo "Agent finished but no commits were made on the branch." > "${RUNNER_TEMP}/failure_reason.txt"
+            exit 1
+          fi
+
+          echo "Implementation produced ${commits_ahead} commit(s)."
 
       - name: Push branch
         if: steps.preflight.outputs.refused != 'true' && steps.preflight.outputs.blocked != 'true' && success()
