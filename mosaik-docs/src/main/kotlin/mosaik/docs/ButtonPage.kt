@@ -508,6 +508,8 @@ fun FlowContent.buttonPageContent(selectedVariantId: String? = DEFAULT_BUTTON_PA
  * interactive examples, and avoids raw DaisyUI button modifier classes in normal
  * examples when a Mosaik abstraction exists (issue #59).
  */
+val BUTTON_PAGE_VARIANT_IDS: List<String> = BUTTON_PAGE_VARIANTS.map { it.id }
+
 private fun FlowContent.buttonPageVariantSelector(selectedVariant: ButtonPageVariant) {
     nav(classes = "not-prose mb-4 flex flex-wrap items-center gap-2") {
         attributes["aria-label"] = "Page variant"

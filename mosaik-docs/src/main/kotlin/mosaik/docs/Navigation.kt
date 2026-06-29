@@ -6,13 +6,21 @@ data class NavItem(
     val label: String,
     val render: () -> String,
     val renderPartial: () -> String,
+    val pageVariantIds: List<String> = emptyList(),
 )
 
 /** The landing page. */
 val HOME = NavItem("/", "Home", ::landingPage, ::landingPagePartial)
 
 /** The Button documentation page. */
-val BUTTON = NavItem("/components/button", "Button", ::buttonPage, ::buttonPagePartial)
+val BUTTON =
+    NavItem(
+        "/components/button",
+        "Button",
+        ::buttonPage,
+        ::buttonPagePartial,
+        BUTTON_PAGE_VARIANT_IDS,
+    )
 
 /** The Card documentation page. */
 val CARD = NavItem("/components/card", "Card", ::cardPage, ::cardPagePartial)

@@ -11,6 +11,8 @@ import org.w3c.dom.url.URL
 import org.w3c.fetch.RequestInit
 
 const val DEFAULT_INTERACTION_STYLE = "htmx"
+const val PAGE_VARIANT_PREFERENCE_KEY = "mosaik-page-variant"
+const val INTERACTION_STYLE_PREFERENCE_KEY = "mosaik-interaction-style"
 
 /**
  * Entry point for the Mosaik docs browser client.
@@ -20,6 +22,7 @@ const val DEFAULT_INTERACTION_STYLE = "htmx"
 fun main() {
     console.log("Mosaik docs client initialized")
     setupShellNavigation()
+    rememberPageVariantPreference(window.location.href)
     syncPreferenceControls()
 }
 
@@ -35,7 +38,7 @@ fun setupShellNavigation() {
             event.preventDefault()
             val variant = target.getAttribute("data-page-variant")
             if (variant != null) {
-                window.localStorage.setItem("mosaik-interaction-style", variant)
+                rememberPageVariantPreference(variant)
             }
             navigateToPage(urlWithSoftPageVariantPreference(target.href))
         }
@@ -146,6 +149,9 @@ fun navigateToPage(
                     window.history.pushState(null, "", resolvedUrl)
                 }
 
+                // Remember explicit page variant URLs as a soft preference for later navigation.
+                rememberPageVariantPreference(resolvedUrl)
+
                 // Re-run syntax highlighting on the new content
                 js("if (typeof hljs !== 'undefined') hljs.highlightAll();")
 
@@ -180,13 +186,50 @@ fun partialUrlFor(url: String): String {
 
 fun urlWithSoftPageVariantPreference(url: String): String {
     val parsed = URL(url, window.location.origin)
-    if (parsed.pathname == "/components/button" && !parsed.searchParams.has("variant")) {
-        val preferred = window.localStorage.getItem("mosaik-interaction-style")
-        if (preferred == "htmx" || preferred == "alpine" || preferred == "datastar") {
+    if (!parsed.searchParams.has("variant")) {
+        val preferred = pageVariantPreference()
+        if (preferred != null && pageSupportsVariant(parsed.pathname, preferred)) {
             parsed.searchParams.set("variant", preferred)
         }
     }
     return parsed.href
+}
+
+fun pageVariantPreference(): String? =
+    window.localStorage.getItem(PAGE_VARIANT_PREFERENCE_KEY)
+        ?: window.localStorage.getItem(INTERACTION_STYLE_PREFERENCE_KEY)
+
+fun rememberPageVariantPreference(valueOrUrl: String) {
+    val variant = pageVariantFrom(valueOrUrl) ?: valueOrUrl
+    val pathname =
+        if (variant == valueOrUrl) {
+            window.location.pathname
+        } else {
+            URL(valueOrUrl, window.location.origin).pathname
+        }
+    if (pageSupportsVariant(pathname, variant)) {
+        window.localStorage.setItem(PAGE_VARIANT_PREFERENCE_KEY, variant)
+        window.localStorage.setItem(INTERACTION_STYLE_PREFERENCE_KEY, variant)
+        document.documentElement?.setAttribute("data-interaction-style", variant)
+    }
+}
+
+fun pageVariantFrom(url: String): String? {
+    val parsed = URL(url, window.location.origin)
+    return parsed.searchParams.get("variant")
+}
+
+fun pageSupportsVariant(
+    pathname: String,
+    variant: String,
+): Boolean {
+    document.querySelectorAll(".menu a").asList().forEach { link ->
+        if (link is HTMLAnchorElement && URL(link.href).pathname == pathname) {
+            val supported = link.getAttribute("data-page-variants") ?: return@forEach
+            return supported.split(" ").contains(variant)
+        }
+    }
+    return false
 }
 
 /**
@@ -253,7 +296,10 @@ fun syncPreferenceControls() {
     }
 
     // Sync interaction style selector to the current data-interaction-style attribute.
-    val interactionStyle = docElement.getAttribute("data-interaction-style") ?: DEFAULT_INTERACTION_STYLE
+    val interactionStyle =
+        pageVariantPreference()
+            ?: docElement.getAttribute("data-interaction-style")
+            ?: DEFAULT_INTERACTION_STYLE
     val styleSwitcher = document.getElementById("interaction-style-switcher")
     if (styleSwitcher is HTMLSelectElement) {
         styleSwitcher.value = interactionStyle

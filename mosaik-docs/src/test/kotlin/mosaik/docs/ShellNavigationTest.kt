@@ -308,6 +308,29 @@ class ShellNavigationTest :
             alpineVariantRendered shouldBe true
         }
 
+        test("direct Page Variant URL is remembered as a soft preference for shell navigation") {
+            page.navigate("http://127.0.0.1:$testPort/components/button?variant=alpine")
+            page.waitForFunction("() => document.getElementById('main-content').textContent.includes('mButton')")
+
+            val remembered = page.evaluate("() => window.localStorage.getItem('mosaik-page-variant')")
+            remembered shouldBe "alpine"
+
+            page.locator(".menu a[href='/components/card']").click()
+            page.waitForURL("http://127.0.0.1:$testPort/components/card")
+            page.locator(".menu a[href='/components/button']").click()
+            page.waitForURL("http://127.0.0.1:$testPort/components/button?variant=alpine")
+
+            val alpineVariantRendered =
+                page.evaluate(
+                    """() => {
+                        return document.querySelectorAll('#main-content [x-data], #main-content [x-on\\:click]').length > 0 &&
+                            document.querySelectorAll('#main-content [hx-post], #main-content [data-on-click]').length === 0;
+                    }
+                    """,
+                )
+            alpineVariantRendered shouldBe true
+        }
+
         test("htmx previews work after shell navigation") {
             page.navigate("http://127.0.0.1:$testPort/components/button")
 
