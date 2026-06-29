@@ -112,12 +112,7 @@ fun navigateToPage(
     pushState: Boolean = true,
 ) {
     val resolvedUrl = urlWithSoftPageVariantPreference(url)
-    val partialUrl =
-        if (resolvedUrl.contains("?")) {
-            "$resolvedUrl&partial=true"
-        } else {
-            "$resolvedUrl?partial=true"
-        }
+    val partialUrl = partialUrlFor(resolvedUrl)
 
     window
         .fetch(partialUrl, RequestInit())
@@ -168,18 +163,21 @@ fun navigateToPage(
                 window.scrollTo(0.0, 0.0)
             } else {
                 // Fallback: no main-content element found, do a normal navigation
-                window.location.href = url
+                window.location.href = resolvedUrl
             }
         }.catch { error ->
             console.error("Navigation error:", error)
             // Fallback to normal navigation on error
-            window.location.href = url
+            window.location.href = resolvedUrl
         }
 }
 
-/**
- * Updates the active sidebar menu item to match the current [url].
- */
+fun partialUrlFor(url: String): String {
+    val parsed = URL(url, window.location.origin)
+    parsed.searchParams.set("partial", "true")
+    return parsed.href
+}
+
 fun urlWithSoftPageVariantPreference(url: String): String {
     val parsed = URL(url, window.location.origin)
     if (parsed.pathname == "/components/button" && !parsed.searchParams.has("variant")) {
@@ -191,6 +189,9 @@ fun urlWithSoftPageVariantPreference(url: String): String {
     return parsed.href
 }
 
+/**
+ * Updates the active sidebar menu item to match the current [url].
+ */
 fun updateActiveSidebarItem(url: String) {
     val currentPath = URL(url).pathname.trimEnd('/')
 
