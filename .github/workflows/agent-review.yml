@@ -83,7 +83,7 @@ jobs:
           cat > ~/.pi/agent/settings.json <<'EOF'
           {
             "defaultProvider": "openai-codex",
-            "defaultModel": "gpt-5-codex",
+            "defaultModel": "gpt-5.1-codex-max",
             "theme": "dark"
           }
           EOF
@@ -93,8 +93,8 @@ jobs:
 
       - name: Run review agent
         env:
-          PI_MODEL: gpt-5-codex
-          PI_THINKING: high
+          PI_MODEL: openai-codex/gpt-5.1-codex-max
+          PI_THINKING: xhigh
           OUTPUT_DIR: ${{ runner.temp }}
         run: npx tsx .sandcastle/agent-workflows/review/review.ts
 

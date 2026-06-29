@@ -53,8 +53,8 @@ export const writeText = (filename: string, value: string): void => {
 };
 
 export const piAgent = () =>
-  sandcastle.pi(process.env.PI_MODEL ?? "gpt-5-codex", {
-    thinking: (process.env.PI_THINKING as "off" | "minimal" | "low" | "medium" | "high" | "xhigh" | undefined) ?? "high",
+  sandcastle.pi(process.env.PI_MODEL ?? "openai-codex/gpt-5.1-codex-max", {
+    thinking: (process.env.PI_THINKING as "off" | "minimal" | "low" | "medium" | "high" | "xhigh" | undefined) ?? "xhigh",
   });
 
 export const standardSchema = <T>(
