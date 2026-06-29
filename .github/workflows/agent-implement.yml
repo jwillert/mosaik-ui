@@ -180,7 +180,7 @@ jobs:
           cat > ~/.pi/agent/settings.json <<'EOF'
           {
             "defaultProvider": "openai-codex",
-            "defaultModel": "gpt-5.1-codex-max",
+            "defaultModel": "gpt-5.5",
             "theme": "dark"
           }
           EOF
@@ -192,7 +192,7 @@ jobs:
       - name: Run implementation agent
         if: steps.preflight.outputs.refused != 'true' && steps.preflight.outputs.blocked != 'true'
         env:
-          PI_MODEL: openai-codex/gpt-5.1-codex-max
+          PI_MODEL: openai-codex/gpt-5.5
           PI_THINKING: xhigh
           BRANCH: ${{ steps.branch.outputs.name }}
           OUTPUT_DIR: ${{ runner.temp }}
