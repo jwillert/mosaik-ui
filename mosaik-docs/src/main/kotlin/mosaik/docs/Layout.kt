@@ -118,7 +118,7 @@ fun layout(
                     }
                 }
                 // Kotlin/JS docs client bundle (generated at build time).
-                script(src = "/static/mosaik-docs-client.js") {}
+                script(src = "/static/mosaik-docs-client.js") { defer = true }
             }
             body(classes = "min-h-screen bg-base-100 text-base-content") {
                 div("flex min-h-screen") {
@@ -150,14 +150,23 @@ private fun FlowContent.sidebar(activePath: String) {
     aside(classes = "w-64 shrink-0 bg-base-200 p-4") {
         h1("text-xl font-bold px-2 pb-4") { +"Mosaik UI" }
         mMenu("w-full") {
-            mMenuItem(HOME.path, active = HOME.path == activePath) { +HOME.label }
+            mMenuItem(HOME.path, active = HOME.path == activePath) {
+                pageVariantSupport(HOME)
+                +HOME.label
+            }
             mMenuTitle { +"Components" }
             COMPONENTS.forEach { item ->
-                mMenuItem(item.path, active = item.path == activePath) { +item.label }
+                mMenuItem(item.path, active = item.path == activePath) {
+                    pageVariantSupport(item)
+                    +item.label
+                }
             }
             mMenuTitle { +"Guides" }
             GUIDES.forEach { item ->
-                mMenuItem(item.path, active = item.path == activePath) { +item.label }
+                mMenuItem(item.path, active = item.path == activePath) {
+                    pageVariantSupport(item)
+                    +item.label
+                }
             }
         }
         themeSwitcher()
@@ -171,6 +180,12 @@ private fun FlowContent.sidebar(activePath: String) {
  * localStorage; [themeRestoreScript] reapplies it on the next page load. This is
  * docs-only JavaScript — components remain CSS-only (see PRD #10).
  */
+private fun A.pageVariantSupport(item: NavItem) {
+    if (item.pageVariantIds.isNotEmpty()) {
+        attributes["data-page-variants"] = item.pageVariantIds.joinToString(" ")
+    }
+}
+
 private fun FlowContent.themeSwitcher() {
     div("px-2 pt-6") {
         label("label text-xs opacity-70") {
@@ -210,6 +225,7 @@ private fun FlowContent.interactionStyleSwitcher() {
             attributes["onchange"] =
                 "document.documentElement.setAttribute('data-interaction-style', this.value);" +
                 "localStorage.setItem('mosaik-interaction-style', this.value);" +
+                "localStorage.setItem('mosaik-page-variant', this.value);" +
                 "document.querySelectorAll('.tabs input[type=\"radio\"]').forEach(function(input) {" +
                 "  if (input.getAttribute('data-interaction-style') === " +
                 "localStorage.getItem('mosaik-interaction-style')) {" +
