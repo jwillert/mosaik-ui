@@ -1,6 +1,7 @@
 package mosaik.docs
 
 import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import mosaik.ui.components.AlertVariant
 import mosaik.ui.components.BadgeVariant
@@ -687,15 +688,23 @@ class PagesTest :
             html shouldContain "mButton { +&quot;Save&quot; }"
         }
 
-        test("the button page uses preview-first example cards for static examples") {
-            val html = buttonPage()
+        test("component reference pages use preview-first example cards for static examples") {
+            mapOf(
+                "button" to (buttonPage() to 9),
+                "card" to (cardPage() to 4),
+                "navbar" to (navbarPage() to 4),
+                "footer" to (footerPage() to 3),
+                "badge" to (badgePage() to 3),
+                "alert" to (alertPage() to 2),
+            ).forEach { (_, page) ->
+                val (html, expectedStaticExampleCount) = page
 
-            html shouldContain "data-docs-example-card=\"true\""
-            html shouldContain "Basic usage"
-            html shouldContain "Color variants"
-            html shouldContain "View code"
-            html shouldContain "Copy"
-            html shouldContain "language-kotlin"
+                Regex("data-docs-example-card=\"true\"").findAll(html).count() shouldBe expectedStaticExampleCount
+                html shouldContain "Basic usage"
+                html shouldContain "View code"
+                html shouldContain "Copy"
+                html shouldContain "language-kotlin"
+            }
         }
 
         test("interactivityTabs renders code-only tabs when no previews are provided") {

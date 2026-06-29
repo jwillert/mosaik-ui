@@ -36,17 +36,23 @@ fun FlowContent.badgePageContent() {
 
     installSection("badge")
 
-    usageSection(
-        """
-        import mosaik.ui.components.mBadge
-        import mosaik.ui.components.BadgeVariant
-        import mosaik.ui.components.Size
+    h2 { +"Basic usage" }
+    exampleCard(
+        code =
+            """
+            import mosaik.ui.components.mBadge
+            import mosaik.ui.components.BadgeVariant
+            import mosaik.ui.components.Size
 
+            mBadge(BadgeVariant.Success, Size.Sm) {
+                +"Active"
+            }
+            """.trimIndent(),
+    ) {
         mBadge(BadgeVariant.Success, Size.Sm) {
             +"Active"
         }
-        """.trimIndent(),
-    )
+    }
 
     section {
         h2 { +"Variants" }
@@ -55,18 +61,20 @@ fun FlowContent.badgePageContent() {
             code { +"BadgeVariant" }
             +" maps to a DaisyUI badge colour role."
         }
-        div("flex flex-wrap gap-2 not-prose") {
-            BadgeVariant.entries.forEach { v ->
-                mBadge(variant = v) { +v.name }
+        exampleCard(
+            code =
+                """
+                BadgeVariant.entries.forEach { v ->
+                    mBadge(variant = v) { +v.name }
+                }
+                """.trimIndent(),
+        ) {
+            div("flex flex-wrap gap-2") {
+                BadgeVariant.entries.forEach { v ->
+                    mBadge(variant = v) { +v.name }
+                }
             }
         }
-        codeBlock(
-            """
-            BadgeVariant.entries.forEach { v ->
-                mBadge(variant = v) { +v.name }
-            }
-            """.trimIndent(),
-        )
     }
 
     section {
@@ -78,18 +86,20 @@ fun FlowContent.badgePageContent() {
             code { +"Size.Md" }
             +" is the unstyled baseline and renders no size class."
         }
-        div("flex flex-wrap items-center gap-2 not-prose") {
-            Size.entries.forEach { s ->
-                mBadge(variant = BadgeVariant.Primary, size = s) { +s.name }
+        exampleCard(
+            code =
+                """
+                Size.entries.forEach { s ->
+                    mBadge(variant = BadgeVariant.Primary, size = s) { +s.name }
+                }
+                """.trimIndent(),
+        ) {
+            div("flex flex-wrap items-center gap-2") {
+                Size.entries.forEach { s ->
+                    mBadge(variant = BadgeVariant.Primary, size = s) { +s.name }
+                }
             }
         }
-        codeBlock(
-            """
-            Size.entries.forEach { s ->
-                mBadge(variant = BadgeVariant.Primary, size = s) { +s.name }
-            }
-            """.trimIndent(),
-        )
     }
 
     apiReference(

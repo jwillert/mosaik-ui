@@ -47,16 +47,28 @@ fun FlowContent.navbarPageContent() {
 
     installSection("navbar")
 
-    usageSection(
-        """
-        import mosaik.ui.components.mNavbar
-        import mosaik.ui.components.mNavbarStart
-        import mosaik.ui.components.mNavbarEnd
-        import mosaik.ui.components.mButton
-        import mosaik.ui.components.mButtonLink
-        import mosaik.ui.components.ButtonStyle
-        import mosaik.ui.components.ButtonVariant
+    h2 { +"Basic usage" }
+    exampleCard(
+        code =
+            """
+            import mosaik.ui.components.mNavbar
+            import mosaik.ui.components.mNavbarStart
+            import mosaik.ui.components.mNavbarEnd
+            import mosaik.ui.components.mButton
+            import mosaik.ui.components.mButtonLink
+            import mosaik.ui.components.ButtonStyle
+            import mosaik.ui.components.ButtonVariant
 
+            mNavbar("bg-base-100 shadow-sm") {
+                mNavbarStart {
+                    mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
+                }
+                mNavbarEnd {
+                    mButton(variant = ButtonVariant.Primary) { +"Sign up" }
+                }
+            }
+            """.trimIndent(),
+    ) {
         mNavbar("bg-base-100 shadow-sm") {
             mNavbarStart {
                 mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
@@ -65,8 +77,7 @@ fun FlowContent.navbarPageContent() {
                 mButton(variant = ButtonVariant.Primary) { +"Sign up" }
             }
         }
-        """.trimIndent(),
-    )
+    }
 
     section {
         h2 { +"Start and end" }
@@ -77,18 +88,19 @@ fun FlowContent.navbarPageContent() {
             code { +"navbar-end" }
             +"."
         }
-        div("not-prose") {
-            mNavbar("bg-base-100 shadow-sm rounded-box") {
-                mNavbarStart {
-                    mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
+        exampleCard(
+            code =
+                """
+                mNavbar("bg-base-100 shadow-sm") {
+                    mNavbarStart {
+                        mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
+                    }
+                    mNavbarEnd {
+                        mButton(variant = ButtonVariant.Primary) { +"Sign up" }
+                    }
                 }
-                mNavbarEnd {
-                    mButton(variant = ButtonVariant.Primary) { +"Sign up" }
-                }
-            }
-        }
-        codeBlock(
-            """
+                """.trimIndent(),
+        ) {
             mNavbar("bg-base-100 shadow-sm") {
                 mNavbarStart {
                     mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
@@ -97,8 +109,7 @@ fun FlowContent.navbarPageContent() {
                     mButton(variant = ButtonVariant.Primary) { +"Sign up" }
                 }
             }
-            """.trimIndent(),
-        )
+        }
     }
 
     section {
@@ -108,22 +119,22 @@ fun FlowContent.navbarPageContent() {
             code { +"navbar-center" }
             +" slot centres the content."
         }
-        div("not-prose") {
-            mNavbar("bg-base-100 shadow-sm rounded-box") {
-                mNavbarCenter {
-                    mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
+        exampleCard(
+            code =
+                """
+                mNavbar("bg-base-100 shadow-sm") {
+                    mNavbarCenter {
+                        mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
+                    }
                 }
-            }
-        }
-        codeBlock(
-            """
+                """.trimIndent(),
+        ) {
             mNavbar("bg-base-100 shadow-sm") {
                 mNavbarCenter {
                     mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
                 }
             }
-            """.trimIndent(),
-        )
+        }
     }
 
     section {
@@ -132,21 +143,22 @@ fun FlowContent.navbarPageContent() {
             +"Brand, centred links, and a trailing action together — the full "
             +"three-slot layout."
         }
-        div("not-prose") {
-            mNavbar("bg-base-100 shadow-sm rounded-box") {
-                mNavbarStart {
-                    mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
+        exampleCard(
+            code =
+                """
+                mNavbar("bg-base-100 shadow-sm") {
+                    mNavbarStart {
+                        mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
+                    }
+                    mNavbarCenter("hidden lg:flex") {
+                        mButtonLink(href = "/docs", style = ButtonStyle.Ghost) { +"Docs" }
+                    }
+                    mNavbarEnd {
+                        mButton(variant = ButtonVariant.Primary) { +"Sign up" }
+                    }
                 }
-                mNavbarCenter("hidden lg:flex") {
-                    mButtonLink(href = "/docs", style = ButtonStyle.Ghost) { +"Docs" }
-                }
-                mNavbarEnd {
-                    mButton(variant = ButtonVariant.Primary) { +"Sign up" }
-                }
-            }
-        }
-        codeBlock(
-            """
+                """.trimIndent(),
+        ) {
             mNavbar("bg-base-100 shadow-sm") {
                 mNavbarStart {
                     mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
@@ -158,8 +170,7 @@ fun FlowContent.navbarPageContent() {
                     mButton(variant = ButtonVariant.Primary) { +"Sign up" }
                 }
             }
-            """.trimIndent(),
-        )
+        }
     }
 
     section {

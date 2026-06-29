@@ -42,16 +42,22 @@ fun FlowContent.alertPageContent() {
 
     installSection("alert")
 
-    usageSection(
-        """
-        import mosaik.ui.components.mAlert
-        import mosaik.ui.components.AlertVariant
+    h2 { +"Basic usage" }
+    exampleCard(
+        code =
+            """
+            import mosaik.ui.components.mAlert
+            import mosaik.ui.components.AlertVariant
 
+            mAlert(AlertVariant.Success) {
+                +"Your changes have been saved."
+            }
+            """.trimIndent(),
+    ) {
         mAlert(AlertVariant.Success) {
             +"Your changes have been saved."
         }
-        """.trimIndent(),
-    )
+    }
 
     section {
         h2 { +"Variants" }
@@ -60,18 +66,20 @@ fun FlowContent.alertPageContent() {
             code { +"AlertVariant" }
             +" maps to a DaisyUI alert colour role."
         }
-        div("flex flex-col gap-2 not-prose") {
-            AlertVariant.entries.forEach { v ->
-                mAlert(variant = v) { +v.name }
+        exampleCard(
+            code =
+                """
+                AlertVariant.entries.forEach { v ->
+                    mAlert(variant = v) { +v.name }
+                }
+                """.trimIndent(),
+        ) {
+            div("flex flex-col gap-2") {
+                AlertVariant.entries.forEach { v ->
+                    mAlert(variant = v) { +v.name }
+                }
             }
         }
-        codeBlock(
-            """
-            AlertVariant.entries.forEach { v ->
-                mAlert(variant = v) { +v.name }
-            }
-            """.trimIndent(),
-        )
     }
 
     section {
