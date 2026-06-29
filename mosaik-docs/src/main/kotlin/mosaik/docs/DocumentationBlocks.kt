@@ -6,6 +6,9 @@ import mosaik.ui.components.ButtonVariant
 import mosaik.ui.components.Size
 import mosaik.ui.components.TabsStyle
 import mosaik.ui.components.mButton
+import mosaik.ui.components.mCard
+import mosaik.ui.components.mCardBody
+import mosaik.ui.components.mCardTitle
 import mosaik.ui.components.mTab
 import mosaik.ui.components.mTable
 import mosaik.ui.components.mTabs
@@ -47,11 +50,11 @@ fun FlowContent.exampleCard(
     title: String? = null,
     preview: FlowContent.() -> Unit,
 ) {
-    div("not-prose card border border-base-300 bg-base-100 shadow-sm mb-6") {
+    mCard("not-prose border border-base-300 bg-base-100 shadow-sm mb-6") {
         attributes["data-docs-example-card"] = "true"
         if (title != null) {
-            div("card-body pb-0") {
-                h3("card-title text-base") { +title }
+            mCardBody("pb-0") {
+                mCardTitle("text-base") { +title }
             }
         }
         div("p-6 border-b border-base-300") {
