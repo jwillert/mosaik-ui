@@ -94,11 +94,11 @@ jobs:
           }
           EOF
 
-      - name: Smoke test Pi auth
+      - name: Smoke test Pi agent tools
         run: |
           set -euo pipefail
-          if ! timeout 60s bash -lc 'printf "Antworte nur OK.\n" | pi -p --mode json --model openai-codex/gpt-5.5 --thinking minimal'; then
-            echo "Pi auth smoke test failed or timed out." > "${RUNNER_TEMP}/failure_reason.txt"
+          if ! timeout 120s bash -lc 'printf "Führe pwd mit bash aus und antworte danach nur TOOL_OK.\n" | pi -p --mode json --model openai-codex/gpt-5.5 --thinking minimal'; then
+            echo "Pi agent tool smoke test failed or timed out." > "${RUNNER_TEMP}/failure_reason.txt"
             exit 1
           fi
 
