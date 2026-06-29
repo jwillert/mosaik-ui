@@ -188,7 +188,10 @@ private val alpineLoginRecipe =
             """
             form {
                 attributes["x-data"] = "{ email: '', password: '', loading: false, error: '' }"
-                attributes["x-on:submit.prevent"] = "loading = true; fetch('/api/login', { method: 'POST' })"
+                attributes["x-on:submit.prevent"] =
+                    "loading = true; error = ''; " +
+                        "fetch('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, " +
+                        "body: JSON.stringify({ email, password }) })"
                 // fields use x-model; button uses x-bind:disabled
             }
             """.trimIndent(),
@@ -269,7 +272,11 @@ private val alpineRegisterRecipe =
 
             post("/api/register") {
                 val req = call.receive<RegisterRequest>()
-                require(req.password.length >= 8)
+                if (req.password.length < 8) {
+                    call.response.status(HttpStatusCode.BadRequest)
+                    call.respondText("Password must be at least 8 characters", ContentType.Text.Plain)
+                    return@post
+                }
                 call.respondText("OK", ContentType.Text.Plain)
             }
             """.trimIndent(),
@@ -279,7 +286,10 @@ private val alpineRegisterRecipe =
                 attributes["x-data"] =
                     "{ name: '', email: '', password: '', confirmPassword: '', loading: false, error: '' }"
                 attributes["x-on:submit.prevent"] =
-                    "if (password !== confirmPassword) { error = 'Passwords do not match'; return; }"
+                    "if (password !== confirmPassword) { error = 'Passwords do not match'; return; } " +
+                        "loading = true; error = ''; " +
+                        "fetch('/api/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, " +
+                        "body: JSON.stringify({ name, email, password }) })"
                 // fields use x-model
             }
             """.trimIndent(),
@@ -356,7 +366,12 @@ private fun FlowContent.loginPreview(style: String) {
                 "alpine" -> {
                     attributes["x-data"] = "{ email: '', password: '', loading: false, error: '' }"
                     attributes["x-on:submit.prevent"] =
-                        "loading = true; fetch('/_examples/login', { method: 'POST' }).finally(() => loading = false)"
+                        "loading = true; error = ''; " +
+                        "fetch('/_examples/login', { method: 'POST', " +
+                        "headers: { 'Content-Type': 'application/json' }, " +
+                        "body: JSON.stringify({ email, password }) })" +
+                        ".then(r => r.ok ? alert('Login successful!') : r.text().then(t => error = t))" +
+                        ".catch(() => error = 'Network error').finally(() => loading = false)"
                 }
                 "datastar" -> {
                     attributes["data-signals"] = "{ email: '', password: '', loading: false, error: '' }"
@@ -387,7 +402,13 @@ private fun FlowContent.registerPreview(style: String) {
                     attributes["x-data"] =
                         "{ name: '', email: '', password: '', confirmPassword: '', loading: false, error: '' }"
                     attributes["x-on:submit.prevent"] =
-                        "if (password !== confirmPassword) { error = 'Passwords do not match'; return; }"
+                        "if (password !== confirmPassword) { error = 'Passwords do not match'; return; } " +
+                        "loading = true; error = ''; " +
+                        "fetch('/_examples/register', { method: 'POST', " +
+                        "headers: { 'Content-Type': 'application/json' }, " +
+                        "body: JSON.stringify({ name, email, password }) })" +
+                        ".then(r => r.ok ? alert('Registration successful!') : r.text().then(t => error = t))" +
+                        ".catch(() => error = 'Network error').finally(() => loading = false)"
                 }
                 "datastar" -> {
                     attributes["data-signals"] =

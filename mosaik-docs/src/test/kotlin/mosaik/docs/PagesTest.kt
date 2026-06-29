@@ -174,6 +174,15 @@ class PagesTest :
             html shouldNotContain "data-on-submit"
         }
 
+        test("the Alpine interactivity previews submit JSON to live example routes") {
+            val html = interactivityPage("alpine")
+            html shouldContain "fetch('/_examples/login'"
+            html shouldContain "fetch('/_examples/register'"
+            html shouldContain "headers: { 'Content-Type': 'application/json' }"
+            html shouldContain "body: JSON.stringify({ email, password })"
+            html shouldContain "body: JSON.stringify({ name, email, password })"
+        }
+
         test("the interactivity page uses Recipe Sections for composed examples") {
             val html = interactivityPage()
             html shouldContain "data-recipe-section=\"login-form\""
@@ -732,6 +741,15 @@ class PagesTest :
             html shouldContain "Create account"
             html shouldNotContain "hx-post"
             html shouldNotContain "data-on-submit"
+        }
+
+        test("the Alpine interactivity previews submit JSON to live example routes") {
+            val html = interactivityPage("alpine")
+            html shouldContain "fetch('/_examples/login'"
+            html shouldContain "fetch('/_examples/register'"
+            html shouldContain "headers: { 'Content-Type': 'application/json' }"
+            html shouldContain "body: JSON.stringify({ email, password })"
+            html shouldContain "body: JSON.stringify({ name, email, password })"
         }
 
         test("the interactivity page uses Recipe Sections for composed examples") {
