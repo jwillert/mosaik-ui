@@ -201,7 +201,7 @@ jobs:
       - name: Run implementation agent
         if: steps.preflight.outputs.refused != 'true' && steps.preflight.outputs.blocked != 'true'
         env:
-          PI_MODEL: gpt-5.5
+          PI_MODEL: openai-codex/gpt-5.5
           PI_THINKING: medium
           BRANCH: ${{ steps.branch.outputs.name }}
           OUTPUT_DIR: ${{ runner.temp }}
