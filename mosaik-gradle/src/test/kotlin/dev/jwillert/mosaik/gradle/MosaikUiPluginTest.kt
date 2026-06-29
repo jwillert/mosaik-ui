@@ -14,6 +14,14 @@ class MosaikUiPluginTest :
 
         fun project() = ProjectBuilder.builder().build().also { it.pluginManager.apply(MosaikUiPlugin::class.java) }
 
+        test("registers the component install tasks") {
+            val project = project()
+            project.tasks.findByName("mosaikAdd") shouldNotBe null
+            project.tasks.findByName("mosaikList") shouldNotBe null
+            project.tasks.findByName("mosaikStatus") shouldNotBe null
+            project.tasks.findByName("mosaikInventory") shouldNotBe null
+        }
+
         test("registers the four CSS tasks") {
             val project = project()
             project.tasks.findByName("installTailwind") shouldNotBe null

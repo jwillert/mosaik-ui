@@ -44,6 +44,13 @@ class MosaikUiPlugin : Plugin<Project> {
             task.packageName.set(extension.packageName)
             task.sourceRoot.set(sourceRoot)
         }
+
+        project.tasks.register("mosaikInventory", MosaikInventoryTask::class.java) { task ->
+            task.group = group
+            task.description = "Regenerate .mosaik/components.json by scanning for installed components."
+            task.packageName.set(extension.packageName)
+            task.sourceRoot.set(sourceRoot)
+        }
     }
 
     private fun registerCssTasks(
