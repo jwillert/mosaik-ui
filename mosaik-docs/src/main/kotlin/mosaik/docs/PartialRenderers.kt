@@ -23,4 +23,5 @@ fun badgePagePartial(): String = partialContent { badgePageContent() }
 
 fun alertPagePartial(): String = partialContent { alertPageContent() }
 
-fun interactivityPagePartial(): String = partialContent { interactivityPageContent() }
+fun interactivityPagePartial(variant: String? = DEFAULT_INTERACTIVITY_PAGE_VARIANT_ID): String =
+    partialContent { interactivityPageContent(variant) }

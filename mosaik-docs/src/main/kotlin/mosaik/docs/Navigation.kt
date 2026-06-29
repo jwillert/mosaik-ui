@@ -38,7 +38,14 @@ val BADGE = NavItem("/components/badge", "Badge", ::badgePage, ::badgePagePartia
 val ALERT = NavItem("/components/alert", "Alert", ::alertPage, ::alertPagePartial)
 
 /** The Interactivity guide page. */
-val INTERACTIVITY = NavItem("/guides/interactivity", "Interactivity", ::interactivityPage, ::interactivityPagePartial)
+val INTERACTIVITY =
+    NavItem(
+        "/guides/interactivity",
+        "Interactivity",
+        ::interactivityPage,
+        ::interactivityPagePartial,
+        INTERACTIVITY_PAGE_VARIANT_IDS,
+    )
 
 /**
  * Every component documentation page. Together with [HOME] and [GUIDES] this is
