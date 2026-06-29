@@ -689,7 +689,7 @@ class PagesTest :
 
         test("component reference pages use preview-first example cards for static examples") {
             mapOf(
-                "button" to (buttonPage() to 9),
+                "button" to (buttonPage() to 10),
                 "card" to (cardPage() to 4),
                 "navbar" to (navbarPage() to 4),
                 "footer" to (footerPage() to 3),
