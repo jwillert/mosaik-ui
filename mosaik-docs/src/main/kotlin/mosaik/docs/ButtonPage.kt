@@ -10,10 +10,168 @@ import mosaik.ui.components.Size
 import mosaik.ui.components.mButton
 import mosaik.ui.components.mLoading
 
+const val DEFAULT_BUTTON_PAGE_VARIANT_ID = "htmx"
+
+private data class ButtonPageVariant(
+    val id: String,
+    val label: String,
+    val code: String,
+    val preview: FlowContent.() -> Unit,
+)
+
+private val BUTTON_PAGE_VARIANTS =
+    listOf(
+        ButtonPageVariant(
+            id = "htmx",
+            label = "htmx",
+            code =
+                """
+                import mosaik.ui.components.mLoading
+                import mosaik.ui.components.LoadingType
+
+                mButton(variant = ButtonVariant.Primary) {
+                    attributes["hx-post"] = "/submit"
+                    attributes["hx-indicator"] = "#spinner"
+                    attributes["hx-target"] = "#result"
+                    +"Submit"
+                }
+                mLoading(LoadingType.Spinner, classes = "htmx-indicator") {
+                    id = "spinner"
+                }
+                div {
+                    id = "result"
+                    attributes["role"] = "region"
+                    attributes["aria-live"] = "polite"
+                }
+                """.trimIndent(),
+            preview = {
+                div("flex items-center gap-2") {
+                    mButton(variant = ButtonVariant.Primary) {
+                        attributes["hx-post"] = "/_examples/button/submit"
+                        attributes["hx-indicator"] = "#button-spinner-htmx"
+                        attributes["hx-target"] = "#button-result-htmx"
+                        +"Submit"
+                    }
+                    mLoading(LoadingType.Spinner, classes = "htmx-indicator") {
+                        id = "button-spinner-htmx"
+                        attributes["style"] = "display:none;"
+                    }
+                }
+                div("mt-2 text-sm") {
+                    id = "button-result-htmx"
+                    attributes["role"] = "region"
+                    attributes["aria-live"] = "polite"
+                }
+            },
+        ),
+        ButtonPageVariant(
+            id = "alpine",
+            label = "Alpine.js",
+            code =
+                """
+                import mosaik.ui.components.mLoading
+                import mosaik.ui.components.LoadingType
+
+                div {
+                    attributes["x-data"] = "{ loading: false, result: '' }"
+                    mButton(variant = ButtonVariant.Primary) {
+                        attributes["x-on:click"] = "loading = true; result = ''; fetch('/submit', {method: 'POST'}).then(r => r.text()).then(t => result = t).finally(() => loading = false)"
+                        attributes["x-bind:disabled"] = "loading"
+                        +"Submit"
+                    }
+                    mLoading(LoadingType.Spinner) {
+                        attributes["x-show"] = "loading"
+                    }
+                    div {
+                        attributes["x-show"] = "result"
+                        attributes["x-text"] = "result"
+                        attributes["role"] = "region"
+                        attributes["aria-live"] = "polite"
+                    }
+                }
+                """.trimIndent(),
+            preview = {
+                div {
+                    attributes["x-data"] = "{ loading: false, result: '' }"
+                    div("flex items-center gap-2") {
+                        mButton(variant = ButtonVariant.Primary) {
+                            attributes["x-on:click"] =
+                                "loading = true; result = ''; fetch('/_examples/button/submit', {method: 'POST'}).then(r => r.text()).then(t => result = t).finally(() => loading = false)"
+                            attributes["x-bind:disabled"] = "loading"
+                            +"Submit"
+                        }
+                        mLoading(LoadingType.Spinner) {
+                            attributes["x-show"] = "loading"
+                        }
+                    }
+                    div("mt-2 text-sm") {
+                        attributes["x-show"] = "result"
+                        attributes["x-text"] = "result"
+                        attributes["role"] = "region"
+                        attributes["aria-live"] = "polite"
+                    }
+                }
+            },
+        ),
+        ButtonPageVariant(
+            id = "datastar",
+            label = "Datastar",
+            code =
+                """
+                import mosaik.ui.components.mLoading
+                import mosaik.ui.components.LoadingType
+
+                div {
+                    attributes["data-signals"] = "{ loading: false, result: '' }"
+                    mButton(variant = ButtonVariant.Primary) {
+                        attributes["data-on-click"] =
+                            "${'$'}loading=true; ${'$'}result=''; fetch('/submit', { method: 'POST' }).then(r => r.text()).then(t => ${'$'}result = t).finally(() => ${'$'}loading = false)"
+                        attributes["data-bind-disabled"] = "${'$'}loading"
+                        +"Submit"
+                    }
+                    mLoading(LoadingType.Spinner) {
+                        attributes["data-show"] = "${'$'}loading"
+                    }
+                    div {
+                        attributes["data-show"] = "${'$'}result"
+                        attributes["data-text"] = "${'$'}result"
+                        attributes["role"] = "region"
+                        attributes["aria-live"] = "polite"
+                    }
+                }
+                """.trimIndent(),
+            preview = {
+                div {
+                    attributes["data-signals"] = "{ loading: false, result: '' }"
+                    div("flex items-center gap-2") {
+                        mButton(variant = ButtonVariant.Primary) {
+                            attributes["data-on-click"] =
+                                "\$loading=true; \$result=''; fetch('/_examples/button/submit', {method: 'POST'}).then(r => r.text()).then(t => \$result = t).finally(() => \$loading = false)"
+                            attributes["data-bind-disabled"] = "\$loading"
+                            +"Submit"
+                        }
+                        mLoading(LoadingType.Spinner) {
+                            attributes["data-show"] = "\$loading"
+                        }
+                    }
+                    div("mt-2 text-sm") {
+                        attributes["data-show"] = "\$result"
+                        attributes["data-text"] = "\$result"
+                        attributes["role"] = "region"
+                        attributes["aria-live"] = "polite"
+                    }
+                }
+            },
+        ),
+    )
+
+private fun buttonPageVariant(id: String?): ButtonPageVariant =
+    BUTTON_PAGE_VARIANTS.firstOrNull { it.id == id } ?: BUTTON_PAGE_VARIANTS.first()
+
 /**
  * Button page content block for use in both full-page and partial renders.
  */
-fun FlowContent.buttonPageContent() {
+fun FlowContent.buttonPageContent(selectedVariantId: String? = DEFAULT_BUTTON_PAGE_VARIANT_ID) {
     h1 { +"Button" }
     p {
         +"A button triggers an action or event — submitting a form, opening a dialog, "
@@ -288,121 +446,12 @@ fun FlowContent.buttonPageContent() {
             +"Form submit with loading state. Each library (htmx, Alpine.js, Datastar) "
             +"wires client-side behavior differently onto the same Button API."
         }
-        interactivityTabs(
-            id = "button-interactive",
-            htmxPreview = {
-                div("flex items-center gap-2") {
-                    mButton(variant = ButtonVariant.Primary) {
-                        attributes["hx-post"] = "/_examples/button/submit"
-                        attributes["hx-indicator"] = "#button-spinner-htmx"
-                        attributes["hx-target"] = "#button-result-htmx"
-                        +"Submit"
-                    }
-                    mLoading(LoadingType.Spinner, classes = "htmx-indicator") {
-                        id = "button-spinner-htmx"
-                        attributes["style"] = "display:none;"
-                    }
-                }
-                div("mt-2 text-sm") {
-                    id = "button-result-htmx"
-                    attributes["role"] = "region"
-                    attributes["aria-live"] = "polite"
-                }
-            },
-            alpinePreview = {
-                div {
-                    attributes["x-data"] = "{ loading: false, result: '' }"
-                    div("flex items-center gap-2") {
-                        mButton(variant = ButtonVariant.Primary) {
-                            attributes["x-on:click"] =
-                                "loading = true; result = ''; fetch('/_examples/button/submit', {method: 'POST'}).then(r => r.text()).then(t => result = t).finally(() => loading = false)"
-                            attributes["x-bind:disabled"] = "loading"
-                            +"Submit"
-                        }
-                        mLoading(LoadingType.Spinner) {
-                            attributes["x-show"] = "loading"
-                        }
-                    }
-                    div("mt-2 text-sm") {
-                        attributes["x-show"] = "result"
-                        attributes["x-text"] = "result"
-                        attributes["role"] = "region"
-                        attributes["aria-live"] = "polite"
-                    }
-                }
-            },
-            datastarPreview = {
-                div {
-                    attributes["data-signals"] = "{ loading: false, result: '' }"
-                    div("flex items-center gap-2") {
-                        mButton(variant = ButtonVariant.Primary) {
-                            attributes["data-on-click"] =
-                                "\$loading=true; \$result=''; fetch('/_examples/button/submit', {method: 'POST'}).then(r => r.text()).then(t => \$result = t).finally(() => \$loading = false)"
-                            attributes["data-bind-disabled"] = "\$loading"
-                            +"Submit"
-                        }
-                        mLoading(LoadingType.Spinner) {
-                            attributes["data-show"] = "\$loading"
-                        }
-                    }
-                    div("mt-2 text-sm") {
-                        attributes["data-show"] = "\$result"
-                        attributes["data-text"] = "\$result"
-                        attributes["role"] = "region"
-                        attributes["aria-live"] = "polite"
-                    }
-                }
-            },
-            htmxCode =
-                """
-                import mosaik.ui.components.mLoading
-                import mosaik.ui.components.LoadingType
-
-                mButton(variant = ButtonVariant.Primary) {
-                    attributes["hx-post"] = "/submit"
-                    attributes["hx-indicator"] = "#spinner"
-                    +"Submit"
-                }
-                mLoading(LoadingType.Spinner, classes = "htmx-indicator") {
-                    id = "spinner"
-                }
-                """.trimIndent(),
-            alpineCode =
-                """
-                import mosaik.ui.components.mLoading
-                import mosaik.ui.components.LoadingType
-
-                div {
-                    attributes["x-data"] = "{ loading: false }"
-                    mButton(variant = ButtonVariant.Primary) {
-                        attributes["x-on:click"] = "loading = true; fetch('/submit', {method: 'POST'}).finally(() => loading = false)"
-                        attributes["x-bind:disabled"] = "loading"
-                        +"Submit"
-                    }
-                    mLoading(LoadingType.Spinner) {
-                        attributes["x-show"] = "loading"
-                    }
-                }
-                """.trimIndent(),
-            datastarCode =
-                """
-                import mosaik.ui.components.mLoading
-                import mosaik.ui.components.LoadingType
-
-                div {
-                    attributes["data-signals"] = "{ loading: false }"
-                    mButton(variant = ButtonVariant.Primary) {
-                        attributes["data-on-click"] =
-                            "${'$'}loading=true; fetch('/submit', { method: 'POST' }).finally(() => ${'$'}loading = false)"
-                        attributes["data-bind-disabled"] = "${'$'}loading"
-                        +"Submit"
-                    }
-                    mLoading(LoadingType.Spinner) {
-                        attributes["data-show"] = "${'$'}loading"
-                    }
-                }
-                """.trimIndent(),
-        )
+        val selectedVariant = buttonPageVariant(selectedVariantId)
+        buttonPageVariantSelector(selectedVariant)
+        h3 { +selectedVariant.label }
+        exampleCard(code = selectedVariant.code) {
+            selectedVariant.preview(this)
+        }
     }
 
     apiReference(
@@ -459,4 +508,25 @@ fun FlowContent.buttonPageContent() {
  * interactive examples, and avoids raw DaisyUI button modifier classes in normal
  * examples when a Mosaik abstraction exists (issue #59).
  */
-fun buttonPage(): String = layout(BUTTON) { buttonPageContent() }
+private fun FlowContent.buttonPageVariantSelector(selectedVariant: ButtonPageVariant) {
+    nav(classes = "not-prose mb-4 flex flex-wrap items-center gap-2") {
+        attributes["aria-label"] = "Page variant"
+        span("text-sm font-medium") { +"Page variant" }
+        BUTTON_PAGE_VARIANTS.forEach { variant ->
+            a(classes = "rounded border border-base-300 px-3 py-1 text-sm hover:bg-base-200") {
+                href = "${BUTTON.path}?variant=${variant.id}"
+                attributes["data-page-variant"] = variant.id
+                if (variant.id == selectedVariant.id) {
+                    attributes["aria-current"] = "page"
+                    classes += " bg-base-200"
+                }
+                +variant.label
+            }
+        }
+    }
+}
+
+fun buttonPage(variant: String? = DEFAULT_BUTTON_PAGE_VARIANT_ID): String =
+    layout(BUTTON) {
+        buttonPageContent(variant)
+    }

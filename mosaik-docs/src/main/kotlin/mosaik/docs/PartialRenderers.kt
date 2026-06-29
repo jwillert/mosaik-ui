@@ -8,7 +8,10 @@ package mosaik.docs
 
 fun landingPagePartial(): String = partialContent { landingPageContent() }
 
-fun buttonPagePartial(): String = partialContent { buttonPageContent() }
+fun buttonPagePartial(variant: String? = DEFAULT_BUTTON_PAGE_VARIANT_ID): String =
+    partialContent {
+        buttonPageContent(variant)
+    }
 
 fun cardPagePartial(): String = partialContent { cardPageContent() }
 

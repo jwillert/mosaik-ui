@@ -33,7 +33,11 @@ fun setupShellNavigation() {
         val target = event.target
         if (target is HTMLAnchorElement && shouldEnhanceNavigation(target, event)) {
             event.preventDefault()
-            navigateToPage(target.href)
+            val variant = target.getAttribute("data-page-variant")
+            if (variant != null) {
+                window.localStorage.setItem("mosaik-interaction-style", variant)
+            }
+            navigateToPage(urlWithSoftPageVariantPreference(target.href))
         }
     })
 
@@ -107,12 +111,8 @@ fun navigateToPage(
     url: String,
     pushState: Boolean = true,
 ) {
-    val partialUrl =
-        if (url.contains("?")) {
-            "$url&partial=true"
-        } else {
-            "$url?partial=true"
-        }
+    val resolvedUrl = urlWithSoftPageVariantPreference(url)
+    val partialUrl = partialUrlFor(resolvedUrl)
 
     window
         .fetch(partialUrl, RequestInit())
@@ -139,11 +139,11 @@ fun navigateToPage(
                 mainContent.innerHTML = html
 
                 // Update active sidebar item
-                updateActiveSidebarItem(url)
+                updateActiveSidebarItem(resolvedUrl)
 
                 // Update browser history
                 if (pushState) {
-                    window.history.pushState(null, "", url)
+                    window.history.pushState(null, "", resolvedUrl)
                 }
 
                 // Re-run syntax highlighting on the new content
@@ -163,13 +163,30 @@ fun navigateToPage(
                 window.scrollTo(0.0, 0.0)
             } else {
                 // Fallback: no main-content element found, do a normal navigation
-                window.location.href = url
+                window.location.href = resolvedUrl
             }
         }.catch { error ->
             console.error("Navigation error:", error)
             // Fallback to normal navigation on error
-            window.location.href = url
+            window.location.href = resolvedUrl
         }
+}
+
+fun partialUrlFor(url: String): String {
+    val parsed = URL(url, window.location.origin)
+    parsed.searchParams.set("partial", "true")
+    return parsed.href
+}
+
+fun urlWithSoftPageVariantPreference(url: String): String {
+    val parsed = URL(url, window.location.origin)
+    if (parsed.pathname == "/components/button" && !parsed.searchParams.has("variant")) {
+        val preferred = window.localStorage.getItem("mosaik-interaction-style")
+        if (preferred == "htmx" || preferred == "alpine" || preferred == "datastar") {
+            parsed.searchParams.set("variant", preferred)
+        }
+    }
+    return parsed.href
 }
 
 /**
