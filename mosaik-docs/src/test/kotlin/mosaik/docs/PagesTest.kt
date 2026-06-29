@@ -667,6 +667,37 @@ class PagesTest :
             htmlWithPreviews shouldContain "datastar code"
         }
 
+        test("exampleCard renders preview first with collapsed Kotlin code and copy support") {
+            val html =
+                layout(BUTTON) {
+                    exampleCard(
+                        title = "Preview first",
+                        code = "mButton { +\"Save\" }",
+                    ) {
+                        mButton(variant = ButtonVariant.Primary) { +"Save" }
+                    }
+                }
+
+            html shouldContain "data-docs-example-card=\"true\""
+            html shouldContain "Save"
+            html shouldContain "<details"
+            html shouldContain "View code"
+            html shouldContain "Copy"
+            html shouldContain "language-kotlin"
+            html shouldContain "mButton { +&quot;Save&quot; }"
+        }
+
+        test("the button page uses preview-first example cards for static examples") {
+            val html = buttonPage()
+
+            html shouldContain "data-docs-example-card=\"true\""
+            html shouldContain "Basic usage"
+            html shouldContain "Color variants"
+            html shouldContain "View code"
+            html shouldContain "Copy"
+            html shouldContain "language-kotlin"
+        }
+
         test("interactivityTabs renders code-only tabs when no previews are provided") {
             val htmlCodeOnly =
                 layout(INTERACTIVITY) {
