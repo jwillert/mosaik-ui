@@ -143,9 +143,6 @@ fun FlowContent.interactivityTabs(
             id = "$id-htmx",
             label = "htmx",
             checked = true,
-            tabConfig = {
-                attributes["data-interaction-style"] = "htmx"
-            },
         ) {
             if (htmxPreview != null) {
                 div("mb-4 not-prose") {
@@ -161,9 +158,6 @@ fun FlowContent.interactivityTabs(
             name = id,
             id = "$id-alpine",
             label = "Alpine.js",
-            tabConfig = {
-                attributes["data-interaction-style"] = "alpine"
-            },
         ) {
             if (alpinePreview != null) {
                 div("mb-4 not-prose") {
@@ -179,9 +173,6 @@ fun FlowContent.interactivityTabs(
             name = id,
             id = "$id-datastar",
             label = "Datastar",
-            tabConfig = {
-                attributes["data-interaction-style"] = "datastar"
-            },
         ) {
             if (datastarPreview != null) {
                 div("mb-4 not-prose") {

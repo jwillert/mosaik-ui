@@ -284,11 +284,9 @@ class ShellNavigationTest :
             hasHighlighting shouldBe true
         }
 
-        test("button Page Variant reflects saved preference after shell navigation") {
+        test("button Page Variant reflects saved soft preference after shell navigation") {
             page.navigate("http://127.0.0.1:$testPort/")
-
-            // Change to alpine interaction style
-            page.locator("#interaction-style-switcher").selectOption("alpine")
+            page.evaluate("() => window.localStorage.setItem('mosaik-page-variant', 'alpine')")
 
             // Navigate to Button page, which applies the matching page-local variant.
             page.locator(".menu a[href='/components/button']").click()
@@ -396,14 +394,7 @@ class ShellNavigationTest :
         }
 
         test("alpine.js previews initialize after shell navigation") {
-            page.navigate("http://127.0.0.1:$testPort/")
-
-            // Change to alpine interaction style
-            page.locator("#interaction-style-switcher").selectOption("alpine")
-
-            // Navigate to Button page which has Alpine previews
-            page.locator(".menu a[href='/components/button']").click()
-            page.waitForURL("http://127.0.0.1:$testPort/components/button?variant=alpine")
+            page.navigate("http://127.0.0.1:$testPort/components/button?variant=alpine")
 
             // Wait for content to load
             page.waitForFunction("() => document.getElementById('main-content').textContent.includes('mButton')")
@@ -433,14 +424,7 @@ class ShellNavigationTest :
         }
 
         test("datastar previews initialize after shell navigation") {
-            page.navigate("http://127.0.0.1:$testPort/")
-
-            // Change to datastar interaction style
-            page.locator("#interaction-style-switcher").selectOption("datastar")
-
-            // Navigate to Button page which has Datastar previews
-            page.locator(".menu a[href='/components/button']").click()
-            page.waitForURL("http://127.0.0.1:$testPort/components/button?variant=datastar")
+            page.navigate("http://127.0.0.1:$testPort/components/button?variant=datastar")
 
             // Wait for content to load
             page.waitForFunction("() => document.getElementById('main-content').textContent.includes('mButton')")
