@@ -1,0 +1,5 @@
+# ADR 0015: Page-Local Documentation Variants
+
+Interactive documentation pages declare their own open-ended Page Variants instead of using a fixed app-wide `htmx | Alpine.js | Datastar` selector or repeating per-example tabs. The selected variant is URL-driven, typically with `?variant=...`, and pages render only the selected variant; unavailable or impractical stacks are omitted from that page's variant toggle rather than represented by fake code.
+
+This supersedes the tab-centric direction in ADR 0006 for interactive docs and narrows ADR 0005/0012: interactivity remains documentation, not component API, but each page now owns the practical implementation stacks it can teach. Variant ids are labels owned by the page, such as `htmx`, `alpine`, `datastar`, or `htmx-alpine`, not a global enum. A docs client may remember the last selected variant id as a soft preference and apply it only on pages that support the same id; the URL remains the source of truth for shareability and back/forward behavior.

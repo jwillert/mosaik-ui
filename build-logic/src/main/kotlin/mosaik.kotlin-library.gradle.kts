@@ -26,3 +26,23 @@ dependencies {
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 }
+
+plugins.withId("maven-publish") {
+    extensions.configure<PublishingExtension>("publishing") {
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/jwillert/mosaik-ui")
+                credentials {
+                    username = providers.gradleProperty("gpr.user")
+                        .orElse(providers.environmentVariable("GITHUB_ACTOR"))
+                        .orNull
+                    password = providers.gradleProperty("gpr.token")
+                        .orElse(providers.gradleProperty("gpr.key"))
+                        .orElse(providers.environmentVariable("GITHUB_TOKEN"))
+                        .orNull
+                }
+            }
+        }
+    }
+}
