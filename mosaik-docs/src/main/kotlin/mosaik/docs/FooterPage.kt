@@ -52,7 +52,7 @@ fun FlowContent.footerPageContent() {
             }
             """.trimIndent(),
     ) {
-        mFooter("footer-center bg-base-200 text-base-content p-4 rounded-box") {
+        mFooter("footer-center bg-base-200 text-base-content p-4") {
             aside {
                 p { +"© 2026 Mosaik UI — built with Kotlin, Ktor and DaisyUI." }
             }
@@ -76,7 +76,7 @@ fun FlowContent.footerPageContent() {
                 }
                 """.trimIndent(),
         ) {
-            mFooter("footer-center bg-base-200 text-base-content p-4 rounded-box") {
+            mFooter("footer-center bg-base-200 text-base-content p-4") {
                 aside {
                     p { +"© 2026 Mosaik UI — built with Kotlin, Ktor and DaisyUI." }
                 }
@@ -110,7 +110,7 @@ fun FlowContent.footerPageContent() {
                 }
                 """.trimIndent(),
         ) {
-            mFooter("bg-base-200 text-base-content p-10 rounded-box") {
+            mFooter("bg-base-200 text-base-content p-10") {
                 nav {
                     mFooterTitle { +"Services" }
                     mLink(href = "#") { +"Branding" }

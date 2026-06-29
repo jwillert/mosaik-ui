@@ -69,7 +69,7 @@ fun FlowContent.navbarPageContent() {
             }
             """.trimIndent(),
     ) {
-        mNavbar("bg-base-100 shadow-sm rounded-box") {
+        mNavbar("bg-base-100 shadow-sm") {
             mNavbarStart {
                 mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
             }
@@ -101,7 +101,7 @@ fun FlowContent.navbarPageContent() {
                 }
                 """.trimIndent(),
         ) {
-            mNavbar("bg-base-100 shadow-sm rounded-box") {
+            mNavbar("bg-base-100 shadow-sm") {
                 mNavbarStart {
                     mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
                 }
@@ -129,7 +129,7 @@ fun FlowContent.navbarPageContent() {
                 }
                 """.trimIndent(),
         ) {
-            mNavbar("bg-base-100 shadow-sm rounded-box") {
+            mNavbar("bg-base-100 shadow-sm") {
                 mNavbarCenter {
                     mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
                 }
@@ -159,7 +159,7 @@ fun FlowContent.navbarPageContent() {
                 }
                 """.trimIndent(),
         ) {
-            mNavbar("bg-base-100 shadow-sm rounded-box") {
+            mNavbar("bg-base-100 shadow-sm") {
                 mNavbarStart {
                     mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
                 }
