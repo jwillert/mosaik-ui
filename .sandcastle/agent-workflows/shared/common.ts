@@ -52,11 +52,9 @@ export const writeText = (filename: string, value: string): void => {
   fs.writeFileSync(path.join(outputDir(), filename), value);
 };
 
-export const claudeAgent = () =>
-  sandcastle.claudeCode("claude-sonnet-4-5", {
-    env: {
-      CLAUDE_CODE_OAUTH_TOKEN: required("CLAUDE_CODE_OAUTH_TOKEN"),
-    },
+export const piAgent = () =>
+  sandcastle.pi(process.env.PI_MODEL ?? "gpt-5-codex", {
+    thinking: (process.env.PI_THINKING as "off" | "minimal" | "low" | "medium" | "high" | "xhigh" | undefined) ?? "high",
   });
 
 export const standardSchema = <T>(

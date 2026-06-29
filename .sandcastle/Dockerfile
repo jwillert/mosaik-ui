@@ -40,10 +40,7 @@ RUN cd /tmp/gradle-bootstrap \
   && ./gradlew --version \
   && rm -rf /tmp/gradle-bootstrap
 
-# Install Claude Code CLI
-RUN curl -fsSL https://claude.ai/install.sh | bash
-
-# Add Claude and Gradle to PATH
+# Add user-local binaries to PATH
 ENV PATH="/home/agent/.local/bin:$PATH"
 
 # 1. Definiere einen neuen Pfad für NPM "global" innerhalb des User-Verzeichnisses

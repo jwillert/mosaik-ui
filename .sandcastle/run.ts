@@ -4,14 +4,28 @@ import { podman } from "@ai-hero/sandcastle/sandboxes/podman";
 const MAX_ITERATIONS = 10;
 const MAX_PARALLEL = 4;
 
+const sandboxProvider = podman({
+  mounts: [
+    {
+      hostPath: "~/.pi/agent",
+      sandboxPath: "/home/agent/.pi/agent",
+    },
+  ],
+});
+
+const piAgent = () =>
+  sandcastle.pi(process.env.PI_MODEL ?? "gpt-5-codex", {
+    thinking: (process.env.PI_THINKING as "off" | "minimal" | "low" | "medium" | "high" | "xhigh" | undefined) ?? "high",
+  });
+
 for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
   console.log(`\n=== Iteration ${iteration}/${MAX_ITERATIONS} ===\n`);
 
   // Phase 1: Plan — orchestrator agent analyzes issues and picks parallelizable work
   const plan = await sandcastle.run({
-    sandbox: podman(),
+    sandbox: sandboxProvider,
     name: "Planner",
-    agent: sandcastle.claudeCode("claude-opus-4-8"),
+    agent: piAgent(),
     promptFile: "./.sandcastle/plan-prompt.md",
   });
 
@@ -59,7 +73,7 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
       await acquire();
       try {
         await using sandbox = await sandcastle.createSandbox({
-          sandbox: podman(),
+          sandbox: sandboxProvider,
           branch: issue.branch,
           hooks: {
             sandbox: {
@@ -72,7 +86,7 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
 
         const result = await sandbox.run({
           name: "Implementer #" + issue.number,
-          agent: sandcastle.claudeCode("claude-opus-4-8"),
+          agent: piAgent(),
           promptFile: "./.sandcastle/implement-prompt.md",
           idleTimeoutSeconds: 900,
           promptArgs: {
@@ -85,7 +99,7 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
         if (result.commits.length > 0) {
           await sandbox.run({
             name: "Reviewer #" + issue.number,
-            agent: sandcastle.claudeCode("claude-opus-4-8"),
+            agent: piAgent(),
             promptFile: "./.sandcastle/review-prompt.md",
             promptArgs: {
               ISSUE_NUMBER: String(issue.number),
@@ -142,10 +156,10 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
 
   // Phase 3: Merge — one agent merges all branches together
   await sandcastle.run({
-    sandbox: podman(),
+    sandbox: sandboxProvider,
     name: "Merger",
     maxIterations: 10,
-    agent: sandcastle.claudeCode("claude-opus-4-8"), // claudeCode("claude-opus-4-8")
+    agent: piAgent(),
     promptFile: "./.sandcastle/merge-prompt.md",
     promptArgs: {
       BRANCHES: completedBranches.map((b) => `- ${b}`).join("\n"),

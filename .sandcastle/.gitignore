@@ -1,2 +1,4 @@
 .env
 logs/
+pi-auth/
+codex-auth/
