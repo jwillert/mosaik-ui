@@ -185,6 +185,15 @@ jobs:
           }
           EOF
 
+      - name: Smoke test Pi auth
+        if: steps.preflight.outputs.refused != 'true' && steps.preflight.outputs.blocked != 'true'
+        run: |
+          set -euo pipefail
+          if ! timeout 60s bash -lc 'printf "Antworte nur OK.\n" | pi -p --mode json --model openai-codex/gpt-5.5 --thinking minimal'; then
+            echo "Pi auth smoke test failed or timed out." > "${RUNNER_TEMP}/failure_reason.txt"
+            exit 1
+          fi
+
       - name: Preflight build
         if: steps.preflight.outputs.refused != 'true' && steps.preflight.outputs.blocked != 'true'
         run: ./gradlew --no-daemon build
