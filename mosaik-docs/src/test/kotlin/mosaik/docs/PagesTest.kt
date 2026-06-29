@@ -687,15 +687,21 @@ class PagesTest :
             html shouldContain "mButton { +&quot;Save&quot; }"
         }
 
-        test("the button page uses preview-first example cards for static examples") {
-            val html = buttonPage()
-
-            html shouldContain "data-docs-example-card=\"true\""
-            html shouldContain "Basic usage"
-            html shouldContain "Color variants"
-            html shouldContain "View code"
-            html shouldContain "Copy"
-            html shouldContain "language-kotlin"
+        test("component reference pages use preview-first example cards for static examples") {
+            listOf(
+                buttonPage(),
+                cardPage(),
+                navbarPage(),
+                footerPage(),
+                badgePage(),
+                alertPage(),
+            ).forEach { html ->
+                html shouldContain "data-docs-example-card=\"true\""
+                html shouldContain "Basic usage"
+                html shouldContain "View code"
+                html shouldContain "Copy"
+                html shouldContain "language-kotlin"
+            }
         }
 
         test("interactivityTabs renders code-only tabs when no previews are provided") {

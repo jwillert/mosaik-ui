@@ -39,17 +39,25 @@ fun FlowContent.footerPageContent() {
 
     installSection("footer")
 
-    usageSection(
-        """
-        import mosaik.ui.components.mFooter
+    h2 { +"Basic usage" }
+    exampleCard(
+        code =
+            """
+            import mosaik.ui.components.mFooter
 
-        mFooter("footer-center bg-base-200 text-base-content p-4") {
+            mFooter("footer-center bg-base-200 text-base-content p-4") {
+                aside {
+                    p { +"© 2026 Mosaik UI — built with Kotlin, Ktor and DaisyUI." }
+                }
+            }
+            """.trimIndent(),
+    ) {
+        mFooter("footer-center bg-base-200 text-base-content p-4 rounded-box") {
             aside {
                 p { +"© 2026 Mosaik UI — built with Kotlin, Ktor and DaisyUI." }
             }
         }
-        """.trimIndent(),
-    )
+    }
 
     section {
         h2 { +"Centred footer" }
@@ -58,22 +66,22 @@ fun FlowContent.footerPageContent() {
             code { +"footer-center" }
             +" utility centres a single line of content — the simplest footer."
         }
-        div("not-prose") {
+        exampleCard(
+            code =
+                """
+                mFooter("footer-center bg-base-200 text-base-content p-4") {
+                    aside {
+                        p { +"© 2026 Mosaik UI — built with Kotlin, Ktor and DaisyUI." }
+                    }
+                }
+                """.trimIndent(),
+        ) {
             mFooter("footer-center bg-base-200 text-base-content p-4 rounded-box") {
                 aside {
                     p { +"© 2026 Mosaik UI — built with Kotlin, Ktor and DaisyUI." }
                 }
             }
         }
-        codeBlock(
-            """
-            mFooter("footer-center bg-base-200 text-base-content p-4") {
-                aside {
-                    p { +"© 2026 Mosaik UI — built with Kotlin, Ktor and DaisyUI." }
-                }
-            }
-            """.trimIndent(),
-        )
     }
 
     section {
@@ -85,7 +93,23 @@ fun FlowContent.footerPageContent() {
             code { +"mFooterTitle" }
             +" — DaisyUI's sitemap footer."
         }
-        div("not-prose") {
+        exampleCard(
+            code =
+                """
+                mFooter("bg-base-200 text-base-content p-10") {
+                    nav {
+                        mFooterTitle { +"Services" }
+                        mLink(href = "#") { +"Branding" }
+                        mLink(href = "#") { +"Design" }
+                    }
+                    nav {
+                        mFooterTitle { +"Company" }
+                        mLink(href = "#") { +"About us" }
+                        mLink(href = "#") { +"Contact" }
+                    }
+                }
+                """.trimIndent(),
+        ) {
             mFooter("bg-base-200 text-base-content p-10 rounded-box") {
                 nav {
                     mFooterTitle { +"Services" }
@@ -99,22 +123,6 @@ fun FlowContent.footerPageContent() {
                 }
             }
         }
-        codeBlock(
-            """
-            mFooter("bg-base-200 text-base-content p-10") {
-                nav {
-                    mFooterTitle { +"Services" }
-                    mLink(href = "#") { +"Branding" }
-                    mLink(href = "#") { +"Design" }
-                }
-                nav {
-                    mFooterTitle { +"Company" }
-                    mLink(href = "#") { +"About us" }
-                    mLink(href = "#") { +"Contact" }
-                }
-            }
-            """.trimIndent(),
-        )
     }
 
     section {

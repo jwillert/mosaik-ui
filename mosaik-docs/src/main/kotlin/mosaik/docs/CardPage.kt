@@ -48,15 +48,28 @@ fun FlowContent.cardPageContent() {
 
     installSection("card")
 
-    usageSection(
-        """
-        import mosaik.ui.components.mCard
-        import mosaik.ui.components.mCardBody
-        import mosaik.ui.components.mCardTitle
-        import mosaik.ui.components.mCardActions
-        import mosaik.ui.components.mButton
-        import mosaik.ui.components.Variant
+    h2 { +"Basic usage" }
+    exampleCard(
+        code =
+            """
+            import mosaik.ui.components.mCard
+            import mosaik.ui.components.mCardBody
+            import mosaik.ui.components.mCardTitle
+            import mosaik.ui.components.mCardActions
+            import mosaik.ui.components.mButton
+            import mosaik.ui.components.ButtonVariant
 
+            mCard("w-96 bg-base-100 shadow-sm") {
+                mCardBody {
+                    mCardTitle { +"Shoes!" }
+                    p { +"If a dog chews shoes whose shoes does he choose?" }
+                    mCardActions("justify-end") {
+                        mButton(variant = ButtonVariant.Primary) { +"Buy Now" }
+                    }
+                }
+            }
+            """.trimIndent(),
+    ) {
         mCard("w-96 bg-base-100 shadow-sm") {
             mCardBody {
                 mCardTitle { +"Shoes!" }
@@ -66,13 +79,22 @@ fun FlowContent.cardPageContent() {
                 }
             }
         }
-        """.trimIndent(),
-    )
+    }
 
     section {
         h2 { +"Basic card" }
         p { +"A card with a title and body text." }
-        div("not-prose") {
+        exampleCard(
+            code =
+                """
+                mCard("w-96 bg-base-100 shadow-sm") {
+                    mCardBody {
+                        mCardTitle { +"Card title" }
+                        p { +"A card with a title and a short description below it." }
+                    }
+                }
+                """.trimIndent(),
+        ) {
             mCard("w-96 bg-base-100 shadow-sm") {
                 mCardBody {
                     mCardTitle { +"Card title" }
@@ -80,16 +102,6 @@ fun FlowContent.cardPageContent() {
                 }
             }
         }
-        codeBlock(
-            """
-            mCard("w-96 bg-base-100 shadow-sm") {
-                mCardBody {
-                    mCardTitle { +"Card title" }
-                    p { +"A card with a title and a short description below it." }
-                }
-            }
-            """.trimIndent(),
-        )
     }
 
     section {
@@ -101,7 +113,20 @@ fun FlowContent.cardPageContent() {
             code { +"justify-end" }
             +"."
         }
-        div("not-prose") {
+        exampleCard(
+            code =
+                """
+                mCard("w-96 bg-base-100 shadow-sm") {
+                    mCardBody {
+                        mCardTitle { +"Buy these shoes" }
+                        p { +"If a dog chews shoes whose shoes does he choose?" }
+                        mCardActions("justify-end") {
+                            mButton(variant = ButtonVariant.Primary) { +"Buy Now" }
+                        }
+                    }
+                }
+                """.trimIndent(),
+        ) {
             mCard("w-96 bg-base-100 shadow-sm") {
                 mCardBody {
                     mCardTitle { +"Buy these shoes" }
@@ -112,19 +137,6 @@ fun FlowContent.cardPageContent() {
                 }
             }
         }
-        codeBlock(
-            """
-            mCard("w-96 bg-base-100 shadow-sm") {
-                mCardBody {
-                    mCardTitle { +"Buy these shoes" }
-                    p { +"If a dog chews shoes whose shoes does he choose?" }
-                    mCardActions("justify-end") {
-                        mButton(variant = ButtonVariant.Primary) { +"Buy Now" }
-                    }
-                }
-            }
-            """.trimIndent(),
-        )
     }
 
     section {
@@ -134,7 +146,20 @@ fun FlowContent.cardPageContent() {
             code { +"figure" }
             +" before the body for DaisyUI's image card layout."
         }
-        div("not-prose") {
+        exampleCard(
+            code =
+                """
+                mCard("w-96 bg-base-100 shadow-sm") {
+                    figure {
+                        img(src = "/shoes.jpg", alt = "Shoes")
+                    }
+                    mCardBody {
+                        mCardTitle { +"Image card" }
+                        p { +"An image sits in a figure above the body." }
+                    }
+                }
+                """.trimIndent(),
+        ) {
             mCard("w-96 bg-base-100 shadow-sm") {
                 figure {
                     img(src = "https://placehold.co/384x192", alt = "Placeholder")
@@ -145,19 +170,6 @@ fun FlowContent.cardPageContent() {
                 }
             }
         }
-        codeBlock(
-            """
-            mCard("w-96 bg-base-100 shadow-sm") {
-                figure {
-                    img(src = "/shoes.jpg", alt = "Shoes")
-                }
-                mCardBody {
-                    mCardTitle { +"Image card" }
-                    p { +"An image sits in a figure above the body." }
-                }
-            }
-            """.trimIndent(),
-        )
     }
 
     section {
