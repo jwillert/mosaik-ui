@@ -52,36 +52,10 @@ export const writeText = (filename: string, value: string): void => {
   fs.writeFileSync(path.join(outputDir(), filename), value);
 };
 
-const shellEscape = (value: string): string => `'${value.replace(/'/g, `'"'"'`)}'`;
-
-export const piAgent = () => {
-  const model = process.env.PI_MODEL ?? "openai-codex/gpt-5.1-codex-max";
-  const thinking =
-    (process.env.PI_THINKING as
-      | "off"
-      | "minimal"
-      | "low"
-      | "medium"
-      | "high"
-      | "xhigh"
-      | undefined) ?? "xhigh";
-  const base = sandcastle.pi(model, { thinking });
-
-  return {
-    ...base,
-    buildPrintCommand({ prompt, resumeSession }: { prompt: string; resumeSession?: string }) {
-      const sessionFlag = resumeSession ? ` --session ${shellEscape(resumeSession)}` : "";
-      return {
-        command:
-          `tmp_prompt=$(mktemp); ` +
-          `cat > "$tmp_prompt"; ` +
-          `pi -p --mode json --model ${shellEscape(model)} --thinking ${shellEscape(thinking)}${sessionFlag} "@$tmp_prompt"; ` +
-          `status=$?; rm -f "$tmp_prompt"; exit $status`,
-        stdin: prompt,
-      };
-    },
-  };
-};
+export const piAgent = () =>
+  sandcastle.pi(process.env.PI_MODEL ?? "openai-codex/gpt-5.1-codex-max", {
+    thinking: (process.env.PI_THINKING as "off" | "minimal" | "low" | "medium" | "high" | "xhigh" | undefined) ?? "xhigh",
+  });
 
 export const standardSchema = <T>(
   validate: (value: unknown) => T,

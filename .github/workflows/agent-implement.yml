@@ -193,7 +193,7 @@ jobs:
         if: steps.preflight.outputs.refused != 'true' && steps.preflight.outputs.blocked != 'true'
         env:
           PI_MODEL: openai-codex/gpt-5.1-codex-max
-          PI_THINKING: medium
+          PI_THINKING: xhigh
           BRANCH: ${{ steps.branch.outputs.name }}
           OUTPUT_DIR: ${{ runner.temp }}
         run: npx tsx .sandcastle/agent-workflows/implement/implement.ts
