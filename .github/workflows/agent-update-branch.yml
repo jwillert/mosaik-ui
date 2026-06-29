@@ -97,7 +97,7 @@ jobs:
       - name: Run update-branch agent
         env:
           PI_MODEL: openai-codex/gpt-5.1-codex-max
-          PI_THINKING: xhigh
+          PI_THINKING: medium
           OUTPUT_DIR: ${{ runner.temp }}
         run: npx tsx .sandcastle/agent-workflows/update-branch/update-branch.ts
 

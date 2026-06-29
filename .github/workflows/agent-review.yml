@@ -94,7 +94,7 @@ jobs:
       - name: Run review agent
         env:
           PI_MODEL: openai-codex/gpt-5.1-codex-max
-          PI_THINKING: xhigh
+          PI_THINKING: medium
           OUTPUT_DIR: ${{ runner.temp }}
         run: npx tsx .sandcastle/agent-workflows/review/review.ts
 
