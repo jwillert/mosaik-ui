@@ -152,68 +152,38 @@ class PagesTest :
             html shouldContain "mButton"
         }
 
-        test("the interactivity page Login form shows all three library implementations") {
+        test("the interactivity page has URL-driven Page Variants instead of recipe tabs") {
             val html = interactivityPage()
-            // Login form tabs exist with unique IDs.
-            html shouldContain "login-form-htmx"
-            html shouldContain "login-form-alpine"
-            html shouldContain "login-form-datastar"
-            // htmx implementation uses hx-post.
-            html shouldContain "hx-post"
-            // Alpine.js implementation uses x-data.
-            html shouldContain "x-data"
-            // Datastar implementation uses data-on-submit.
-            html shouldContain "data-on-submit"
+            html shouldContain "Page variant"
+            html shouldContain "href=\"/guides/interactivity?variant=htmx\""
+            html shouldContain "href=\"/guides/interactivity?variant=alpine\""
+            html shouldContain "href=\"/guides/interactivity?variant=datastar\""
+            html shouldContain "aria-current=\"page\""
+            html shouldNotContain "login-form-alpine"
+            html shouldNotContain "register-form-datastar"
         }
 
-        test("the interactivity page Login form shows working previews per style") {
-            val html = interactivityPage()
-            // Preview wrapper with mb-4 not-prose class.
-            html shouldContain "class=\"mb-4 not-prose\""
-            // All three previews render the login form card.
+        test("the interactivity page renders only the selected recipe variant") {
+            val html = interactivityPage("alpine")
+            html shouldContain "Alpine.js"
+            html shouldContain "x-data"
+            html shouldContain "x-on:submit.prevent"
             html shouldContain "Login"
-            // Form inputs are present in previews.
-            html shouldContain "type=\"email\""
-            html shouldContain "name=\"email\""
-            html shouldContain "type=\"password\""
-            html shouldContain "name=\"password\""
-            // Submit button is present.
-            html shouldContain "Sign in"
-            // Result/error display elements are present.
-            html shouldContain "login-result"
-        }
-
-        test("the interactivity page Register form shows all three library implementations") {
-            val html = interactivityPage()
-            // Register form tabs exist with unique IDs.
-            html shouldContain "register-form-htmx"
-            html shouldContain "register-form-alpine"
-            html shouldContain "register-form-datastar"
-            // htmx implementation uses hx-post.
-            html shouldContain "hx-post"
-            // Alpine.js implementation uses x-data.
-            html shouldContain "x-data"
-            // Datastar implementation uses data-on-submit.
-            html shouldContain "data-on-submit"
-        }
-
-        test("the interactivity page Register form shows working previews per style") {
-            val html = interactivityPage()
-            // Preview wrapper with mb-4 not-prose class.
-            html shouldContain "class=\"mb-4 not-prose\""
-            // All three previews render the registration form card.
             html shouldContain "Create account"
-            // Form inputs are present in previews.
-            html shouldContain "type=\"text\""
-            html shouldContain "name=\"name\""
-            html shouldContain "type=\"email\""
-            html shouldContain "name=\"email\""
-            html shouldContain "type=\"password\""
-            html shouldContain "name=\"password\""
-            html shouldContain "name=\"confirm_password\""
-            // Submit button is present.
-            html shouldContain "Sign up"
-            // Result/error display elements are present.
+            html shouldNotContain "hx-post"
+            html shouldNotContain "data-on-submit"
+        }
+
+        test("the interactivity page uses Recipe Sections for composed examples") {
+            val html = interactivityPage()
+            html shouldContain "data-recipe-section=\"login-form\""
+            html shouldContain "data-recipe-section=\"register-form\""
+            html shouldContain "<h3>Preview</h3>"
+            html shouldContain "<h3>Server route</h3>"
+            html shouldContain "<h3>Page markup</h3>"
+            html shouldContain "<h3>Behavior notes</h3>"
+            html shouldContain "class=\"not-prose mb-6\""
+            html shouldContain "login-result"
             html shouldContain "register-result"
         }
         test("the button page has URL-driven Page Variants instead of interactive tabs") {
@@ -381,12 +351,13 @@ class PagesTest :
             // Client-side only, no server endpoints needed for this example.
         }
 
-        test("the interactivity page contains building blocks sections for all three libraries") {
-            val html = interactivityPage()
+        test("the interactivity page contains building blocks for the selected library") {
+            val html = interactivityPage("datastar")
             html shouldContain "Building blocks"
-            html shouldContain "htmx"
-            html shouldContain "Alpine.js"
             html shouldContain "Datastar"
+            html shouldContain "data-signals"
+            html shouldNotContain "hx-post"
+            html shouldNotContain "x-data"
         }
 
         test("the htmx building blocks section documents core primitives and uses attributes syntax") {
@@ -401,7 +372,7 @@ class PagesTest :
         }
 
         test("the Alpine.js building blocks section documents core primitives") {
-            val html = interactivityPage()
+            val html = interactivityPage("alpine")
             html shouldContain "x-data"
             html shouldContain "x-show"
             html shouldContain "x-on"
@@ -410,7 +381,7 @@ class PagesTest :
         }
 
         test("the Datastar building blocks section documents core primitives and notes SSE requirement") {
-            val html = interactivityPage()
+            val html = interactivityPage("datastar")
             html shouldContain "data-signals"
             html shouldContain "data-on"
             html shouldContain "SSE"
@@ -741,68 +712,38 @@ class PagesTest :
             html shouldContain "mButton"
         }
 
-        test("the interactivity page Login form shows all three library implementations") {
+        test("the interactivity page has URL-driven Page Variants instead of recipe tabs") {
             val html = interactivityPage()
-            // Login form tabs exist with unique IDs.
-            html shouldContain "login-form-htmx"
-            html shouldContain "login-form-alpine"
-            html shouldContain "login-form-datastar"
-            // htmx implementation uses hx-post.
-            html shouldContain "hx-post"
-            // Alpine.js implementation uses x-data.
-            html shouldContain "x-data"
-            // Datastar implementation uses data-on-submit.
-            html shouldContain "data-on-submit"
+            html shouldContain "Page variant"
+            html shouldContain "href=\"/guides/interactivity?variant=htmx\""
+            html shouldContain "href=\"/guides/interactivity?variant=alpine\""
+            html shouldContain "href=\"/guides/interactivity?variant=datastar\""
+            html shouldContain "aria-current=\"page\""
+            html shouldNotContain "login-form-alpine"
+            html shouldNotContain "register-form-datastar"
         }
 
-        test("the interactivity page Login form shows working previews per style") {
-            val html = interactivityPage()
-            // Preview wrapper with mb-4 not-prose class.
-            html shouldContain "class=\"mb-4 not-prose\""
-            // All three previews render the login form card.
+        test("the interactivity page renders only the selected recipe variant") {
+            val html = interactivityPage("alpine")
+            html shouldContain "Alpine.js"
+            html shouldContain "x-data"
+            html shouldContain "x-on:submit.prevent"
             html shouldContain "Login"
-            // Form inputs are present in previews.
-            html shouldContain "type=\"email\""
-            html shouldContain "name=\"email\""
-            html shouldContain "type=\"password\""
-            html shouldContain "name=\"password\""
-            // Submit button is present.
-            html shouldContain "Sign in"
-            // Result/error display elements are present.
-            html shouldContain "login-result"
-        }
-
-        test("the interactivity page Register form shows all three library implementations") {
-            val html = interactivityPage()
-            // Register form tabs exist with unique IDs.
-            html shouldContain "register-form-htmx"
-            html shouldContain "register-form-alpine"
-            html shouldContain "register-form-datastar"
-            // htmx implementation uses hx-post.
-            html shouldContain "hx-post"
-            // Alpine.js implementation uses x-data.
-            html shouldContain "x-data"
-            // Datastar implementation uses data-on-submit.
-            html shouldContain "data-on-submit"
-        }
-
-        test("the interactivity page Register form shows working previews per style") {
-            val html = interactivityPage()
-            // Preview wrapper with mb-4 not-prose class.
-            html shouldContain "class=\"mb-4 not-prose\""
-            // All three previews render the registration form card.
             html shouldContain "Create account"
-            // Form inputs are present in previews.
-            html shouldContain "type=\"text\""
-            html shouldContain "name=\"name\""
-            html shouldContain "type=\"email\""
-            html shouldContain "name=\"email\""
-            html shouldContain "type=\"password\""
-            html shouldContain "name=\"password\""
-            html shouldContain "name=\"confirm_password\""
-            // Submit button is present.
-            html shouldContain "Sign up"
-            // Result/error display elements are present.
+            html shouldNotContain "hx-post"
+            html shouldNotContain "data-on-submit"
+        }
+
+        test("the interactivity page uses Recipe Sections for composed examples") {
+            val html = interactivityPage()
+            html shouldContain "data-recipe-section=\"login-form\""
+            html shouldContain "data-recipe-section=\"register-form\""
+            html shouldContain "<h3>Preview</h3>"
+            html shouldContain "<h3>Server route</h3>"
+            html shouldContain "<h3>Page markup</h3>"
+            html shouldContain "<h3>Behavior notes</h3>"
+            html shouldContain "class=\"not-prose mb-6\""
+            html shouldContain "login-result"
             html shouldContain "register-result"
         }
         test("the default button interactive Page Variant is htmx") {
@@ -913,12 +854,13 @@ class PagesTest :
             // Client-side only, no server endpoints needed for this example.
         }
 
-        test("the interactivity page contains building blocks sections for all three libraries") {
-            val html = interactivityPage()
+        test("the interactivity page contains building blocks for the selected library") {
+            val html = interactivityPage("datastar")
             html shouldContain "Building blocks"
-            html shouldContain "htmx"
-            html shouldContain "Alpine.js"
             html shouldContain "Datastar"
+            html shouldContain "data-signals"
+            html shouldNotContain "hx-post"
+            html shouldNotContain "x-data"
         }
 
         test("the htmx building blocks section documents core primitives and uses attributes syntax") {
@@ -933,7 +875,7 @@ class PagesTest :
         }
 
         test("the Alpine.js building blocks section documents core primitives") {
-            val html = interactivityPage()
+            val html = interactivityPage("alpine")
             html shouldContain "x-data"
             html shouldContain "x-show"
             html shouldContain "x-on"
@@ -942,7 +884,7 @@ class PagesTest :
         }
 
         test("the Datastar building blocks section documents core primitives and notes SSE requirement") {
-            val html = interactivityPage()
+            val html = interactivityPage("datastar")
             html shouldContain "data-signals"
             html shouldContain "data-on"
             html shouldContain "SSE"

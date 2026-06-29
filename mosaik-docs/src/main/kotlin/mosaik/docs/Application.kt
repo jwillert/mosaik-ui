@@ -29,6 +29,8 @@ fun Application.module() {
                     when {
                         page == BUTTON && isPartial -> buttonPagePartial(variant)
                         page == BUTTON -> buttonPage(variant)
+                        page == INTERACTIVITY && isPartial -> interactivityPagePartial(variant)
+                        page == INTERACTIVITY -> interactivityPage(variant)
                         isPartial -> page.renderPartial()
                         else -> page.render()
                     }

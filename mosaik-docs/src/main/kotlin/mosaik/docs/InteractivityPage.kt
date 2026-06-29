@@ -16,1089 +16,496 @@ import mosaik.ui.components.mLabelText
 import mosaik.ui.components.mLoading
 import mosaik.ui.components.mTable
 
-/**
- * Interactivity page content block for use in both full-page and partial renders.
- */
-fun FlowContent.interactivityPageContent() {
+const val DEFAULT_INTERACTIVITY_PAGE_VARIANT_ID = "htmx"
+
+private data class InteractivityPageVariant(
+    val id: String,
+    val label: String,
+    val login: Recipe,
+    val register: Recipe,
+)
+
+private data class Recipe(
+    val intro: String,
+    val serverRoute: String,
+    val pageMarkup: String,
+    val notes: List<String>,
+    val preview: FlowContent.() -> Unit,
+)
+
+/** Interactivity page content block for use in both full-page and partial renders. */
+fun FlowContent.interactivityPageContent(variant: String? = DEFAULT_INTERACTIVITY_PAGE_VARIANT_ID) {
+    val selectedVariant = interactivityPageVariant(variant)
+
     h1 { +"Interactivity" }
     p {
-        +"Mosaik components are CSS-only — they carry no built-in JavaScript. To "
-        +"add client-side behavior (form validation, dropdown menus, live search) "
-        +"you reach for a JavaScript library. This guide shows the same examples "
-        +"built with htmx, Alpine.js, and Datastar, so you can compare patterns and "
-        +"pick the one that fits."
+        +"Mosaik components are CSS-only — they carry no built-in JavaScript. To add "
+        +"client-side behavior (form validation, dropdown menus, live search) you pair "
+        +"the same Kotlin markup with a small client library. This guide is rendered as "
+        +"page-local variants so the URL shows one practical stack at a time."
     }
+    interactivityPageVariantSelector(selectedVariant)
 
-    section {
-        h2 { +"Login form" }
-        p {
+    recipeSection(
+        id = "login-form",
+        title = "Login form",
+        composition = {
             +"A login form built with "
             code { +"mCard" }
             +", "
             code { +"mButton" }
-            +", and raw HTML form inputs. Each library wires client-side behavior "
-            +"(async submit, loading state, error display) onto the same Kotlin code."
-        }
-        p {
-            +"The htmx example posts to "
-            code { +"/api/login" }
-            +". Here's the corresponding Ktor route:"
-        }
-        pre {
-            code {
-                +
-                    """
-fun Application.module() {
-    routing {
-        post("/api/login") {
-            val params = call.receiveParameters()
-            val email = params["email"]
-            val password = params["password"]
+            +", and raw HTML form inputs. The selected variant wires async submit, "
+            +"loading state, and result display onto that same component composition."
+        },
+        recipe = selectedVariant.login,
+    )
 
-            // Validate credentials (replace with your auth logic)
-            if (email == "user@example.com" && password == "secret") {
-                call.response.headers.append("HX-Redirect", "/dashboard")
-                call.respondText("Login successful", ContentType.Text.Plain)
-            } else {
-                call.response.status(HttpStatusCode.Unauthorized)
-                call.respondText("Invalid email or password", ContentType.Text.Plain)
-            }
-        }
-    }
-}
-                    """.trimIndent()
-            }
-        }
-        p {
-            +"The Alpine.js and Datastar examples expect JSON. Here's the route for those:"
-        }
-        pre {
-            code {
-                +
-                    """
-@Serializable
-data class LoginRequest(val email: String, val password: String)
-
-fun Application.module() {
-    install(ContentNegotiation) { json() }
-    routing {
-        post("/api/login") {
-            val req = call.receive<LoginRequest>()
-
-            // Validate credentials (replace with your auth logic)
-            if (req.email == "user@example.com" && req.password == "secret") {
-                call.respondText("OK", ContentType.Text.Plain)
-            } else {
-                call.response.status(HttpStatusCode.Unauthorized)
-                call.respondText("Invalid email or password", ContentType.Text.Plain)
-            }
-        }
-    }
-}
-                    """.trimIndent()
-            }
-        }
-        interactivityTabs(
-            id = "login-form",
-            htmxPreview = {
-                mCard("w-96 bg-base-100 shadow-xl") {
-                    form {
-                        attributes["hx-post"] = "/_examples/login"
-                        attributes["hx-target"] = "#login-result"
-                        attributes["hx-indicator"] = "#login-spinner"
-
-                        mCardBody {
-                            mCardTitle { +"Login" }
-
-                            mFormControl("w-full") {
-                                mLabel {
-                                    mLabelText { +"Email" }
-                                }
-                                mInput(type = InputType.email, classes = "w-full") {
-                                    name = "email"
-                                    required = true
-                                }
-                            }
-
-                            mFormControl("w-full") {
-                                mLabel {
-                                    mLabelText { +"Password" }
-                                }
-                                mInput(type = InputType.password, classes = "w-full") {
-                                    name = "password"
-                                    required = true
-                                }
-                            }
-
-                            div("mt-2") {
-                                id = "login-result"
-                                attributes["role"] = "region"
-                                attributes["aria-live"] = "polite"
-                            }
-
-                            mCardActions("justify-end") {
-                                mButton(variant = ButtonVariant.Primary) {
-                                    type = ButtonType.submit
-                                    span { +"Sign in" }
-                                    mLoading(LoadingType.Spinner, Size.Sm, "htmx-indicator") {
-                                        id = "login-spinner"
-                                        attributes["style"] = "display:none;"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            alpinePreview = {
-                mCard("w-96 bg-base-100 shadow-xl") {
-                    form {
-                        attributes["x-data"] = "{ email: '', password: '', loading: false, error: '' }"
-                        attributes["x-on:submit.prevent"] =
-                            "loading = true; error = ''; " +
-                            "fetch('/_examples/login', { method: 'POST', " +
-                            "headers: { 'Content-Type': 'application/json' }, " +
-                            "body: JSON.stringify({ email, password }) })" +
-                            ".then(r => r.ok ? alert('Login successful!') : r.text().then(t => error = t))" +
-                            ".catch(e => error = 'Network error').finally(() => loading = false)"
-
-                        mCardBody {
-                            mCardTitle { +"Login" }
-
-                            mFormControl("w-full") {
-                                mLabel {
-                                    mLabelText { +"Email" }
-                                }
-                                mInput(type = InputType.email, classes = "w-full") {
-                                    name = "email"
-                                    required = true
-                                    attributes["x-model"] = "email"
-                                }
-                            }
-
-                            mFormControl("w-full") {
-                                mLabel {
-                                    mLabelText { +"Password" }
-                                }
-                                mInput(type = InputType.password, classes = "w-full") {
-                                    name = "password"
-                                    required = true
-                                    attributes["x-model"] = "password"
-                                }
-                            }
-
-                            div("mt-2 text-error text-sm") {
-                                attributes["x-show"] = "error"
-                                attributes["x-text"] = "error"
-                                attributes["role"] = "alert"
-                            }
-
-                            mCardActions("justify-end") {
-                                mButton(variant = ButtonVariant.Primary) {
-                                    attributes["x-bind:disabled"] = "loading"
-                                    span {
-                                        attributes["x-show"] = "!loading"
-                                        +"Sign in"
-                                    }
-                                    mLoading(LoadingType.Spinner, Size.Sm) {
-                                        attributes["x-show"] = "loading"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            datastarPreview = {
-                mCard("w-96 bg-base-100 shadow-xl") {
-                    form {
-                        attributes["data-on-submit"] = "\$\$post('/_examples/login')"
-                        attributes["data-signals"] = "{ email: '', password: '', loading: false, error: '' }"
-
-                        mCardBody {
-                            mCardTitle { +"Login" }
-
-                            mFormControl("w-full") {
-                                mLabel {
-                                    mLabelText { +"Email" }
-                                }
-                                mInput(type = InputType.email, classes = "w-full") {
-                                    name = "email"
-                                    required = true
-                                    attributes["data-model"] = "email"
-                                }
-                            }
-
-                            mFormControl("w-full") {
-                                mLabel {
-                                    mLabelText { +"Password" }
-                                }
-                                mInput(type = InputType.password, classes = "w-full") {
-                                    name = "password"
-                                    required = true
-                                    attributes["data-model"] = "password"
-                                }
-                            }
-
-                            div("mt-2 text-error text-sm") {
-                                attributes["data-show"] = "\$error"
-                                attributes["data-text"] = "\$error"
-                                attributes["role"] = "alert"
-                            }
-
-                            mCardActions("justify-end") {
-                                mButton(variant = ButtonVariant.Primary) {
-                                    attributes["data-bind-disabled"] = "\$loading"
-                                    span {
-                                        attributes["data-show"] = "!\$loading"
-                                        +"Sign in"
-                                    }
-                                    mLoading(LoadingType.Spinner, Size.Sm) {
-                                        attributes["data-show"] = "\$loading"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            htmxCode =
-                """
-mCard("w-96 bg-base-100 shadow-xl") {
-    form {
-        attributes["hx-post"] = "/api/login"
-        attributes["hx-target"] = "#login-result"
-        attributes["hx-indicator"] = "#login-spinner"
-
-        mCardBody {
-            mCardTitle { +"Login" }
-
-            mFormControl("w-full") {
-                mLabel {
-                    mLabelText { +"Email" }
-                }
-                mInput(type = InputType.email, classes = "w-full") {
-                    name = "email"
-                    required = true
-                }
-            }
-
-            mFormControl("w-full") {
-                mLabel {
-                    mLabelText { +"Password" }
-                }
-                mInput(type = InputType.password, classes = "w-full") {
-                    name = "password"
-                    required = true
-                }
-            }
-
-            div("mt-2") {
-                id = "login-result"
-                attributes["role"] = "region"
-                attributes["aria-live"] = "polite"
-            }
-
-            mCardActions("justify-end") {
-                mButton(variant = ButtonVariant.Primary) {
-                    span { +"Sign in" }
-                    mLoading(LoadingType.Spinner, Size.Sm, "htmx-indicator") {
-                        id = "login-spinner"
-                        attributes["style"] = "display:none;"
-                    }
-                }
-            }
-        }
-    }
-}
-                """.trimIndent(),
-            alpineCode =
-                """
-mCard("w-96 bg-base-100 shadow-xl") {
-    form {
-        attributes["x-data"] = "{ email: '', password: '', loading: false, error: '' }"
-        attributes["x-on:submit.prevent"] = "loading = true; error = ''; " +
-            "fetch('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, " +
-            "body: JSON.stringify({ email, password }) }).then(r => r.ok ? location.href = '/dashboard' : " +
-            "r.text().then(t => error = t)).catch(e => error = 'Network error').finally(() => loading = false)"
-
-        mCardBody {
-            mCardTitle { +"Login" }
-
-            mFormControl("w-full") {
-                mLabel {
-                    mLabelText { +"Email" }
-                }
-                mInput(type = InputType.email, classes = "w-full") {
-                    name = "email"
-                    required = true
-                    attributes["x-model"] = "email"
-                }
-            }
-
-            mFormControl("w-full") {
-                mLabel {
-                    mLabelText { +"Password" }
-                }
-                mInput(type = InputType.password, classes = "w-full") {
-                    name = "password"
-                    required = true
-                    attributes["x-model"] = "password"
-                }
-            }
-
-            div("mt-2 text-error text-sm") {
-                attributes["x-show"] = "error"
-                attributes["x-text"] = "error"
-                attributes["role"] = "alert"
-            }
-
-            mCardActions("justify-end") {
-                mButton(variant = ButtonVariant.Primary) {
-                    attributes["x-bind:disabled"] = "loading"
-                    span {
-                        attributes["x-show"] = "!loading"
-                        +"Sign in"
-                    }
-                    mLoading(LoadingType.Spinner, Size.Sm) {
-                        attributes["x-show"] = "loading"
-                    }
-                }
-            }
-        }
-    }
-}
-                """.trimIndent(),
-            datastarCode =
-                """
-mCard("w-96 bg-base-100 shadow-xl") {
-    form {
-        attributes["data-on-submit"] = "${'$'}${'$'}post('/api/login')"
-        attributes["data-signals"] = "{ loading: false, error: '' }"
-
-        mCardBody {
-            mCardTitle { +"Login" }
-
-            mFormControl("w-full") {
-                mLabel {
-                    mLabelText { +"Email" }
-                }
-                mInput(type = InputType.email, classes = "w-full") {
-                    name = "email"
-                    required = true
-                    attributes["data-model"] = "email"
-                }
-            }
-
-            mFormControl("w-full") {
-                mLabel {
-                    mLabelText { +"Password" }
-                }
-                mInput(type = InputType.password, classes = "w-full") {
-                    name = "password"
-                    required = true
-                    attributes["data-model"] = "password"
-                }
-            }
-
-            div("mt-2 text-error text-sm") {
-                attributes["data-show"] = "${'$'}error"
-                attributes["data-text"] = "${'$'}error"
-                attributes["role"] = "alert"
-            }
-
-            mCardActions("justify-end") {
-                mButton(variant = ButtonVariant.Primary) {
-                    attributes["data-bind-disabled"] = "${'$'}loading"
-                    span {
-                        attributes["data-show"] = "!${'$'}loading"
-                        +"Sign in"
-                    }
-                    mLoading(LoadingType.Spinner, Size.Sm) {
-                        attributes["data-show"] = "${'$'}loading"
-                    }
-                }
-            }
-        }
-    }
-}
-                """.trimIndent(),
-        )
-    }
-
-    section {
-        h2 { +"Register form" }
-        p {
-            +"A registration form with multiple fields, validation, and error "
-            +"handling. Built with "
+    recipeSection(
+        id = "register-form",
+        title = "Register form",
+        composition = {
+            +"A registration form with multiple fields, validation, and error handling. "
+            +"It uses the same "
             code { +"mCard" }
             +" and "
             code { +"mButton" }
-            +", the form wiring is identical to Login — only the fields change."
-        }
-        p {
-            +"The htmx example posts to "
-            code { +"/api/register" }
-            +". Here's the corresponding Ktor route:"
-        }
-        pre {
-            code {
-                +
-                    """
-fun Application.module() {
-    routing {
-        post("/api/register") {
-            val params = call.receiveParameters()
-            val name = params["name"]
-            val email = params["email"]
-            val password = params["password"]
-            val confirmPassword = params["confirm_password"]
+            +" structure as Login while the behavior layer changes per variant."
+        },
+        recipe = selectedVariant.register,
+    )
 
-            // Validate passwords match
-            if (password != confirmPassword) {
-                call.response.status(HttpStatusCode.BadRequest)
-                call.respondText("Passwords do not match", ContentType.Text.Plain)
-                return@post
-            }
-
-            // Validate password strength (example: minimum 8 characters)
-            if (password.isNullOrBlank() || password.length < 8) {
-                call.response.status(HttpStatusCode.BadRequest)
-                call.respondText("Password must be at least 8 characters", ContentType.Text.Plain)
-                return@post
-            }
-
-            // Register user (replace with your registration logic)
-            // saveUser(name, email, password)
-
-            call.response.headers.append("HX-Redirect", "/welcome")
-            call.respondText("Registration successful", ContentType.Text.Plain)
-        }
-    }
+    buildingBlocksSection(selectedVariant)
+    comparisonSection()
 }
-                    """.trimIndent()
-            }
-        }
-        p {
-            +"The Alpine.js and Datastar examples expect JSON. Here's the route for those:"
-        }
-        pre {
-            code {
-                +
-                    """
-@Serializable
-data class RegisterRequest(val name: String, val email: String, val password: String)
 
-fun Application.module() {
-    install(ContentNegotiation) { json() }
-    routing {
-        post("/api/register") {
-            val req = call.receive<RegisterRequest>()
+private fun interactivityPageVariant(id: String?): InteractivityPageVariant =
+    INTERACTIVITY_PAGE_VARIANTS.firstOrNull { it.id == id }
+        ?: INTERACTIVITY_PAGE_VARIANTS.first { it.id == DEFAULT_INTERACTIVITY_PAGE_VARIANT_ID }
 
-            // Validate password strength (example: minimum 8 characters)
-            if (req.password.length < 8) {
-                call.response.status(HttpStatusCode.BadRequest)
-                call.respondText("Password must be at least 8 characters", ContentType.Text.Plain)
-                return@post
-            }
-
-            // Register user (replace with your registration logic)
-            // saveUser(req.name, req.email, req.password)
-
-            call.respondText("OK", ContentType.Text.Plain)
-        }
-    }
-}
-                    """.trimIndent()
-            }
-        }
-        interactivityTabs(
-            id = "register-form",
-            htmxPreview = {
-                mCard("w-96 bg-base-100 shadow-xl") {
-                    form {
-                        attributes["hx-post"] = "/_examples/register"
-                        attributes["hx-target"] = "#register-result"
-                        attributes["hx-indicator"] = "#register-spinner"
-
-                        mCardBody {
-                            mCardTitle { +"Create account" }
-
-                            mFormControl("w-full") {
-                                mLabel {
-                                    mLabelText { +"Name" }
-                                }
-                                mInput(type = InputType.text, classes = "w-full") {
-                                    name = "name"
-                                    required = true
-                                }
-                            }
-
-                            mFormControl("w-full") {
-                                mLabel {
-                                    mLabelText { +"Email" }
-                                }
-                                mInput(type = InputType.email, classes = "w-full") {
-                                    name = "email"
-                                    required = true
-                                }
-                            }
-
-                            mFormControl("w-full") {
-                                mLabel {
-                                    mLabelText { +"Password" }
-                                }
-                                mInput(type = InputType.password, classes = "w-full") {
-                                    name = "password"
-                                    required = true
-                                    attributes["minlength"] = "8"
-                                }
-                            }
-
-                            mFormControl("w-full") {
-                                mLabel {
-                                    mLabelText { +"Confirm password" }
-                                }
-                                mInput(type = InputType.password, classes = "w-full") {
-                                    name = "confirm_password"
-                                    required = true
-                                }
-                            }
-
-                            div("mt-2") {
-                                id = "register-result"
-                                attributes["role"] = "region"
-                                attributes["aria-live"] = "polite"
-                            }
-
-                            mCardActions("justify-end") {
-                                mButton(variant = ButtonVariant.Primary) {
-                                    span { +"Sign up" }
-                                    mLoading(LoadingType.Spinner, Size.Sm, "htmx-indicator") {
-                                        id = "register-spinner"
-                                        attributes["style"] = "display:none;"
-                                    }
-                                }
-                            }
-                        }
-                    }
+private fun FlowContent.interactivityPageVariantSelector(selectedVariant: InteractivityPageVariant) {
+    nav(classes = "not-prose mb-6 flex flex-wrap items-center gap-2") {
+        attributes["aria-label"] = "Page variant"
+        span("text-sm font-medium") { +"Page variant" }
+        INTERACTIVITY_PAGE_VARIANTS.forEach { variant ->
+            a(classes = "rounded border border-base-300 px-3 py-1 text-sm hover:bg-base-200") {
+                href = "${INTERACTIVITY.path}?variant=${variant.id}"
+                attributes["data-page-variant"] = variant.id
+                if (variant.id == selectedVariant.id) {
+                    attributes["aria-current"] = "page"
+                    classes += " bg-base-200"
                 }
-            },
-            alpinePreview = {
-                mCard("w-96 bg-base-100 shadow-xl") {
-                    form {
-                        attributes["x-data"] =
-                            "{ name: '', email: '', password: '', confirmPassword: '', loading: false, error: '' }"
-                        attributes["x-on:submit.prevent"] =
-                            "if (password !== confirmPassword) { error = 'Passwords do not match'; return; } " +
-                            "loading = true; error = ''; " +
-                            "fetch('/_examples/register', { method: 'POST', " +
-                            "headers: { 'Content-Type': 'application/json' }, " +
-                            "body: JSON.stringify({ name, email, password }) })" +
-                            ".then(r => r.ok ? alert('Registration successful!') : r.text().then(t => error = t))" +
-                            ".catch(e => error = 'Network error').finally(() => loading = false)"
-
-                        mCardBody {
-                            mCardTitle { +"Create account" }
-
-                            mFormControl("w-full") {
-                                mLabel {
-                                    mLabelText { +"Name" }
-                                }
-                                mInput(type = InputType.text, classes = "w-full") {
-                                    name = "name"
-                                    required = true
-                                    attributes["x-model"] = "name"
-                                }
-                            }
-
-                            mFormControl("w-full") {
-                                mLabel {
-                                    mLabelText { +"Email" }
-                                }
-                                mInput(type = InputType.email, classes = "w-full") {
-                                    name = "email"
-                                    required = true
-                                    attributes["x-model"] = "email"
-                                }
-                            }
-
-                            mFormControl("w-full") {
-                                mLabel {
-                                    mLabelText { +"Password" }
-                                }
-                                mInput(type = InputType.password, classes = "w-full") {
-                                    name = "password"
-                                    required = true
-                                    attributes["minlength"] = "8"
-                                    attributes["x-model"] = "password"
-                                }
-                            }
-
-                            mFormControl("w-full") {
-                                mLabel {
-                                    mLabelText { +"Confirm password" }
-                                }
-                                mInput(type = InputType.password, classes = "w-full") {
-                                    name = "confirm_password"
-                                    required = true
-                                    attributes["x-model"] = "confirmPassword"
-                                }
-                            }
-
-                            div("mt-2 text-error text-sm") {
-                                attributes["x-show"] = "error"
-                                attributes["x-text"] = "error"
-                                attributes["role"] = "alert"
-                            }
-
-                            mCardActions("justify-end") {
-                                mButton(variant = ButtonVariant.Primary) {
-                                    attributes["x-bind:disabled"] = "loading"
-                                    span {
-                                        attributes["x-show"] = "!loading"
-                                        +"Sign up"
-                                    }
-                                    mLoading(LoadingType.Spinner, Size.Sm) {
-                                        attributes["x-show"] = "loading"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            datastarPreview = {
-                mCard("w-96 bg-base-100 shadow-xl") {
-                    form {
-                        attributes["data-on-submit"] =
-                            "if (\$password !== \$confirmPassword) { \$error = 'Passwords do not match'; return; } \$\$post('/_examples/register')"
-                        attributes["data-signals"] =
-                            "{ name: '', email: '', password: '', confirmPassword: '', loading: false, error: '' }"
-
-                        mCardBody {
-                            mCardTitle { +"Create account" }
-
-                            mFormControl("w-full") {
-                                mLabel {
-                                    mLabelText { +"Name" }
-                                }
-                                mInput(type = InputType.text, classes = "w-full") {
-                                    name = "name"
-                                    required = true
-                                    attributes["data-model"] = "name"
-                                }
-                            }
-
-                            mFormControl("w-full") {
-                                mLabel {
-                                    mLabelText { +"Email" }
-                                }
-                                mInput(type = InputType.email, classes = "w-full") {
-                                    name = "email"
-                                    required = true
-                                    attributes["data-model"] = "email"
-                                }
-                            }
-
-                            mFormControl("w-full") {
-                                mLabel {
-                                    mLabelText { +"Password" }
-                                }
-                                mInput(type = InputType.password, classes = "w-full") {
-                                    name = "password"
-                                    required = true
-                                    attributes["minlength"] = "8"
-                                    attributes["data-model"] = "password"
-                                }
-                            }
-
-                            mFormControl("w-full") {
-                                mLabel {
-                                    mLabelText { +"Confirm password" }
-                                }
-                                mInput(type = InputType.password, classes = "w-full") {
-                                    name = "confirm_password"
-                                    required = true
-                                    attributes["data-model"] = "confirmPassword"
-                                }
-                            }
-
-                            div("mt-2 text-error text-sm") {
-                                attributes["data-show"] = "\$error"
-                                attributes["data-text"] = "\$error"
-                                attributes["role"] = "alert"
-                            }
-
-                            mCardActions("justify-end") {
-                                mButton(variant = ButtonVariant.Primary) {
-                                    attributes["data-bind-disabled"] = "\$loading"
-                                    span {
-                                        attributes["data-show"] = "!\$loading"
-                                        +"Sign up"
-                                    }
-                                    mLoading(LoadingType.Spinner, Size.Sm) {
-                                        attributes["data-show"] = "\$loading"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            htmxCode =
-                """
-mCard("w-96 bg-base-100 shadow-xl") {
-    form {
-        attributes["hx-post"] = "/api/register"
-        attributes["hx-target"] = "#register-result"
-        attributes["hx-indicator"] = "#register-spinner"
-
-        mCardBody {
-            mCardTitle { +"Create account" }
-
-            mFormControl("w-full") {
-                mLabel {
-                    mLabelText { +"Name" }
-                }
-                mInput(type = InputType.text, classes = "w-full") {
-                    name = "name"
-                    required = true
-                }
-            }
-
-            mFormControl("w-full") {
-                mLabel {
-                    mLabelText { +"Email" }
-                }
-                mInput(type = InputType.email, classes = "w-full") {
-                    name = "email"
-                    required = true
-                }
-            }
-
-            mFormControl("w-full") {
-                mLabel {
-                    mLabelText { +"Password" }
-                }
-                mInput(type = InputType.password, classes = "w-full") {
-                    name = "password"
-                    required = true
-                    attributes["minlength"] = "8"
-                }
-            }
-
-            mFormControl("w-full") {
-                mLabel {
-                    mLabelText { +"Confirm password" }
-                }
-                mInput(type = InputType.password, classes = "w-full") {
-                    name = "confirm_password"
-                    required = true
-                }
-            }
-
-            div("mt-2") {
-                id = "register-result"
-                attributes["role"] = "region"
-                attributes["aria-live"] = "polite"
-            }
-
-            mCardActions("justify-end") {
-                mButton(variant = ButtonVariant.Primary) {
-                    span { +"Sign up" }
-                    mLoading(LoadingType.Spinner, Size.Sm, "htmx-indicator") {
-                        id = "register-spinner"
-                        attributes["style"] = "display:none;"
-                    }
-                }
+                +variant.label
             }
         }
     }
 }
-                """.trimIndent(),
-            alpineCode =
-                """
-mCard("w-96 bg-base-100 shadow-xl") {
-    form {
-        attributes["x-data"] = "{ name: '', email: '', password: '', confirmPassword: '', loading: false, error: '' }"
-        attributes["x-on:submit.prevent"] = "if (password !== confirmPassword) { error = 'Passwords do not match'; return; } " +
-            "loading = true; error = ''; " +
-            "fetch('/api/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, " +
-            "body: JSON.stringify({ name, email, password }) }).then(r => r.ok ? location.href = '/welcome' : " +
-            "r.text().then(t => error = t)).catch(e => error = 'Network error').finally(() => loading = false)"
 
-        mCardBody {
-            mCardTitle { +"Create account" }
+private fun FlowContent.recipeSection(
+    id: String,
+    title: String,
+    composition: FlowContent.() -> Unit,
+    recipe: Recipe,
+) {
+    section("mb-12") {
+        attributes["data-recipe-section"] = id
+        h2 { +title }
+        p { composition.invoke(this) }
+        p { +recipe.intro }
 
-            mFormControl("w-full") {
-                mLabel {
-                    mLabelText { +"Name" }
-                }
-                mInput(type = InputType.text, classes = "w-full") {
-                    name = "name"
-                    required = true
-                    attributes["x-model"] = "name"
+        h3 { +"Preview" }
+        div("not-prose mb-6") { recipe.preview.invoke(this) }
+
+        h3 { +"Server route" }
+        codeBlock(recipe.serverRoute)
+
+        h3 { +"Page markup" }
+        codeBlock(recipe.pageMarkup)
+
+        h3 { +"Behavior notes" }
+        ul {
+            recipe.notes.forEach { note -> li { +note } }
+        }
+    }
+}
+
+private val htmxLoginRecipe =
+    Recipe(
+        intro =
+            "htmx keeps the browser behavior declarative: the form posts as regular form data " +
+                "and swaps the server response into a result region.",
+        serverRoute =
+            """
+            post("/api/login") {
+                val params = call.receiveParameters()
+                if (params["email"] == "user@example.com" && params["password"] == "secret") {
+                    call.response.headers.append("HX-Redirect", "/dashboard")
+                    call.respondText("Login successful", ContentType.Text.Plain)
+                } else {
+                    call.response.status(HttpStatusCode.Unauthorized)
+                    call.respondText("Invalid email or password", ContentType.Text.Plain)
                 }
             }
-
-            mFormControl("w-full") {
-                mLabel {
-                    mLabelText { +"Email" }
-                }
-                mInput(type = InputType.email, classes = "w-full") {
-                    name = "email"
-                    required = true
-                    attributes["x-model"] = "email"
-                }
-            }
-
-            mFormControl("w-full") {
-                mLabel {
-                    mLabelText { +"Password" }
-                }
-                mInput(type = InputType.password, classes = "w-full") {
-                    name = "password"
-                    required = true
-                    attributes["minlength"] = "8"
-                    attributes["x-model"] = "password"
+            """.trimIndent(),
+        pageMarkup =
+            """
+            mCard("w-96 bg-base-100 shadow-xl") {
+                form {
+                    attributes["hx-post"] = "/api/login"
+                    attributes["hx-target"] = "#login-result"
+                    attributes["hx-indicator"] = "#login-spinner"
+                    // fields...
+                    mButton(variant = ButtonVariant.Primary) { +"Sign in" }
                 }
             }
+            """.trimIndent(),
+        notes =
+            listOf(
+                "Use htmx when the server can render the next HTML fragment.",
+                "The loading spinner is controlled by the htmx-indicator class.",
+            ),
+        preview = { loginPreview("htmx") },
+    )
 
-            mFormControl("w-full") {
-                mLabel {
-                    mLabelText { +"Confirm password" }
-                }
-                mInput(type = InputType.password, classes = "w-full") {
-                    name = "confirm_password"
-                    required = true
-                    attributes["x-model"] = "confirmPassword"
+private val alpineLoginRecipe =
+    Recipe(
+        intro = "Alpine.js owns local state in the page and calls fetch from an x-on submit handler.",
+        serverRoute =
+            """
+            @Serializable
+            data class LoginRequest(val email: String, val password: String)
+
+            post("/api/login") {
+                val req = call.receive<LoginRequest>()
+                if (req.email == "user@example.com" && req.password == "secret") {
+                    call.respondText("OK", ContentType.Text.Plain)
+                } else {
+                    call.response.status(HttpStatusCode.Unauthorized)
+                    call.respondText("Invalid email or password", ContentType.Text.Plain)
                 }
             }
+            """.trimIndent(),
+        pageMarkup =
+            """
+            form {
+                attributes["x-data"] = "{ email: '', password: '', loading: false, error: '' }"
+                attributes["x-on:submit.prevent"] = "loading = true; fetch('/api/login', { method: 'POST' })"
+                // fields use x-model; button uses x-bind:disabled
+            }
+            """.trimIndent(),
+        notes =
+            listOf(
+                "Use Alpine.js when validation or UI state can stay local to the form.",
+                "The endpoint can return JSON or plain text because Alpine handles the response explicitly.",
+            ),
+        preview = { loginPreview("alpine") },
+    )
 
-            div("mt-2 text-error text-sm") {
+private val datastarLoginRecipe =
+    Recipe(
+        intro = "Datastar stores form state in signals and submits with data-on-submit.",
+        serverRoute =
+            """
+            post("/api/login") {
+                val params = call.receiveParameters()
+                call.respondText("Login successful", ContentType.Text.Plain)
+            }
+            """.trimIndent(),
+        pageMarkup =
+            """
+            form {
+                attributes["data-signals"] = "{ email: '', password: '', loading: false, error: '' }"
+                attributes["data-on-submit"] = "${'$'}${'$'}post('/api/login')"
+                // fields use data-model; button uses data-bind-disabled
+            }
+            """.trimIndent(),
+        notes =
+            listOf(
+                "Use Datastar when the same page also needs signal-driven or SSE updates.",
+                "Keep signal names local to the recipe to avoid collisions.",
+            ),
+        preview = { loginPreview("datastar") },
+    )
+
+private val htmxRegisterRecipe =
+    Recipe(
+        intro = "htmx submits all fields as form data and lets the server enforce validation rules.",
+        serverRoute =
+            """
+            post("/api/register") {
+                val params = call.receiveParameters()
+                if (params["password"] != params["confirm_password"]) {
+                    call.response.status(HttpStatusCode.BadRequest)
+                    call.respondText("Passwords do not match", ContentType.Text.Plain)
+                    return@post
+                }
+                call.response.headers.append("HX-Redirect", "/welcome")
+                call.respondText("Registration successful", ContentType.Text.Plain)
+            }
+            """.trimIndent(),
+        pageMarkup =
+            """
+            form {
+                attributes["hx-post"] = "/api/register"
+                attributes["hx-target"] = "#register-result"
+                attributes["hx-indicator"] = "#register-spinner"
+                // fields...
+            }
+            """.trimIndent(),
+        notes =
+            listOf(
+                "Server validation remains authoritative.",
+                "The response region doubles as an accessible live region.",
+            ),
+        preview = { registerPreview("htmx") },
+    )
+
+private val alpineRegisterRecipe =
+    Recipe(
+        intro = "Alpine.js performs immediate password confirmation before calling the server.",
+        serverRoute =
+            """
+            @Serializable
+            data class RegisterRequest(val name: String, val email: String, val password: String)
+
+            post("/api/register") {
+                val req = call.receive<RegisterRequest>()
+                require(req.password.length >= 8)
+                call.respondText("OK", ContentType.Text.Plain)
+            }
+            """.trimIndent(),
+        pageMarkup =
+            """
+            form {
+                attributes["x-data"] =
+                    "{ name: '', email: '', password: '', confirmPassword: '', loading: false, error: '' }"
+                attributes["x-on:submit.prevent"] =
+                    "if (password !== confirmPassword) { error = 'Passwords do not match'; return; }"
+                // fields use x-model
+            }
+            """.trimIndent(),
+        notes =
+            listOf(
+                "Client validation improves feedback but does not replace server validation.",
+                "Use x-model when multiple controls feed the same submit handler.",
+            ),
+        preview = { registerPreview("alpine") },
+    )
+
+private val datastarRegisterRecipe =
+    Recipe(
+        intro = "Datastar keeps fields as signals and can reject mismatched passwords before posting.",
+        serverRoute =
+            """
+            post("/api/register") {
+                val params = call.receiveParameters()
+                call.respondText("Registration successful", ContentType.Text.Plain)
+            }
+            """.trimIndent(),
+        pageMarkup =
+            """
+            form {
+                attributes["data-signals"] =
+                    "{ name: '', email: '', password: '', confirmPassword: '', loading: false, error: '' }"
+                attributes["data-on-submit"] =
+                    "if (${'$'}password !== ${'$'}confirmPassword) { ${'$'}error = 'Passwords do not match'; return; } " +
+                        "${'$'}${'$'}post('/api/register')"
+                // fields use data-model
+            }
+            """.trimIndent(),
+        notes =
+            listOf(
+                "Signals keep behavior declarative in markup.",
+                "Pair this with SSE endpoints when the registration flow needs live server feedback.",
+            ),
+        preview = { registerPreview("datastar") },
+    )
+
+private val INTERACTIVITY_PAGE_VARIANTS =
+    listOf(
+        InteractivityPageVariant(
+            id = "htmx",
+            label = "htmx",
+            login = htmxLoginRecipe,
+            register = htmxRegisterRecipe,
+        ),
+        InteractivityPageVariant(
+            id = "alpine",
+            label = "Alpine.js",
+            login = alpineLoginRecipe,
+            register = alpineRegisterRecipe,
+        ),
+        InteractivityPageVariant(
+            id = "datastar",
+            label = "Datastar",
+            login = datastarLoginRecipe,
+            register = datastarRegisterRecipe,
+        ),
+    )
+
+val INTERACTIVITY_PAGE_VARIANT_IDS: List<String> = INTERACTIVITY_PAGE_VARIANTS.map { it.id }
+
+private fun FlowContent.loginPreview(style: String) {
+    mCard("w-96 bg-base-100 shadow-xl") {
+        form {
+            when (style) {
+                "htmx" -> {
+                    attributes["hx-post"] = "/_examples/login"
+                    attributes["hx-target"] = "#login-result"
+                    attributes["hx-indicator"] = "#login-spinner"
+                }
+                "alpine" -> {
+                    attributes["x-data"] = "{ email: '', password: '', loading: false, error: '' }"
+                    attributes["x-on:submit.prevent"] =
+                        "loading = true; fetch('/_examples/login', { method: 'POST' }).finally(() => loading = false)"
+                }
+                "datastar" -> {
+                    attributes["data-signals"] = "{ email: '', password: '', loading: false, error: '' }"
+                    attributes["data-on-submit"] = "${'$'}${'$'}post('/_examples/login')"
+                }
+            }
+            mCardBody {
+                mCardTitle { +"Login" }
+                authField("Email", InputType.email, "email", style)
+                authField("Password", InputType.password, "password", style)
+                resultRegion("login-result", style)
+                mCardActions("justify-end") { submitButton("Sign in", "login-spinner", style) }
+            }
+        }
+    }
+}
+
+private fun FlowContent.registerPreview(style: String) {
+    mCard("w-96 bg-base-100 shadow-xl") {
+        form {
+            when (style) {
+                "htmx" -> {
+                    attributes["hx-post"] = "/_examples/register"
+                    attributes["hx-target"] = "#register-result"
+                    attributes["hx-indicator"] = "#register-spinner"
+                }
+                "alpine" -> {
+                    attributes["x-data"] =
+                        "{ name: '', email: '', password: '', confirmPassword: '', loading: false, error: '' }"
+                    attributes["x-on:submit.prevent"] =
+                        "if (password !== confirmPassword) { error = 'Passwords do not match'; return; }"
+                }
+                "datastar" -> {
+                    attributes["data-signals"] =
+                        "{ name: '', email: '', password: '', confirmPassword: '', loading: false, error: '' }"
+                    attributes["data-on-submit"] =
+                        "if (${'$'}password !== ${'$'}confirmPassword) { " +
+                        "${'$'}error = 'Passwords do not match'; return; } " +
+                        "${'$'}${'$'}post('/_examples/register')"
+                }
+            }
+            mCardBody {
+                mCardTitle { +"Create account" }
+                authField("Name", InputType.text, "name", style)
+                authField("Email", InputType.email, "email", style)
+                authField("Password", InputType.password, "password", style, minlength = "8")
+                authField("Confirm password", InputType.password, "confirm_password", style, model = "confirmPassword")
+                resultRegion("register-result", style)
+                mCardActions("justify-end") { submitButton("Sign up", "register-spinner", style) }
+            }
+        }
+    }
+}
+
+private fun FlowContent.authField(
+    label: String,
+    type: InputType,
+    fieldName: String,
+    style: String,
+    minlength: String? = null,
+    model: String = fieldName,
+) {
+    mFormControl("w-full") {
+        mLabel { mLabelText { +label } }
+        mInput(type = type, classes = "w-full") {
+            name = fieldName
+            required = true
+            if (minlength != null) attributes["minlength"] = minlength
+            when (style) {
+                "alpine" -> attributes["x-model"] = model
+                "datastar" -> attributes["data-model"] = model
+            }
+        }
+    }
+}
+
+private fun FlowContent.resultRegion(
+    idValue: String,
+    style: String,
+) {
+    div(if (style == "htmx") "mt-2" else "mt-2 text-error text-sm") {
+        id = idValue
+        attributes["role"] = if (style == "htmx") "region" else "alert"
+        attributes["aria-live"] = "polite"
+        when (style) {
+            "alpine" -> {
                 attributes["x-show"] = "error"
                 attributes["x-text"] = "error"
-                attributes["role"] = "alert"
             }
-
-            mCardActions("justify-end") {
-                mButton(variant = ButtonVariant.Primary) {
-                    attributes["x-bind:disabled"] = "loading"
-                    span {
-                        attributes["x-show"] = "!loading"
-                        +"Sign up"
-                    }
-                    mLoading(LoadingType.Spinner, Size.Sm) {
-                        attributes["x-show"] = "loading"
-                    }
-                }
-            }
-        }
-    }
-}
-                """.trimIndent(),
-            datastarCode =
-                """
-mCard("w-96 bg-base-100 shadow-xl") {
-    form {
-        attributes["data-on-submit"] = "if (${'$'}password !== ${'$'}confirmPassword) { ${'$'}error = 'Passwords do not match'; return; } ${'$'}${'$'}post('/api/register')"
-        attributes["data-signals"] = "{ name: '', email: '', password: '', confirmPassword: '', loading: false, error: '' }"
-
-        mCardBody {
-            mCardTitle { +"Create account" }
-
-            mFormControl("w-full") {
-                mLabel {
-                    mLabelText { +"Name" }
-                }
-                mInput(type = InputType.text, classes = "w-full") {
-                    name = "name"
-                    required = true
-                    attributes["data-model"] = "name"
-                }
-            }
-
-            mFormControl("w-full") {
-                mLabel {
-                    mLabelText { +"Email" }
-                }
-                mInput(type = InputType.email, classes = "w-full") {
-                    name = "email"
-                    required = true
-                    attributes["data-model"] = "email"
-                }
-            }
-
-            mFormControl("w-full") {
-                mLabel {
-                    mLabelText { +"Password" }
-                }
-                mInput(type = InputType.password, classes = "w-full") {
-                    name = "password"
-                    required = true
-                    attributes["minlength"] = "8"
-                    attributes["data-model"] = "password"
-                }
-            }
-
-            mFormControl("w-full") {
-                mLabel {
-                    mLabelText { +"Confirm password" }
-                }
-                mInput(type = InputType.password, classes = "w-full") {
-                    name = "confirm_password"
-                    required = true
-                    attributes["data-model"] = "confirmPassword"
-                }
-            }
-
-            div("mt-2 text-error text-sm") {
+            "datastar" -> {
                 attributes["data-show"] = "${'$'}error"
                 attributes["data-text"] = "${'$'}error"
-                attributes["role"] = "alert"
-            }
-
-            mCardActions("justify-end") {
-                mButton(variant = ButtonVariant.Primary) {
-                    attributes["data-bind-disabled"] = "${'$'}loading"
-                    span {
-                        attributes["data-show"] = "!${'$'}loading"
-                        +"Sign up"
-                    }
-                    mLoading(LoadingType.Spinner, Size.Sm) {
-                        attributes["data-show"] = "${'$'}loading"
-                    }
-                }
             }
         }
     }
 }
-                """.trimIndent(),
-        )
+
+private fun FlowContent.submitButton(
+    label: String,
+    spinnerId: String,
+    style: String,
+) {
+    mButton(variant = ButtonVariant.Primary) {
+        type = ButtonType.submit
+        when (style) {
+            "alpine" -> attributes["x-bind:disabled"] = "loading"
+            "datastar" -> attributes["data-bind-disabled"] = "${'$'}loading"
+        }
+        span { +label }
+        mLoading(LoadingType.Spinner, Size.Sm, if (style == "htmx") "htmx-indicator" else "") {
+            if (style == "htmx") {
+                id = spinnerId
+                attributes["style"] = "display:none;"
+            } else if (style == "alpine") {
+                attributes["x-show"] = "loading"
+            } else {
+                attributes["data-show"] = "${'$'}loading"
+            }
+        }
     }
+}
+
+private fun FlowContent.buildingBlocksSection(variant: InteractivityPageVariant) {
     h2 { +"Building blocks" }
-    p {
-        +"Before diving into examples, here's an overview of each library's core primitives, "
-        +"best-fit use cases, and limitations."
+    p { +"Each page variant focuses on the primitives used by the selected recipe." }
+    when (variant.id) {
+        "htmx" -> {
+            h3 { +"htmx" }
+            p {
+                +"Server-driven HTML fragments with hx-get, hx-post, hx-target, hx-swap, and hx-trigger. "
+                +"In Ktor 3.1 set attributes manually; Ktor 3.2 adds typed extensions."
+            }
+        }
+        "alpine" -> {
+            h3 { +"Alpine.js" }
+            p { +"Client-side state with x-data, x-show, x-on, x-bind, and x-model." }
+        }
+        "datastar" -> {
+            h3 { +"Datastar" }
+            p {
+                +"Signal-oriented behavior with data-signals, data-on, data-bind, "
+                +"and Server-Sent Events (SSE) fragments."
+            }
+        }
     }
+}
 
-    h3 { +"htmx" }
-    p {
-        +"htmx extends HTML with attributes that trigger AJAX requests and swap content. "
-        +"Server-driven: the server renders HTML fragments, htmx swaps them into the DOM."
-    }
-    ul {
-        li {
-            strong { +"Core primitives: " }
-            code { +"hx-get" }
-            +", "
-            code { +"hx-post" }
-            +", "
-            code { +"hx-target" }
-            +", "
-            code { +"hx-swap" }
-            +", "
-            code { +"hx-trigger" }
-        }
-        li {
-            strong { +"Best for: " }
-            +"Server-rendered apps, progressive enhancement, form submissions, live search"
-        }
-        li {
-            strong { +"Script size: " }
-            +"~14KB minified + gzipped"
-        }
-        li {
-            strong { +"Limitations: " }
-            +"Requires server endpoints for every interaction; not ideal for complex client-side state"
-        }
-    }
-    p {
-        +"Note: This project uses Ktor 3.1.3, so htmx attributes are set via the raw attributes map. "
-        +"Ktor 3.2 adds typed extensions."
-    }
-    pre("bg-base-200 rounded-box p-4 overflow-x-auto") {
-        code {
-            +
-                """
-                // Ktor 3.1.3 syntax
-                attributes["hx-post"] = "/endpoint"
-
-                // Ktor 3.2+ syntax
-                hxPost = "/endpoint"
-                """.trimIndent()
-        }
-    }
-
-    h3 { +"Alpine.js" }
-    p {
-        +"Alpine.js brings reactive client-side state to HTML with inline directives. "
-        +"Client-side: state lives in JavaScript, DOM updates automatically on change."
-    }
-    ul {
-        li {
-            strong { +"Core primitives: " }
-            code { +"x-data" }
-            +", "
-            code { +"x-show" }
-            +", "
-            code { +"x-on" }
-            +", "
-            code { +"x-bind" }
-            +", "
-            code { +"x-model" }
-        }
-        li {
-            strong { +"Best for: " }
-            +"Dropdowns, modals, tabs, toggles, form validation — anything with local UI state"
-        }
-        li {
-            strong { +"Script size: " }
-            +"~15KB minified + gzipped"
-        }
-        li {
-            strong { +"Limitations: " }
-            +"Not built for cross-component or persistent state; no built-in server sync"
-        }
-    }
-
-    h3 { +"Datastar" }
-    p {
-        +"Datastar merges server-driven updates with client-side reactivity via Server-Sent Events (SSE). "
-        +"Hybrid: server pushes HTML fragments over a persistent connection, client-side store reacts to changes."
-    }
-    ul {
-        li {
-            strong { +"Core primitives: " }
-            code { +"data-signals" }
-            +", "
-            code { +"data-on" }
-            +", "
-            code { +"data-bind" }
-            +", SSE fragments"
-        }
-        li {
-            strong { +"Best for: " }
-            +"Real-time dashboards, live notifications, collaborative editing, streaming updates"
-        }
-        li {
-            strong { +"Script size: " }
-            +"~20KB minified + gzipped"
-        }
-        li {
-            strong { +"Limitations: " }
-            +"Requires SSE server-side support; less mature ecosystem than htmx or Alpine"
-        }
-    }
-    p {
-        +"Note: Datastar requires a Server-Sent Events endpoint on the server to push updates."
-    }
-
+private fun FlowContent.comparisonSection() {
     h2 { +"Comparison" }
-    p {
-        +"Choosing between htmx, Alpine.js, and Datastar depends on your app's needs."
-    }
     div("overflow-x-auto") {
         mTable(zebra = true) {
             thead {
@@ -1116,40 +523,32 @@ mCard("w-96 bg-base-100 shadow-xl") {
                     td { +"Server-driven" }
                     td { +"HTML endpoints" }
                     td { +"~14KB" }
-                    td { +"Server renders everything; progressive enhancement; no complex client state" }
+                    td { +"Server renders everything; progressive enhancement" }
                 }
                 tr {
                     td { strong { +"Alpine.js" } }
                     td { +"Client-side" }
-                    td { +"None (static HTML)" }
+                    td { +"Any endpoint or static HTML" }
                     td { +"~15KB" }
-                    td { +"Local UI state (dropdowns, modals, toggles); no server round-trips needed" }
+                    td { +"Local UI state and validation" }
                 }
                 tr {
                     td { strong { +"Datastar" } }
-                    td { +"Hybrid (SSE-based)" }
-                    td { +"SSE endpoints" }
+                    td { +"Hybrid" }
+                    td { +"HTTP plus optional SSE endpoints" }
                     td { +"~20KB" }
-                    td { +"Real-time updates; server pushes changes; collaborative or live-data features" }
+                    td { +"Signals, live updates, and server-pushed fragments" }
                 }
             }
         }
     }
 }
 
-/**
- * The interactivity guide: how to add client-side behavior (htmx, Alpine.js,
- * Datastar) to components without writing new Kotlin code. Each example shows
- * the same feature implemented in all three libraries, toggled by DaisyUI CSS
- * radio tabs (ADR-0006).
- */
-fun interactivityPage(): String = layout(INTERACTIVITY) { interactivityPageContent() }
+/** The interactivity guide rendered with a page-local variant selector. */
+fun interactivityPage(variant: String? = DEFAULT_INTERACTIVITY_PAGE_VARIANT_ID): String =
+    layout(INTERACTIVITY) { interactivityPageContent(variant) }
 
-/**
- * A test page that renders the [interactivityTabs] helper with example code
- * blocks, so smoke tests can verify the tab HTML structure without depending
- * on the interactivity guide content.
- */
+/** Test page for the legacy tab helper used by per-component interactive snippets. */
 fun interactivityTabsTestPage(): String =
     layout(INTERACTIVITY) {
         h1 { +"Test page" }
