@@ -23,5 +23,15 @@ fun badgePagePartial(): String = partialContent { badgePageContent() }
 
 fun alertPagePartial(): String = partialContent { alertPageContent() }
 
+fun formPagePartial(): String = partialContent { formPageContent() }
+
+fun loadingPagePartial(): String = partialContent { loadingPageContent() }
+
+fun menuPagePartial(): String = partialContent { menuPageContent() }
+
+fun tablePagePartial(): String = partialContent { tablePageContent() }
+
+fun tabsPagePartial(): String = partialContent { tabsPageContent() }
+
 fun interactivityPagePartial(variant: String? = DEFAULT_INTERACTIVITY_PAGE_VARIANT_ID): String =
     partialContent { interactivityPageContent(variant) }
