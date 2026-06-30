@@ -73,7 +73,9 @@ fun FlowContent.menuPageContent() {
             ),
             ApiParam("mMenuItem.href", "String", "required", "Destination for the rendered anchor."),
             ApiParam("mMenuItem.active", "Boolean", "false", "Adds the active marker for the current page."),
+            ApiParam("mMenuItem.block", "A.() -> Unit", "{}", "Receiver block on the raw kotlinx.html A element."),
             ApiParam("mMenuTitle.classes", "String?", "null", "Extra CSS classes for the menu title LI."),
+            ApiParam("mMenuTitle.block", "LI.() -> Unit", "{}", "Receiver block on the raw kotlinx.html LI element."),
         ),
     )
 }

@@ -103,29 +103,36 @@ fun FlowContent.formPageContent() {
 
     apiReference(
         listOf(
-            ApiParam(
-                "mFormControl.classes",
-                "String?",
-                "null",
-                "Extra CSS classes for the LABEL container; block is LABEL.() -> Unit.",
-            ),
-            ApiParam(
-                "mLabel.classes",
-                "String?",
-                "null",
-                "Extra CSS classes for the DIV label row; block is DIV.() -> Unit.",
-            ),
-            ApiParam(
-                "mLabelText.classes",
-                "String?",
-                "null",
-                "Extra CSS classes for the SPAN text; block is SPAN.() -> Unit.",
-            ),
+            ApiParam("mFormControl.classes", "String?", "null", "Extra CSS classes for the LABEL container."),
+            ApiParam("mFormControl.block", "LABEL.() -> Unit", "{}", "Receiver block on the form-control label."),
+            ApiParam("mLabel.classes", "String?", "null", "Extra CSS classes for the DIV label row."),
+            ApiParam("mLabel.block", "DIV.() -> Unit", "{}", "Receiver block on the label row."),
+            ApiParam("mLabelText.classes", "String?", "null", "Extra CSS classes for the SPAN text."),
+            ApiParam("mLabelText.block", "SPAN.() -> Unit", "{}", "Receiver block on the label text span."),
             ApiParam("mInput.type", "InputType", "InputType.text", "Native input type such as InputType.email."),
             ApiParam("mInput.bordered", "Boolean", "true", "Controls bordered input styling."),
             ApiParam("mInput.size", "Size", "Size.Md", "Size step. Md is the baseline and adds no size token."),
+            ApiParam("mInput.classes", "String?", "null", "Extra CSS classes appended after generated input classes."),
+            ApiParam(
+                "mInput.block",
+                "INPUT.() -> Unit",
+                "{}",
+                "Receiver block on the raw kotlinx.html INPUT element.",
+            ),
             ApiParam("mSelect.bordered", "Boolean", "true", "Controls bordered select styling."),
             ApiParam("mSelect.size", "Size", "Size.Md", "Size step. Md is the baseline and adds no size token."),
+            ApiParam(
+                "mSelect.classes",
+                "String?",
+                "null",
+                "Extra CSS classes appended after generated select classes.",
+            ),
+            ApiParam(
+                "mSelect.block",
+                "SELECT.() -> Unit",
+                "{}",
+                "Receiver block on the raw kotlinx.html SELECT element.",
+            ),
         ),
     )
 }

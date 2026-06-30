@@ -77,6 +77,9 @@ fun FlowContent.tabsPageContent() {
             ApiParam("mTab.id", "String", "required", "Unique id for the radio input."),
             ApiParam("mTab.label", "String", "required", "Visible tab label via aria-label."),
             ApiParam("mTab.checked", "Boolean", "false", "Selects the default active tab."),
+            ApiParam("mTab.contentClasses", "String?", "null", "Extra CSS classes for the tab content panel."),
+            ApiParam("mTab.tabConfig", "INPUT.() -> Unit", "{}", "Receiver block for custom radio input attributes."),
+            ApiParam("mTab.content", "FlowContent.() -> Unit", "{}", "Panel content rendered after the tab input."),
         ),
     )
 }
