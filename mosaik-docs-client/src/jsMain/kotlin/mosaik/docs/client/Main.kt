@@ -3,16 +3,13 @@ package mosaik.docs.client
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.w3c.dom.HTMLAnchorElement
-import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.HTMLSelectElement
 import org.w3c.dom.asList
 import org.w3c.dom.parsing.DOMParser
 import org.w3c.dom.url.URL
 import org.w3c.fetch.RequestInit
 
-const val DEFAULT_INTERACTION_STYLE = "htmx"
 const val PAGE_VARIANT_PREFERENCE_KEY = "mosaik-page-variant"
-const val INTERACTION_STYLE_PREFERENCE_KEY = "mosaik-interaction-style"
 
 /**
  * Entry point for the Mosaik docs browser client.
@@ -205,9 +202,7 @@ fun urlWithSoftPageVariantPreference(url: String): String {
     return parsed.href
 }
 
-fun pageVariantPreference(): String? =
-    window.localStorage.getItem(PAGE_VARIANT_PREFERENCE_KEY)
-        ?: window.localStorage.getItem(INTERACTION_STYLE_PREFERENCE_KEY)
+fun pageVariantPreference(): String? = window.localStorage.getItem(PAGE_VARIANT_PREFERENCE_KEY)
 
 fun rememberPageVariantPreference(valueOrUrl: String) {
     val variant = pageVariantFrom(valueOrUrl) ?: valueOrUrl
@@ -219,8 +214,6 @@ fun rememberPageVariantPreference(valueOrUrl: String) {
         }
     if (pageSupportsVariant(pathname, variant)) {
         window.localStorage.setItem(PAGE_VARIANT_PREFERENCE_KEY, variant)
-        window.localStorage.setItem(INTERACTION_STYLE_PREFERENCE_KEY, variant)
-        document.documentElement?.setAttribute("data-interaction-style", variant)
     }
 }
 
@@ -288,10 +281,9 @@ fun rehydrateInteractivePreviews() {
 }
 
 /**
- * Synchronizes the theme selector, interaction style selector, and interactivity
- * tab radios to match the preferences already restored by the inline head script.
- * Called on initial load and after shell content swaps to ensure controls reflect
- * the current state.
+ * Synchronizes the theme selector to match the preference already restored by
+ * the inline head script. Called on initial load and after shell content swaps to
+ * ensure controls reflect the current state.
  */
 fun syncPreferenceControls() {
     val docElement = document.documentElement ?: return
@@ -302,28 +294,6 @@ fun syncPreferenceControls() {
         val currentTheme = docElement.getAttribute("data-theme")
         if (currentTheme != null) {
             themeSwitcher.value = currentTheme
-        }
-    }
-
-    // Sync interaction style selector to the current data-interaction-style attribute.
-    val interactionStyle =
-        pageVariantPreference()
-            ?: docElement.getAttribute("data-interaction-style")
-            ?: DEFAULT_INTERACTION_STYLE
-    val styleSwitcher = document.getElementById("interaction-style-switcher")
-    if (styleSwitcher is HTMLSelectElement) {
-        styleSwitcher.value = interactionStyle
-    }
-
-    // Sync interactivity tab radios to the current interaction style.
-    val radios = document.querySelectorAll(".tabs input[type=\"radio\"]")
-    for (i in 0 until radios.length) {
-        val element = radios.item(i)
-        if (element is HTMLInputElement) {
-            val tabStyle = element.getAttribute("data-interaction-style")
-            if (tabStyle == interactionStyle) {
-                element.checked = true
-            }
         }
     }
 }
