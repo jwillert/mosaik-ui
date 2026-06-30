@@ -117,12 +117,13 @@ fun FlowContent.apiReference(params: List<ApiParam>) {
 }
 
 /**
- * Renders DaisyUI CSS-only radio tabs for toggling between htmx, Alpine.js,
- * and Datastar code examples. Each tab group uses the [id] parameter as the
+ * Renders DaisyUI CSS-only radio tabs for legacy per-example htmx, Alpine.js,
+ * and Datastar code snippets. Each tab group uses the [id] parameter as the
  * unique radio group `name` to prevent interference between multiple tab
- * groups on the same page. The htmx tab is checked by default. The wrapper
- * carries the `not-prose` class to prevent Tailwind Typography from
- * overriding DaisyUI's tab styling (ADR-0006).
+ * groups on the same page. Tabs are intentionally local to this example and are
+ * not synchronized with a global interaction-style preference. The htmx tab is
+ * checked by default. The wrapper carries the `not-prose` class to prevent
+ * Tailwind Typography from overriding DaisyUI's tab styling (ADR-0006).
  *
  * Each tab can optionally show a rendered Preview above the code snippet
  * (ADR-0008). The preview content is provided as a lambda that receives a

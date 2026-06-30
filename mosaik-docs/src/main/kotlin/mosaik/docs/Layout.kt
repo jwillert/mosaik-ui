@@ -162,7 +162,7 @@ private fun FlowContent.sidebar(activePath: String) {
 /**
  * A `<select>` in the sidebar that previews the page in any DaisyUI theme. On
  * change it sets `data-theme` on `<html>` and persists the choice to
- * localStorage; [themeRestoreScript] reapplies it on the next page load. This is
+ * localStorage; [preferenceRestoreScript] reapplies it on the next page load. This is
  * docs-only JavaScript — components remain CSS-only (see PRD #10).
  */
 private fun A.pageVariantSupport(item: NavItem) {

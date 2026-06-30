@@ -9,7 +9,7 @@ Create the first vertical slice of the new Mosaik documentation model by making 
 - Component docs use a **Component Reference Gallery** shape: visual-first hero, install/usage, visual examples, interactive examples, API reference.
 - DaisyUI component semantics are exposed as **Type-safe Modifiers**, not normal raw class usage.
 - `classes` remains an escape hatch for layout and one-off styling utilities, not the primary way to use DaisyUI component modifiers.
-- Interactive examples use a docs-wide **Interaction Style**: htmx, Alpine.js, or Datastar.
+- Interactive examples use page-local **Page Variants** per ADR 0015; each page declares the practical stack labels it supports.
 - Static and interactive examples use a reusable **Example Card** with preview, code, copy button, and client-side syntax highlighting where feasible.
 - Docs stay server-rendered Kotlin/kotlinx.html with Tailwind/DaisyUI and small vanilla JavaScript.
 
@@ -56,7 +56,7 @@ Update VRT scenarios enough to cover the new Button docs examples and the new lo
 Introduce reusable docs helpers before rewriting all pages:
 
 - `ExampleCard`: preview + Kotlin code + copy button + syntax-highlightable code markup.
-- Global/local Interaction Style switch backed by `localStorage`.
+- Page-local variant selectors with URL-driven `?variant=...` state and optional soft preference reuse via `localStorage`.
 - Highlight.js from CDN for the first slice, with markup structured so assets can be vendored later.
 
 Keep helpers compatible with ADR 0011: shared blocks should be extracted because they will be repeated across component pages, while page-owned content remains page-owned.
@@ -81,7 +81,7 @@ Target page order:
    - Disabled.
    - Icon/content composition.
    - Loading content using `mLoading`.
-6. Interactive usage Example Card driven by selected Interaction Style.
+6. Interactive usage Example Card driven by the selected page-local variant.
 7. API reference.
 
 Avoid raw DaisyUI component classes in normal examples when a Mosaik abstraction exists. Raw `classes` may still appear for layout utilities such as spacing, width, shadow, or flex alignment.

@@ -422,6 +422,8 @@ class PagesTest :
             listOf(landingPage(), buttonPage(), interactivityPage()).forEach { html ->
                 html shouldNotContain "id=\"interaction-style-switcher\""
                 html shouldNotContain "Interaction Style"
+                html shouldNotContain "mosaik-interaction-style"
+                html shouldNotContain "data-interaction-style"
             }
         }
 
@@ -932,6 +934,8 @@ class PagesTest :
             listOf(landingPage(), buttonPage(), interactivityPage()).forEach { html ->
                 html shouldNotContain "id=\"interaction-style-switcher\""
                 html shouldNotContain "Interaction Style"
+                html shouldNotContain "mosaik-interaction-style"
+                html shouldNotContain "data-interaction-style"
             }
         }
 
