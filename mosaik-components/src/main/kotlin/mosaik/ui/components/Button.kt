@@ -12,9 +12,9 @@ import kotlinx.html.*
  * to [mButton], not in Theme.kt.
  */
 enum class ButtonVariant(
-    val token: String?,
+    val token: String,
 ) {
-    Default(null),
+    Default(""),
     Neutral("neutral"),
     Primary("primary"),
     Secondary("secondary"),
@@ -24,6 +24,8 @@ enum class ButtonVariant(
     Warning("warning"),
     Error("error"),
 }
+
+private fun ButtonVariant.cssClass(): String? = token.takeIf { it.isNotBlank() }?.let { "btn-$it" }
 
 /**
  * The DaisyUI button style modifiers.
@@ -94,7 +96,7 @@ fun FlowContent.mButton(
         classes =
             buildClasses(
                 "btn",
-                variant.token?.let { "btn-$it" },
+                variant.cssClass(),
                 style?.let { "btn-${it.token}" },
                 shape?.let { "btn-${it.token}" },
                 width?.let { "btn-${it.token}" },
@@ -141,7 +143,7 @@ fun FlowContent.mButtonLink(
         classes =
             buildClasses(
                 "btn",
-                variant.token?.let { "btn-$it" },
+                variant.cssClass(),
                 style?.let { "btn-${it.token}" },
                 shape?.let { "btn-${it.token}" },
                 width?.let { "btn-${it.token}" },

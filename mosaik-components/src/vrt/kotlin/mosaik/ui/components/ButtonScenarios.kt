@@ -5,7 +5,7 @@ import kotlinx.html.span
 
 object ButtonScenarios {
     private fun variantScenario(variant: ButtonVariant) =
-        Scenario("button-${variant.token ?: "default"}") {
+        Scenario("button-${variant.token.ifBlank { "default" }}") {
             mButton(variant = variant) { +"Button" }
         }
 

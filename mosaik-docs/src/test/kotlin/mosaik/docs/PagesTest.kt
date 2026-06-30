@@ -76,7 +76,7 @@ class PagesTest :
         test("the button page renders the default variant and every color variant") {
             val html = buttonPage()
             html shouldContain "ButtonVariant.Default"
-            ButtonVariant.entries.mapNotNull { it.token }.forEach { token ->
+            ButtonVariant.entries.map { it.token }.filter { it.isNotBlank() }.forEach { token ->
                 html shouldContain "btn-$token"
             }
             html shouldNotContain "btn-null"
