@@ -66,17 +66,21 @@ class PagesTest :
             buttonPage() shouldContain "./gradlew mosaikAdd --component=button"
         }
 
-        test("the button page shows a basic usage Kotlin code block") {
+        test("the button page shows default/no-color basic usage") {
             val html = buttonPage()
             html shouldContain "Basic usage"
-            html shouldContain "mButton(variant = ButtonVariant.Primary, size = Size.Md)"
+            html shouldContain "mButton { +&quot;Default button&quot; }"
+            html shouldContain "mButtonLink(href = &quot;/docs&quot;) { +&quot;Default link&quot; }"
+            html shouldContain "ButtonVariant.Neutral"
         }
 
-        test("the button page renders every variant as its DaisyUI class") {
+        test("the button page renders the default variant and every color variant") {
             val html = buttonPage()
-            ButtonVariant.entries.forEach { variant ->
-                html shouldContain "btn-${variant.token}"
+            html shouldContain "ButtonVariant.Default"
+            ButtonVariant.entries.map { it.token }.filter { it.isNotBlank() }.forEach { token ->
+                html shouldContain "btn-$token"
             }
+            html shouldNotContain "btn-null"
         }
 
         test("the button page renders every non-default size and omits the medium token") {
@@ -97,7 +101,7 @@ class PagesTest :
                 html shouldContain param
             }
             // Types and defaults are documented in the table.
-            html shouldContain "ButtonVariant.Neutral"
+            html shouldContain "ButtonVariant.Default"
             html shouldContain "Size.Md"
         }
 
