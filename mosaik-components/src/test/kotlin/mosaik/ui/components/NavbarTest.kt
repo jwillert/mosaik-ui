@@ -74,7 +74,7 @@ class NavbarTest :
 
             html shouldContain "<div class=\"navbar bg-base-100 shadow-sm\">" +
                 "<div class=\"navbar-start\">" +
-                "<a href=\"/\" class=\"btn btn-neutral btn-ghost text-xl\">Mosaik</a>" +
+                "<a href=\"/\" class=\"btn btn-ghost text-xl\">Mosaik</a>" +
                 "</div>" +
                 "<div class=\"navbar-center\"><a>Docs</a></div>" +
                 "<div class=\"navbar-end\"><button class=\"btn btn-primary\">Sign up</button></div>" +
