@@ -12,7 +12,7 @@ private fun render(block: FlowContent.() -> Unit): String = createHTML(prettyPri
 class TableTest :
     FunSpec({
 
-        test("a basic table renders with the table class") {
+        test("a basic table renders with the table class and no size modifier") {
             val html =
                 render {
                     mTable {
@@ -32,8 +32,55 @@ class TableTest :
                 }
 
             html shouldContain "<table class=\"table\">"
+            html shouldNotContain "table-xs"
+            html shouldNotContain "table-sm"
+            html shouldNotContain "table-md"
+            html shouldNotContain "table-lg"
+            html shouldNotContain "table-xl"
             html shouldContain "<thead>"
             html shouldContain "<th>Name</th>"
+        }
+
+        test("each non-default table size emits its table size class") {
+            val expected =
+                mapOf(
+                    TableSize.Xs to "table-xs",
+                    TableSize.Sm to "table-sm",
+                    TableSize.Lg to "table-lg",
+                    TableSize.Xl to "table-xl",
+                )
+
+            expected.forEach { (size, token) ->
+                val html =
+                    render {
+                        mTable(size = size) {
+                            tbody {
+                                tr {
+                                    td { +size.name }
+                                }
+                            }
+                        }
+                    }
+
+                html shouldContain "class=\"table $token\""
+            }
+        }
+
+        test("the default table size enum value emits no size class") {
+            val html =
+                render {
+                    mTable(size = TableSize.Default) {
+                        tbody {
+                            tr {
+                                td { +"Default" }
+                            }
+                        }
+                    }
+                }
+
+            html shouldContain "class=\"table\""
+            html shouldNotContain "table-md"
+            html shouldNotContain "table-sm"
         }
 
         test("zebra modifier adds the table-zebra class") {
@@ -67,10 +114,25 @@ class TableTest :
             html shouldNotContain "table-zebra"
         }
 
+        test("zebra composes with table size") {
+            val html =
+                render {
+                    mTable(zebra = true, size = TableSize.Sm) {
+                        tbody {
+                            tr {
+                                td { +"Row 1" }
+                            }
+                        }
+                    }
+                }
+
+            html shouldContain "class=\"table table-zebra table-sm\""
+        }
+
         test("custom classes are appended after the generated table classes") {
             val html =
                 render {
-                    mTable(zebra = true, classes = "w-full") {
+                    mTable(zebra = true, size = TableSize.Lg, classes = "w-full whitespace-nowrap") {
                         tbody {
                             tr {
                                 td { +"Data" }
@@ -79,7 +141,7 @@ class TableTest :
                     }
                 }
 
-            html shouldContain "class=\"table table-zebra w-full\""
+            html shouldContain "class=\"table table-zebra table-lg w-full whitespace-nowrap\""
         }
 
         test("the block receives the raw table element so its html attributes apply natively") {

@@ -34,6 +34,9 @@ val FOOTER = NavItem("/components/footer", "Footer", ::footerPage, ::footerPageP
 /** The Badge documentation page. */
 val BADGE = NavItem("/components/badge", "Badge", ::badgePage, ::badgePagePartial)
 
+/** The Table documentation page. */
+val TABLE_PAGE = NavItem("/components/table", "Table", ::tablePage, ::tablePagePartial)
+
 /** The Alert documentation page. */
 val ALERT = NavItem("/components/alert", "Alert", ::alertPage, ::alertPagePartial)
 
@@ -53,7 +56,7 @@ val INTERACTIVITY =
  * [mosaik.docs.module]), so adding a component page is one [NavItem] plus its
  * renderer.
  */
-val COMPONENTS = listOf(BUTTON, CARD, NAVBAR, FOOTER, BADGE, ALERT)
+val COMPONENTS = listOf(BUTTON, CARD, NAVBAR, FOOTER, BADGE, TABLE_PAGE, ALERT)
 
 /**
  * Every guide documentation page. Together with [HOME] and [COMPONENTS] this is

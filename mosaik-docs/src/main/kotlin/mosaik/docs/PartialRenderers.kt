@@ -21,6 +21,8 @@ fun footerPagePartial(): String = partialContent { footerPageContent() }
 
 fun badgePagePartial(): String = partialContent { badgePageContent() }
 
+fun tablePagePartial(): String = partialContent { tablePageContent() }
+
 fun alertPagePartial(): String = partialContent { alertPageContent() }
 
 fun interactivityPagePartial(variant: String? = DEFAULT_INTERACTIVITY_PAGE_VARIANT_ID): String =

@@ -8,6 +8,7 @@ import mosaik.ui.components.AlertVariant
 import mosaik.ui.components.BadgeVariant
 import mosaik.ui.components.ButtonVariant
 import mosaik.ui.components.Size
+import mosaik.ui.components.TableSize
 import mosaik.ui.components.mButton
 
 /**
@@ -541,6 +542,46 @@ class PagesTest :
             html shouldContain "SPAN.()"
         }
 
+        test("the sidebar links the table page and it carries the active marker") {
+            landingPage() shouldContain "href=\"/components/table\""
+            tablePage() shouldContain "menu-active"
+        }
+
+        test("the table page opens with a title and a description of what Table is") {
+            val html = tablePage()
+            html shouldContain "<h1>Table</h1>"
+            html shouldContain "mTable"
+            html shouldContain "TableSize"
+            html shouldContain "DaisyUI"
+        }
+
+        test("the table page shows the Gradle installation command and usage blocks") {
+            val html = tablePage()
+            html shouldContain "./gradlew mosaikAdd --component=table"
+            html shouldContain "Basic usage"
+            html shouldContain "mTable(size = TableSize.Sm"
+            html shouldContain "whitespace-nowrap"
+        }
+
+        test("the table page renders zebra rows and every non-default table size") {
+            val html = tablePage()
+            html shouldContain "table-zebra"
+            TableSize.entries.mapNotNull { it.token }.forEach { token ->
+                html shouldContain "table-$token"
+            }
+            html shouldNotContain "table-md"
+        }
+
+        test("the table page includes an API reference table for every mTable parameter") {
+            val html = tablePage()
+            html shouldContain "API reference"
+            html shouldContain "TableSize.Default"
+            html shouldContain "TABLE.()"
+            listOf("zebra", "size", "classes", "block").forEach { param ->
+                html shouldContain param
+            }
+        }
+
         test("the sidebar links the alert page and it carries the active marker") {
             landingPage() shouldContain "href=\"/components/alert\""
             alertPage() shouldContain "menu-active"
@@ -674,6 +715,7 @@ class PagesTest :
                 "navbar" to (navbarPage() to 4),
                 "footer" to (footerPage() to 3),
                 "badge" to (badgePage() to 3),
+                "table" to (tablePage() to 5),
                 "alert" to (alertPage() to 2),
             ).forEach { (_, page) ->
                 val (html, expectedStaticExampleCount) = page
