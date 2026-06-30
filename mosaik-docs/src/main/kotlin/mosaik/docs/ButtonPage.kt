@@ -8,6 +8,7 @@ import mosaik.ui.components.ButtonWidth
 import mosaik.ui.components.LoadingType
 import mosaik.ui.components.Size
 import mosaik.ui.components.mButton
+import mosaik.ui.components.mButtonLink
 import mosaik.ui.components.mLoading
 
 const val DEFAULT_BUTTON_PAGE_VARIANT_ID = "htmx"
@@ -184,6 +185,7 @@ fun FlowContent.buttonPageContent(selectedVariantId: String? = DEFAULT_BUTTON_PA
     section {
         div("not-prose mb-6") {
             div("flex flex-wrap items-center gap-2") {
+                mButton { +"Default" }
                 mButton(variant = ButtonVariant.Neutral) { +"Neutral" }
                 mButton(variant = ButtonVariant.Primary) { +"Primary" }
                 mButton(variant = ButtonVariant.Secondary) { +"Secondary" }
@@ -195,31 +197,41 @@ fun FlowContent.buttonPageContent(selectedVariantId: String? = DEFAULT_BUTTON_PA
     installSection("button")
 
     h2 { +"Basic usage" }
+    p {
+        +"Plain "
+        code { +"mButton()" }
+        +" and "
+        code { +"mButtonLink()" }
+        +" calls render DaisyUI default buttons with no color-role variant. Pass "
+        code { +"ButtonVariant.Neutral" }
+        +" explicitly when neutral styling is desired."
+    }
     exampleCard(
         code =
             """
             import mosaik.ui.components.mButton
-            import mosaik.ui.components.ButtonVariant
-            import mosaik.ui.components.Size
+            import mosaik.ui.components.mButtonLink
 
-            mButton(variant = ButtonVariant.Primary, size = Size.Md) {
-                +"Save"
-            }
+            mButton { +"Default button" }
+            mButtonLink(href = "/docs") { +"Default link" }
             """.trimIndent(),
     ) {
-        mButton(variant = ButtonVariant.Primary, size = Size.Md) {
-            +"Save"
+        div("flex flex-wrap gap-2") {
+            mButton { +"Default button" }
+            mButtonLink(href = "/docs") { +"Default link" }
         }
     }
 
     section {
         h2 { +"Color variants" }
         p {
-            +"Button supports eight color variants. Each maps to a DaisyUI color role."
+            +"Button defaults to a no-color variant. It also supports eight color variants; "
+            +"each maps to a DaisyUI color role."
         }
         exampleCard(
             code =
                 """
+                mButton(variant = ButtonVariant.Default) { +"Default" }
                 mButton(variant = ButtonVariant.Neutral) { +"Neutral" }
                 mButton(variant = ButtonVariant.Primary) { +"Primary" }
                 mButton(variant = ButtonVariant.Secondary) { +"Secondary" }
@@ -459,8 +471,9 @@ fun FlowContent.buttonPageContent(selectedVariantId: String? = DEFAULT_BUTTON_PA
             ApiParam(
                 "variant",
                 "ButtonVariant",
-                "ButtonVariant.Neutral",
-                "DaisyUI colour role: Neutral, Primary, Secondary, Accent, Info, Success, Warning, Error.",
+                "ButtonVariant.Default",
+                "Default/no-color button styling, or a color role: Neutral, Primary, Secondary, " +
+                    "Accent, Info, Success, Warning, Error.",
             ),
             ApiParam(
                 "style",

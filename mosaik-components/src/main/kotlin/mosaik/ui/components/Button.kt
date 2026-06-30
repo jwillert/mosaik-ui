@@ -3,16 +3,18 @@ package mosaik.ui.components
 import kotlinx.html.*
 
 /**
- * The DaisyUI button color role variants.
+ * The DaisyUI button default/no-color variant plus color role variants.
  *
- * Per ADR-0010 this is a component-specific enum rather than the shared
- * [Variant]: Button's color vocabulary excludes ghost and link, which are
- * styles (see [ButtonStyle]), not color roles. The enum lives here, next to
- * [mButton], not in Theme.kt.
+ * [Default] represents DaisyUI's plain button styling and emits no `btn-*`
+ * color class. Per ADR-0010 this is a component-specific enum rather than the
+ * shared [Variant]: Button's color vocabulary excludes ghost and link, which
+ * are styles (see [ButtonStyle]), not color roles. The enum lives here, next
+ * to [mButton], not in Theme.kt.
  */
 enum class ButtonVariant(
-    val token: String,
+    val token: String?,
 ) {
+    Default(null),
     Neutral("neutral"),
     Primary("primary"),
     Secondary("secondary"),
@@ -80,7 +82,7 @@ enum class ButtonWidth(
  * ```
  */
 fun FlowContent.mButton(
-    variant: ButtonVariant = ButtonVariant.Neutral,
+    variant: ButtonVariant = ButtonVariant.Default,
     style: ButtonStyle? = null,
     shape: ButtonShape? = null,
     width: ButtonWidth? = null,
@@ -92,7 +94,7 @@ fun FlowContent.mButton(
         classes =
             buildClasses(
                 "btn",
-                "btn-${variant.token}",
+                variant.token?.let { "btn-$it" },
                 style?.let { "btn-${it.token}" },
                 shape?.let { "btn-${it.token}" },
                 width?.let { "btn-${it.token}" },
@@ -126,7 +128,7 @@ fun FlowContent.mButton(
  */
 fun FlowContent.mButtonLink(
     href: String,
-    variant: ButtonVariant = ButtonVariant.Neutral,
+    variant: ButtonVariant = ButtonVariant.Default,
     style: ButtonStyle? = null,
     shape: ButtonShape? = null,
     width: ButtonWidth? = null,
@@ -139,7 +141,7 @@ fun FlowContent.mButtonLink(
         classes =
             buildClasses(
                 "btn",
-                "btn-${variant.token}",
+                variant.token?.let { "btn-$it" },
                 style?.let { "btn-${it.token}" },
                 shape?.let { "btn-${it.token}" },
                 width?.let { "btn-${it.token}" },

@@ -13,7 +13,15 @@ private fun render(block: FlowContent.() -> Unit): String = createHTML(prettyPri
 class ButtonTest :
     FunSpec({
 
-        test("a neutral medium button renders the base and variant classes, omitting the default size") {
+        test("a default medium button renders only the base button class") {
+            val html = render { mButton { +"Click" } }
+
+            html shouldContain "<button class=\"btn\">Click</button>"
+            html shouldNotContain "btn-neutral"
+            html shouldNotContain "btn-primary"
+        }
+
+        test("an explicit neutral medium button renders the base and neutral variant classes") {
             val html = render { mButton(variant = ButtonVariant.Neutral, size = Size.Md) { +"Click" } }
 
             html shouldContain "<button class=\"btn btn-neutral\">Click</button>"
@@ -98,9 +106,9 @@ class ButtonTest :
 
         // Type-safe modifier tests - Component-specific enums
 
-        test("ButtonVariant declares exactly the color role variants without ghost or link") {
+        test("ButtonVariant declares the default/no-color variant and color role variants without ghost or link") {
             ButtonVariant.entries.map { it.name } shouldBe
-                listOf("Neutral", "Primary", "Secondary", "Accent", "Info", "Success", "Warning", "Error")
+                listOf("Default", "Neutral", "Primary", "Secondary", "Accent", "Info", "Success", "Warning", "Error")
         }
 
         test("ButtonStyle declares outline, ghost, and link styles") {
@@ -120,13 +128,21 @@ class ButtonTest :
 
         // Variant rendering tests
 
-        test("ButtonVariant neutral is the default and renders btn-neutral") {
-            val html = render { mButton(variant = ButtonVariant.Neutral) { +"Click" } }
+        test("ButtonVariant default emits no color-role class") {
+            val html = render { mButton(variant = ButtonVariant.Default) { +"Click" } }
 
-            html shouldContain "class=\"btn btn-neutral\""
+            html shouldContain "class=\"btn\""
+            html shouldNotContain "btn-neutral"
+            html shouldNotContain "btn-primary"
+            html shouldNotContain "btn-secondary"
+            html shouldNotContain "btn-accent"
+            html shouldNotContain "btn-info"
+            html shouldNotContain "btn-success"
+            html shouldNotContain "btn-warning"
+            html shouldNotContain "btn-error"
         }
 
-        test("every ButtonVariant maps to its DaisyUI class") {
+        test("every color ButtonVariant maps to its DaisyUI class") {
             val expected =
                 mapOf(
                     ButtonVariant.Neutral to "btn-neutral",
@@ -165,7 +181,7 @@ class ButtonTest :
 
             expected.forEach { (style, css) ->
                 val html = render { mButton(style = style) {} }
-                html shouldContain "class=\"btn btn-neutral $css\""
+                html shouldContain "class=\"btn $css\""
             }
         }
 
@@ -196,7 +212,7 @@ class ButtonTest :
 
             expected.forEach { (shape, css) ->
                 val html = render { mButton(shape = shape) {} }
-                html shouldContain "class=\"btn btn-neutral $css\""
+                html shouldContain "class=\"btn $css\""
             }
         }
 
@@ -218,11 +234,18 @@ class ButtonTest :
 
             expected.forEach { (width, css) ->
                 val html = render { mButton(width = width) {} }
-                html shouldContain "class=\"btn btn-neutral $css\""
+                html shouldContain "class=\"btn $css\""
             }
         }
 
         // Combined modifier tests
+
+        test("shape and size compose with the default/no-color variant") {
+            val html = render { mButton(shape = ButtonShape.Square, size = Size.Sm) { +"□" } }
+
+            html shouldContain "class=\"btn btn-square btn-sm\""
+            html shouldNotContain "btn-neutral"
+        }
 
         test("variant, style, shape, width, size, and classes combine correctly") {
             val html =
@@ -242,10 +265,11 @@ class ButtonTest :
 
         // mButtonLink tests - anchor-compatible button API
 
-        test("mButtonLink renders an anchor with button classes") {
+        test("mButtonLink renders an anchor with default/no-color button classes") {
             val html = render { mButtonLink(href = "/docs") { +"Docs" } }
 
-            html shouldContain "<a href=\"/docs\" class=\"btn btn-neutral\">Docs</a>"
+            html shouldContain "<a href=\"/docs\" class=\"btn\">Docs</a>"
+            html shouldNotContain "btn-neutral"
         }
 
         test("mButtonLink supports all ButtonVariant options") {
@@ -258,7 +282,7 @@ class ButtonTest :
         test("mButtonLink supports ButtonStyle including ghost") {
             val html = render { mButtonLink(href = "/", style = ButtonStyle.Ghost) { +"Brand" } }
 
-            html shouldContain "class=\"btn btn-neutral btn-ghost\""
+            html shouldContain "class=\"btn btn-ghost\""
         }
 
         test("mButtonLink combines variant, style, size, and classes") {
@@ -306,7 +330,7 @@ class ButtonTest :
 
             html shouldContain "hx-get=\"/api/nav\""
             html shouldContain "hx-target=\"#content\""
-            html shouldContain "class=\"btn btn-neutral btn-ghost\""
+            html shouldContain "class=\"btn btn-ghost\""
         }
 
         test("mButtonLink supports shape and width modifiers") {
@@ -320,6 +344,6 @@ class ButtonTest :
                 }
 
             html shouldContain "href=\"/icon\""
-            html shouldContain "class=\"btn btn-neutral btn-square btn-block\""
+            html shouldContain "class=\"btn btn-square btn-block\""
         }
     })

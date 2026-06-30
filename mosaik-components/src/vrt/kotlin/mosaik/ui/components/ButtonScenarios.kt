@@ -5,7 +5,7 @@ import kotlinx.html.span
 
 object ButtonScenarios {
     private fun variantScenario(variant: ButtonVariant) =
-        Scenario("button-${variant.token}") {
+        Scenario("button-${variant.token ?: "default"}") {
             mButton(variant = variant) { +"Button" }
         }
 
@@ -31,6 +31,7 @@ object ButtonScenarios {
 
     val variants =
         listOf(
+            variantScenario(ButtonVariant.Default),
             variantScenario(ButtonVariant.Neutral),
             variantScenario(ButtonVariant.Primary),
             variantScenario(ButtonVariant.Secondary),
