@@ -7,6 +7,7 @@ import io.kotest.matchers.string.shouldNotContain
 import mosaik.ui.components.AlertVariant
 import mosaik.ui.components.BadgeVariant
 import mosaik.ui.components.ButtonVariant
+import mosaik.ui.components.FileInputVariant
 import mosaik.ui.components.Size
 import mosaik.ui.components.mButton
 
@@ -576,6 +577,47 @@ class PagesTest :
             html shouldContain "DIV.()"
         }
 
+        test("the sidebar links the file input page and it carries the active marker") {
+            landingPage() shouldContain "href=\"/components/file-input\""
+            fileInputPage() shouldContain "menu-active"
+        }
+
+        test("the file input page opens with a title and component description") {
+            val html = fileInputPage()
+            html shouldContain "<h1>File input</h1>"
+            html shouldContain "mFileInput"
+            html shouldContain "FileInputVariant"
+            html shouldContain "DaisyUI"
+        }
+
+        test("the file input page shows the Gradle installation command and a usage block") {
+            val html = fileInputPage()
+            html shouldContain "./gradlew mosaikAdd --component=form"
+            html shouldContain "Basic usage"
+            html shouldContain "mFileInput(classes = &quot;w-full&quot;)"
+        }
+
+        test("the file input page renders every FileInputVariant and non-default size") {
+            val html = fileInputPage()
+            FileInputVariant.entries.forEach { variant ->
+                html shouldContain "file-input-${variant.token}"
+            }
+            Size.entries.mapNotNull { it.token }.forEach { token ->
+                html shouldContain "file-input-$token"
+            }
+        }
+
+        test("the file input page documents native attributes and API parameters") {
+            val html = fileInputPage()
+            html shouldContain "API reference"
+            html shouldContain "attributes[&quot;accept&quot;]"
+            html shouldContain "attributes[&quot;hx-post&quot;]"
+            html shouldContain "INPUT.()"
+            listOf("variant", "bordered", "size", "classes", "block").forEach { param ->
+                html shouldContain param
+            }
+        }
+
         test("the sidebar renders menu-title headers for Components and Guides sections") {
             val html = landingPage()
             html shouldContain "menu-title\">Components"
@@ -675,6 +717,7 @@ class PagesTest :
                 "footer" to (footerPage() to 3),
                 "badge" to (badgePage() to 3),
                 "alert" to (alertPage() to 2),
+                "file-input" to (fileInputPage() to 4),
             ).forEach { (_, page) ->
                 val (html, expectedStaticExampleCount) = page
 
