@@ -7,8 +7,10 @@ import io.kotest.matchers.string.shouldNotContain
 import mosaik.ui.components.AlertVariant
 import mosaik.ui.components.BadgeVariant
 import mosaik.ui.components.ButtonVariant
+import mosaik.ui.components.FileInputVariant
 import mosaik.ui.components.LoadingType
 import mosaik.ui.components.Size
+import mosaik.ui.components.TableSize
 import mosaik.ui.components.TabsStyle
 import mosaik.ui.components.mButton
 
@@ -49,8 +51,20 @@ class PagesTest :
 
         test("the sidebar links Home and every component page, marking the active one") {
             landingPage() shouldContain "href=\"/\""
-            listOf("button", "card", "navbar", "footer", "badge", "alert", "form", "loading", "menu", "table", "tabs")
-                .forEach { component -> landingPage() shouldContain "href=\"/components/$component\"" }
+            listOf(
+                "button",
+                "card",
+                "navbar",
+                "footer",
+                "badge",
+                "table",
+                "alert",
+                "file-input",
+                "form",
+                "loading",
+                "menu",
+                "tabs",
+            ).forEach { component -> landingPage() shouldContain "href=\"/components/$component\"" }
 
             // The active page's nav entry carries DaisyUI's menu-active marker.
             buttonPage() shouldContain "menu-active"
@@ -68,17 +82,21 @@ class PagesTest :
             buttonPage() shouldContain "./gradlew mosaikAdd --component=button"
         }
 
-        test("the button page shows a basic usage Kotlin code block") {
+        test("the button page shows default/no-color basic usage") {
             val html = buttonPage()
             html shouldContain "Basic usage"
-            html shouldContain "mButton(variant = ButtonVariant.Primary, size = Size.Md)"
+            html shouldContain "mButton { +&quot;Default button&quot; }"
+            html shouldContain "mButtonLink(href = &quot;/docs&quot;) { +&quot;Default link&quot; }"
+            html shouldContain "ButtonVariant.Neutral"
         }
 
-        test("the button page renders every variant as its DaisyUI class") {
+        test("the button page renders the default variant and every color variant") {
             val html = buttonPage()
-            ButtonVariant.entries.forEach { variant ->
-                html shouldContain "btn-${variant.token}"
+            html shouldContain "ButtonVariant.Default"
+            ButtonVariant.entries.map { it.token }.filter { it.isNotBlank() }.forEach { token ->
+                html shouldContain "btn-$token"
             }
+            html shouldNotContain "btn-null"
         }
 
         test("the button page renders every non-default size and omits the medium token") {
@@ -99,7 +117,7 @@ class PagesTest :
                 html shouldContain param
             }
             // Types and defaults are documented in the table.
-            html shouldContain "ButtonVariant.Neutral"
+            html shouldContain "ButtonVariant.Default"
             html shouldContain "Size.Md"
         }
 
@@ -544,6 +562,46 @@ class PagesTest :
             html shouldContain "SPAN.()"
         }
 
+        test("the sidebar links the table page and it carries the active marker") {
+            landingPage() shouldContain "href=\"/components/table\""
+            tablePage() shouldContain "menu-active"
+        }
+
+        test("the table page opens with a title and a description of what Table is") {
+            val html = tablePage()
+            html shouldContain "<h1>Table</h1>"
+            html shouldContain "mTable"
+            html shouldContain "TableSize"
+            html shouldContain "DaisyUI"
+        }
+
+        test("the table page shows the Gradle installation command and usage blocks") {
+            val html = tablePage()
+            html shouldContain "./gradlew mosaikAdd --component=table"
+            html shouldContain "Basic usage"
+            html shouldContain "mTable(size = TableSize.Sm"
+            html shouldContain "whitespace-nowrap"
+        }
+
+        test("the table page renders zebra rows and every non-default table size") {
+            val html = tablePage()
+            html shouldContain "table-zebra"
+            TableSize.entries.mapNotNull { it.token }.forEach { token ->
+                html shouldContain "table-$token"
+            }
+            html shouldNotContain "table-md"
+        }
+
+        test("the table page includes an API reference table for every mTable parameter") {
+            val html = tablePage()
+            html shouldContain "API reference"
+            html shouldContain "TableSize.Default"
+            html shouldContain "TABLE.()"
+            listOf("zebra", "size", "classes", "block").forEach { param ->
+                html shouldContain param
+            }
+        }
+
         test("the sidebar links the alert page and it carries the active marker") {
             landingPage() shouldContain "href=\"/components/alert\""
             alertPage() shouldContain "menu-active"
@@ -577,6 +635,47 @@ class PagesTest :
             html shouldContain "AlertVariant.Info"
             // The block param documents the raw DIV receiver (> is HTML-escaped in the cell).
             html shouldContain "DIV.()"
+        }
+
+        test("the sidebar links the file input page and it carries the active marker") {
+            landingPage() shouldContain "href=\"/components/file-input\""
+            fileInputPage() shouldContain "menu-active"
+        }
+
+        test("the file input page opens with a title and component description") {
+            val html = fileInputPage()
+            html shouldContain "<h1>File input</h1>"
+            html shouldContain "mFileInput"
+            html shouldContain "FileInputVariant"
+            html shouldContain "DaisyUI"
+        }
+
+        test("the file input page shows the Gradle installation command and a usage block") {
+            val html = fileInputPage()
+            html shouldContain "./gradlew mosaikAdd --component=form"
+            html shouldContain "Basic usage"
+            html shouldContain "mFileInput(classes = &quot;w-full&quot;)"
+        }
+
+        test("the file input page renders every FileInputVariant and non-default size") {
+            val html = fileInputPage()
+            FileInputVariant.entries.forEach { variant ->
+                html shouldContain "file-input-${variant.token}"
+            }
+            Size.entries.mapNotNull { it.token }.forEach { token ->
+                html shouldContain "file-input-$token"
+            }
+        }
+
+        test("the file input page documents native attributes and API parameters") {
+            val html = fileInputPage()
+            html shouldContain "API reference"
+            html shouldContain "attributes[&quot;accept&quot;]"
+            html shouldContain "attributes[&quot;hx-post&quot;]"
+            html shouldContain "INPUT.()"
+            listOf("variant", "bordered", "size", "classes", "block").forEach { param ->
+                html shouldContain param
+            }
         }
 
         test("the sidebar renders menu-title headers for Components and Guides sections") {
@@ -725,11 +824,12 @@ class PagesTest :
                 "navbar" to (navbarPage() to 4),
                 "footer" to (footerPage() to 3),
                 "badge" to (badgePage() to 3),
+                "table" to (tablePage() to 5),
                 "alert" to (alertPage() to 2),
+                "file-input" to (fileInputPage() to 4),
                 "form" to (formPage() to 3),
                 "loading" to (loadingPage() to 3),
                 "menu" to (menuPage() to 2),
-                "table" to (tablePage() to 2),
                 "tabs" to (tabsPage() to 2),
             ).forEach { (_, page) ->
                 val (html, expectedStaticExampleCount) = page

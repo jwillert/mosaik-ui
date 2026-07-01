@@ -173,6 +173,110 @@ class FormTest :
             html shouldContain "hx-trigger=\"keyup changed delay:500ms\""
         }
 
+        // mFileInput tests
+
+        test("mFileInput renders a file input with file-input and file-input-bordered classes") {
+            val html = render { mFileInput() }
+
+            html shouldContain "<input type=\"file\" class=\"file-input file-input-bordered\">"
+        }
+
+        test("mFileInput with bordered=false renders only file-input class") {
+            val html = render { mFileInput(bordered = false) }
+
+            html shouldContain "class=\"file-input\""
+            html shouldNotContain "file-input-bordered"
+        }
+
+        test("mFileInput with variant applies the file-input-{variant} class") {
+            val html = render { mFileInput(variant = FileInputVariant.Secondary) }
+
+            html shouldContain "class=\"file-input file-input-bordered file-input-secondary\""
+        }
+
+        test("every file input variant maps to its DaisyUI class") {
+            val expected =
+                mapOf(
+                    FileInputVariant.Neutral to "file-input-neutral",
+                    FileInputVariant.Primary to "file-input-primary",
+                    FileInputVariant.Secondary to "file-input-secondary",
+                    FileInputVariant.Accent to "file-input-accent",
+                    FileInputVariant.Info to "file-input-info",
+                    FileInputVariant.Success to "file-input-success",
+                    FileInputVariant.Warning to "file-input-warning",
+                    FileInputVariant.Error to "file-input-error",
+                )
+
+            expected.forEach { (variant, css) ->
+                val html = render { mFileInput(variant = variant) }
+                html shouldContain "class=\"file-input file-input-bordered $css\""
+            }
+        }
+
+        test("mFileInput with size applies the file-input-{size} class") {
+            val html = render { mFileInput(size = Size.Xl) }
+
+            html shouldContain "class=\"file-input file-input-bordered file-input-xl\""
+        }
+
+        test("mFileInput with size Md omits the size class as it is the default") {
+            val html = render { mFileInput(size = Size.Md) }
+
+            html shouldContain "class=\"file-input file-input-bordered\""
+            html shouldNotContain "file-input-md"
+        }
+
+        test("every non-default file input size maps to its DaisyUI class") {
+            val expected =
+                mapOf(
+                    Size.Xs to "file-input-xs",
+                    Size.Sm to "file-input-sm",
+                    Size.Lg to "file-input-lg",
+                    Size.Xl to "file-input-xl",
+                )
+
+            expected.forEach { (size, css) ->
+                val html = render { mFileInput(size = size) }
+                html shouldContain "class=\"file-input file-input-bordered $css\""
+            }
+        }
+
+        test("mFileInput with custom classes appends them") {
+            val html = render { mFileInput(classes = "w-full max-w-xs") }
+
+            html shouldContain "class=\"file-input file-input-bordered w-full max-w-xs\""
+        }
+
+        test("mFileInput block receives the raw input element so html attributes apply natively") {
+            val html =
+                render {
+                    mFileInput {
+                        id = "avatar-input"
+                        name = "avatar"
+                        required = true
+                        attributes["accept"] = "image/*"
+                    }
+                }
+
+            html shouldContain "id=\"avatar-input\""
+            html shouldContain "name=\"avatar\""
+            html shouldContain "required=\"required\""
+            html shouldContain "accept=\"image/*\""
+        }
+
+        test("mFileInput allows arbitrary attributes (e.g. htmx, alpine) via the raw element") {
+            val html =
+                render {
+                    mFileInput {
+                        attributes["x-ref"] = "upload"
+                        attributes["hx-post"] = "/uploads"
+                    }
+                }
+
+            html shouldContain "x-ref=\"upload\""
+            html shouldContain "hx-post=\"/uploads\""
+        }
+
         // mSelect tests
 
         test("mSelect renders a select with select and select-bordered classes") {

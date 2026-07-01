@@ -104,10 +104,11 @@
     },
     {
       "name": "table",
-      "description": "DaisyUI table with zebra modifier for striped rows. Preserves normal HTML table structure (thead, tbody, tr, th, td).",
+      "description": "DaisyUI table with zebra modifier and component-specific TableSize for table sizing. Preserves normal HTML table structure (thead, tbody, tr, th, td).",
       "files": ["Table.kt"],
       "dependencies": ["theme"],
       "api": [
+        { "name": "TableSize", "kind": "enum" },
         { "name": "mTable", "kind": "function" }
       ]
     },
@@ -123,14 +124,16 @@
     },
     {
       "name": "form",
-      "description": "DaisyUI form components: mFormControl (form-control wrapper), mLabel (label container), mLabelText (label-text span), mInput (input with bordered/size modifiers), and mSelect (select with bordered/size modifiers). All expose raw HTML elements for native attribute access.",
+      "description": "DaisyUI form components: mFormControl (form-control wrapper), mLabel (label container), mLabelText (label-text span), mInput (input with bordered/size modifiers), mFileInput (file input with bordered/variant/size modifiers), and mSelect (select with bordered/size modifiers). All expose raw HTML elements for native attribute access.",
       "files": ["Form.kt"],
       "dependencies": ["theme"],
       "api": [
+        { "name": "FileInputVariant", "kind": "enum" },
         { "name": "mFormControl", "kind": "function" },
         { "name": "mLabel", "kind": "function" },
         { "name": "mLabelText", "kind": "function" },
         { "name": "mInput", "kind": "function" },
+        { "name": "mFileInput", "kind": "function" },
         { "name": "mSelect", "kind": "function" }
       ]
     }

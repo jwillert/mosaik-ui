@@ -21,15 +21,17 @@ fun footerPagePartial(): String = partialContent { footerPageContent() }
 
 fun badgePagePartial(): String = partialContent { badgePageContent() }
 
+fun tablePagePartial(): String = partialContent { tablePageContent() }
+
 fun alertPagePartial(): String = partialContent { alertPageContent() }
+
+fun fileInputPagePartial(): String = partialContent { fileInputPageContent() }
 
 fun formPagePartial(): String = partialContent { formPageContent() }
 
 fun loadingPagePartial(): String = partialContent { loadingPageContent() }
 
 fun menuPagePartial(): String = partialContent { menuPageContent() }
-
-fun tablePagePartial(): String = partialContent { tablePageContent() }
 
 fun tabsPagePartial(): String = partialContent { tabsPageContent() }
 

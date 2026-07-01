@@ -3,6 +3,26 @@ package mosaik.ui.components
 import kotlinx.html.*
 
 /**
+ * The DaisyUI colour roles a file input supports.
+ *
+ * Per ADR-0004 this is a component-specific enum rather than the shared
+ * [Variant], because file inputs support neutral and info roles but not the
+ * full shared palette.
+ */
+enum class FileInputVariant(
+    val token: String,
+) {
+    Neutral("neutral"),
+    Primary("primary"),
+    Secondary("secondary"),
+    Accent("accent"),
+    Info("info"),
+    Success("success"),
+    Warning("warning"),
+    Error("error"),
+}
+
+/**
  * A DaisyUI form control container, usable anywhere in a kotlinx.html flow.
  *
  * Per ADR-0003 the design tokens are function parameters and [block] receives
@@ -145,6 +165,42 @@ fun FlowContent.mSelect(
                 "select",
                 if (bordered) "select-bordered" else null,
                 size.token?.let { "select-$it" },
+                classes,
+            ),
+        block = block,
+    )
+}
+
+/**
+ * A DaisyUI file input element, usable anywhere in a kotlinx.html flow.
+ *
+ * Per ADR-0003 the design tokens are function parameters and [block] receives
+ * the raw kotlinx.html [INPUT]. Callers can set native file-upload attributes
+ * such as `name`, `required`, `accept`, `multiple`, and any third-party
+ * extension attributes directly on the element.
+ *
+ * ```kotlin
+ * mFileInput(variant = FileInputVariant.Secondary, classes = "w-full") {
+ *     name = "avatar"
+ *     attributes["accept"] = "image/png,image/jpeg"
+ * }
+ * ```
+ */
+fun FlowContent.mFileInput(
+    variant: FileInputVariant? = null,
+    bordered: Boolean = true,
+    size: Size = Size.Md,
+    classes: String? = null,
+    block: INPUT.() -> Unit = {},
+) {
+    input(
+        type = InputType.file,
+        classes =
+            buildClasses(
+                "file-input",
+                if (bordered) "file-input-bordered" else null,
+                variant?.token?.let { "file-input-$it" },
+                size.token?.let { "file-input-$it" },
                 classes,
             ),
         block = block,
