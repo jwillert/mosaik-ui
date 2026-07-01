@@ -8,8 +8,10 @@ import mosaik.ui.components.AlertVariant
 import mosaik.ui.components.BadgeVariant
 import mosaik.ui.components.ButtonVariant
 import mosaik.ui.components.FileInputVariant
+import mosaik.ui.components.LoadingType
 import mosaik.ui.components.Size
 import mosaik.ui.components.TableSize
+import mosaik.ui.components.TabsStyle
 import mosaik.ui.components.mButton
 
 /**
@@ -49,7 +51,20 @@ class PagesTest :
 
         test("the sidebar links Home and every component page, marking the active one") {
             landingPage() shouldContain "href=\"/\""
-            landingPage() shouldContain "href=\"/components/button\""
+            listOf(
+                "button",
+                "card",
+                "navbar",
+                "footer",
+                "badge",
+                "table",
+                "alert",
+                "file-input",
+                "form",
+                "loading",
+                "menu",
+                "tabs",
+            ).forEach { component -> landingPage() shouldContain "href=\"/components/$component\"" }
 
             // The active page's nav entry carries DaisyUI's menu-active marker.
             buttonPage() shouldContain "menu-active"
@@ -687,6 +702,54 @@ class PagesTest :
             interactivityPage() shouldContain "menu-active"
         }
 
+        test("missing component reference pages render install, usage, previews, and API docs") {
+            mapOf(
+                "form" to formPage(),
+                "loading" to loadingPage(),
+                "menu" to menuPage(),
+                "table" to tablePage(),
+                "tabs" to tabsPage(),
+            ).forEach { (component, html) ->
+                html shouldContain "href=\"/components/$component\""
+                html shouldContain "./gradlew mosaikAdd --component=$component"
+                html shouldContain "Basic usage"
+                html shouldContain "data-docs-example-card=\"true\""
+                html shouldContain "API reference"
+            }
+        }
+
+        test("the form page documents input and select helpers") {
+            val html = formPage()
+            listOf("mFormControl", "mLabel", "mLabelText", "mInput", "mSelect", "InputType.email").forEach { text ->
+                html shouldContain text
+            }
+            Size.entries.mapNotNull { it.token }.forEach { token -> html shouldContain "input-$token" }
+        }
+
+        test("the loading page renders every loading type and size") {
+            val html = loadingPage()
+            LoadingType.entries.forEach { type -> html shouldContain "loading-${type.token}" }
+            Size.entries.mapNotNull { it.token }.forEach { token -> html shouldContain "loading-$token" }
+        }
+
+        test("the menu page documents constrained menu children") {
+            val html = menuPage()
+            listOf("mMenu", "mMenuItem", "mMenuTitle", "MMenu.()", "menu-active", "menu-title").forEach { text ->
+                html shouldContain text
+            }
+        }
+
+        test("the table page documents zebra tables and raw table structure") {
+            val html = tablePage()
+            listOf("mTable", "table-zebra", "thead", "tbody", "TABLE.()").forEach { text -> html shouldContain text }
+        }
+
+        test("the tabs page documents every style and constrained tab child") {
+            val html = tabsPage()
+            TabsStyle.entries.mapNotNull { it.token }.forEach { token -> html shouldContain token }
+            listOf("mTabs", "mTab", "MTabs.()", "role=&quot;tablist&quot;").forEach { text -> html shouldContain text }
+        }
+
         test("interactivityTabs renders DaisyUI radio tabs with unique name attributes") {
             val html = interactivityTabsTestPage()
             // Wrapper with not-prose class to prevent Tailwind Typography interference.
@@ -764,6 +827,10 @@ class PagesTest :
                 "table" to (tablePage() to 5),
                 "alert" to (alertPage() to 2),
                 "file-input" to (fileInputPage() to 4),
+                "form" to (formPage() to 3),
+                "loading" to (loadingPage() to 3),
+                "menu" to (menuPage() to 2),
+                "tabs" to (tabsPage() to 2),
             ).forEach { (_, page) ->
                 val (html, expectedStaticExampleCount) = page
 

@@ -43,6 +43,18 @@ val ALERT = NavItem("/components/alert", "Alert", ::alertPage, ::alertPagePartia
 /** The File input documentation page. */
 val FILE_INPUT = NavItem("/components/file-input", "File input", ::fileInputPage, ::fileInputPagePartial)
 
+/** The Form documentation page. */
+val FORM = NavItem("/components/form", "Form", ::formPage, ::formPagePartial)
+
+/** The Loading documentation page. */
+val LOADING = NavItem("/components/loading", "Loading", ::loadingPage, ::loadingPagePartial)
+
+/** The Menu documentation page. */
+val MENU = NavItem("/components/menu", "Menu", ::menuPage, ::menuPagePartial)
+
+/** The Tabs documentation page. */
+val TABS = NavItem("/components/tabs", "Tabs", ::tabsPage, ::tabsPagePartial)
+
 /** The Interactivity guide page. */
 val INTERACTIVITY =
     NavItem(
@@ -59,7 +71,21 @@ val INTERACTIVITY =
  * [mosaik.docs.module]), so adding a component page is one [NavItem] plus its
  * renderer.
  */
-val COMPONENTS = listOf(BUTTON, CARD, NAVBAR, FOOTER, BADGE, TABLE_PAGE, ALERT, FILE_INPUT)
+val COMPONENTS =
+    listOf(
+        BUTTON,
+        CARD,
+        NAVBAR,
+        FOOTER,
+        BADGE,
+        TABLE_PAGE,
+        ALERT,
+        FILE_INPUT,
+        FORM,
+        LOADING,
+        MENU,
+        TABS,
+    )
 
 /**
  * Every guide documentation page. Together with [HOME] and [COMPONENTS] this is
