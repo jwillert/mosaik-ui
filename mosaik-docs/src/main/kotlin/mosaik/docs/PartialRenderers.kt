@@ -21,6 +21,8 @@ fun footerPagePartial(): String = partialContent { footerPageContent() }
 
 fun badgePagePartial(): String = partialContent { badgePageContent() }
 
+fun tablePagePartial(): String = partialContent { tablePageContent() }
+
 fun alertPagePartial(): String = partialContent { alertPageContent() }
 
 fun fileInputPagePartial(): String = partialContent { fileInputPageContent() }

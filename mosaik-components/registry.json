@@ -104,10 +104,11 @@
     },
     {
       "name": "table",
-      "description": "DaisyUI table with zebra modifier for striped rows. Preserves normal HTML table structure (thead, tbody, tr, th, td).",
+      "description": "DaisyUI table with zebra modifier and component-specific TableSize for table sizing. Preserves normal HTML table structure (thead, tbody, tr, th, td).",
       "files": ["Table.kt"],
       "dependencies": ["theme"],
       "api": [
+        { "name": "TableSize", "kind": "enum" },
         { "name": "mTable", "kind": "function" }
       ]
     },
