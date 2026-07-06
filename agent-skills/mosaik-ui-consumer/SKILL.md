@@ -38,6 +38,19 @@ When writing UI:
 3. Import/use the local package and configured prefix from the inventory.
 4. Prefer local component functions such as `mButton`, `mCard`, etc. using the actual prefix from the inventory.
 
+## Composition guidance
+
+### Navbar with mobile drawer
+
+For responsive site navigation, compose `navbar`, `drawer`, and usually `menu` rather than writing raw DaisyUI class tokens:
+
+1. Install/check all required components: `navbar`, `drawer`, and `menu` (plus `button` if actions are needed).
+2. Wrap the page in `mDrawer(toggleId = "...")`.
+3. Put the top bar and page body inside `mDrawerContent`.
+4. In the navbar, use `mNavbarStart`, `mNavbarCenter`, and `mNavbarEnd`; hide desktop navigation with responsive Tailwind utilities where appropriate.
+5. Use an ordinary `label` with `htmlFor` set to the drawer `toggleId` as the mobile trigger.
+6. Put mobile links inside `mDrawerSide` with `mMenu`/`mMenuItem`.
+
 ## Installing components
 
 If a needed component is not installed:
