@@ -99,6 +99,7 @@ class MosaikAddTaskTest :
 
             result.output shouldContain "theme"
             result.output shouldContain "button"
+            result.output shouldContain "drawer"
             result.output shouldContain "depends on: theme"
         }
 
