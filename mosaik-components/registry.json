@@ -52,6 +52,19 @@
       ]
     },
     {
+      "name": "drawer",
+      "description": "DaisyUI drawer layout with a generated checkbox toggle, type-safe placement/open modifiers, and constrained mDrawerContent and mDrawerSide slots.",
+      "files": ["Drawer.kt"],
+      "dependencies": ["theme"],
+      "api": [
+        { "name": "DrawerPlacement", "kind": "enum" },
+        { "name": "MDrawer", "kind": "type" },
+        { "name": "mDrawer", "kind": "function" },
+        { "name": "mDrawerContent", "kind": "function" },
+        { "name": "mDrawerSide", "kind": "function" }
+      ]
+    },
+    {
       "name": "footer",
       "description": "DaisyUI footer container with no variant, size, or sub-components — a simple wrapper around the footer classes, styled by the utility classes the caller passes.",
       "files": ["Footer.kt"],
