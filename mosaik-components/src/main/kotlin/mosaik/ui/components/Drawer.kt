@@ -10,6 +10,17 @@ enum class DrawerPlacement(
     End("end"),
 }
 
+/** The Tailwind breakpoint where a drawer becomes always open. */
+enum class DrawerBreakpoint(
+    val token: String,
+) {
+    Sm("sm"),
+    Md("md"),
+    Lg("lg"),
+    Xl("xl"),
+    TwoXl("2xl"),
+}
+
 /**
  * DSL context for [mDrawer]. Collects drawer slots before rendering so root
  * attributes can be applied before the generated checkbox opens the element.
@@ -47,6 +58,7 @@ fun FlowContent.mDrawer(
     open: Boolean = false,
     checked: Boolean = false,
     classes: String? = null,
+    openFrom: DrawerBreakpoint? = null,
     block: MDrawer.() -> Unit = {},
 ) {
     val drawer = MDrawer(toggleId).apply(block)
@@ -56,6 +68,7 @@ fun FlowContent.mDrawer(
                 "drawer",
                 placement.token?.let { "drawer-$it" },
                 if (open) "drawer-open" else null,
+                openFrom?.let { "${it.token}:drawer-open" },
                 classes,
             ),
     ) {

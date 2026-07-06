@@ -2,6 +2,7 @@ package mosaik.ui.components
 
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldNotContain
 import kotlinx.html.*
 import kotlinx.html.stream.createHTML
 
@@ -47,6 +48,34 @@ class DrawerTest :
 
             html shouldContain
                 "<input type=\"checkbox\" class=\"drawer-toggle\" id=\"open-drawer\" checked=\"checked\">"
+        }
+
+        test("responsive open modifier keeps the drawer open from each breakpoint") {
+            DrawerBreakpoint.entries.forEach { breakpoint ->
+                val html =
+                    render {
+                        mDrawer(
+                            toggleId = "responsive-drawer-${breakpoint.token}",
+                            openFrom = breakpoint,
+                        ) {}
+                    }
+
+                html shouldContain "class=\"drawer ${breakpoint.token}:drawer-open\""
+                html shouldNotContain "drawer-open drawer-open"
+            }
+        }
+
+        test("end placement combines with responsive open modifier") {
+            val html =
+                render {
+                    mDrawer(
+                        toggleId = "responsive-end-drawer",
+                        placement = DrawerPlacement.End,
+                        openFrom = DrawerBreakpoint.Lg,
+                    ) {}
+                }
+
+            html shouldContain "class=\"drawer drawer-end lg:drawer-open\""
         }
 
         test("slot custom classes are appended after their base classes") {
