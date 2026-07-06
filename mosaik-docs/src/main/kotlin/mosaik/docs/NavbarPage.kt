@@ -5,6 +5,11 @@ import mosaik.ui.components.ButtonStyle
 import mosaik.ui.components.ButtonVariant
 import mosaik.ui.components.mButton
 import mosaik.ui.components.mButtonLink
+import mosaik.ui.components.mDrawer
+import mosaik.ui.components.mDrawerContent
+import mosaik.ui.components.mDrawerSide
+import mosaik.ui.components.mMenu
+import mosaik.ui.components.mMenuItem
 import mosaik.ui.components.mNavbar
 import mosaik.ui.components.mNavbarCenter
 import mosaik.ui.components.mNavbarEnd
@@ -168,6 +173,103 @@ fun FlowContent.navbarPageContent() {
                 }
                 mNavbarEnd {
                     mButton(variant = ButtonVariant.Primary) { +"Sign up" }
+                }
+            }
+        }
+    }
+
+    section {
+        h2 { +"Mobile drawer navigation" }
+        p {
+            +"For small screens, keep the desktop links in "
+            code { +"mNavbarCenter" }
+            +" hidden with responsive utility classes and wrap the page in "
+            code { +"mDrawer" }
+            +". Install the composed pieces: "
+            code { +"./gradlew mosaikAdd --component=navbar" }
+            +", "
+            code { +"./gradlew mosaikAdd --component=drawer" }
+            +", and "
+            code { +"./gradlew mosaikAdd --component=menu" }
+            +". The navbar's mobile trigger is an ordinary "
+            code { +"label" }
+            +" whose "
+            code { +"htmlFor" }
+            +" matches the drawer "
+            code { +"toggleId" }
+            +". Put the same navigation links in the drawer side with "
+            code { +"mMenu" }
+            +" so mobile users get a full-height navigation panel."
+        }
+        exampleCard(
+            code =
+                """
+                import mosaik.ui.components.mDrawer
+                import mosaik.ui.components.mDrawerContent
+                import mosaik.ui.components.mDrawerSide
+                import mosaik.ui.components.mMenu
+                import mosaik.ui.components.mMenuItem
+                import mosaik.ui.components.mNavbar
+                import mosaik.ui.components.mNavbarStart
+                import mosaik.ui.components.mNavbarCenter
+                import mosaik.ui.components.mNavbarEnd
+                import mosaik.ui.components.mButton
+                import mosaik.ui.components.mButtonLink
+                import mosaik.ui.components.ButtonStyle
+                import mosaik.ui.components.ButtonVariant
+
+                mDrawer(toggleId = "site-drawer") {
+                    mDrawerContent {
+                        mNavbar("bg-base-100 shadow-sm") {
+                            mNavbarStart {
+                                label(classes = "inline-flex cursor-pointer px-3 py-2 lg:hidden") {
+                                    htmlFor = "site-drawer"
+                                    +"Menu"
+                                }
+                                mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
+                            }
+                            mNavbarCenter("hidden lg:flex") {
+                                mButtonLink(href = "/components/navbar", style = ButtonStyle.Ghost) { +"Navbar" }
+                                mButtonLink(href = "/components/menu", style = ButtonStyle.Ghost) { +"Menu" }
+                            }
+                            mNavbarEnd {
+                                mButton(variant = ButtonVariant.Primary) { +"Sign up" }
+                            }
+                        }
+                    }
+                    mDrawerSide("bg-base-200 p-4") {
+                        mMenu("w-64") {
+                            mMenuItem("/components/navbar") { +"Navbar" }
+                            mMenuItem("/components/menu") { +"Menu" }
+                        }
+                    }
+                }
+                """.trimIndent(),
+        ) {
+            mDrawer(toggleId = "site-drawer") {
+                mDrawerContent {
+                    mNavbar("bg-base-100 shadow-sm") {
+                        mNavbarStart {
+                            label(classes = "inline-flex cursor-pointer px-3 py-2 lg:hidden") {
+                                htmlFor = "site-drawer"
+                                +"Menu"
+                            }
+                            mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
+                        }
+                        mNavbarCenter("hidden lg:flex") {
+                            mButtonLink(href = "/components/navbar", style = ButtonStyle.Ghost) { +"Navbar" }
+                            mButtonLink(href = "/components/menu", style = ButtonStyle.Ghost) { +"Menu" }
+                        }
+                        mNavbarEnd {
+                            mButton(variant = ButtonVariant.Primary) { +"Sign up" }
+                        }
+                    }
+                }
+                mDrawerSide("bg-base-200 p-4") {
+                    mMenu("w-64") {
+                        mMenuItem("/components/navbar") { +"Navbar" }
+                        mMenuItem("/components/menu") { +"Menu" }
+                    }
                 }
             }
         }
