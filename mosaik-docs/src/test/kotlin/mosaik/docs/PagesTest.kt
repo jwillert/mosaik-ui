@@ -502,6 +502,20 @@ class PagesTest :
             DrawerBreakpoint.entries.forEach { breakpoint -> html shouldContain breakpoint.name }
         }
 
+        test("the navbar page guides mobile navigation with Drawer") {
+            val html = navbarPage()
+
+            html shouldContain "Mobile drawer navigation"
+            html shouldContain "./gradlew mosaikAdd --component=drawer"
+            html shouldContain "./gradlew mosaikAdd --component=button"
+            html shouldContain "mDrawer(toggleId"
+            html shouldContain "site-drawer"
+            html shouldContain "mDrawerContent"
+            html shouldContain "mDrawerSide"
+            html shouldContain "htmlFor"
+            html shouldContain "mMenuItem"
+        }
+
         test("the sidebar links the footer page and it carries the active marker") {
             landingPage() shouldContain "href=\"/components/footer\""
             footerPage() shouldContain "menu-active"
@@ -839,7 +853,7 @@ class PagesTest :
             mapOf(
                 "button" to (buttonPage() to 10),
                 "card" to (cardPage() to 4),
-                "navbar" to (navbarPage() to 4),
+                "navbar" to (navbarPage() to 5),
                 "drawer" to (drawerPage() to 3),
                 "footer" to (footerPage() to 3),
                 "badge" to (badgePage() to 3),
