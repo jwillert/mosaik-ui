@@ -489,6 +489,7 @@ class PagesTest :
 
             html shouldContain "Mobile drawer navigation"
             html shouldContain "./gradlew mosaikAdd --component=drawer"
+            html shouldContain "./gradlew mosaikAdd --component=button"
             html shouldContain "mDrawer(toggleId"
             html shouldContain "site-drawer"
             html shouldContain "mDrawerContent"

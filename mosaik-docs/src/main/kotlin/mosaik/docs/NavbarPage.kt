@@ -191,6 +191,12 @@ fun FlowContent.navbarPageContent() {
             code { +"./gradlew mosaikAdd --component=drawer" }
             +", and "
             code { +"./gradlew mosaikAdd --component=menu" }
+            +", and "
+            code { +"./gradlew mosaikAdd --component=button" }
+            +" because this example uses "
+            code { +"mButtonLink" }
+            +" and "
+            code { +"mButton" }
             +". The navbar's mobile trigger is an ordinary "
             code { +"label" }
             +" whose "
