@@ -7,6 +7,7 @@ import io.kotest.matchers.string.shouldNotContain
 import mosaik.ui.components.AlertVariant
 import mosaik.ui.components.BadgeVariant
 import mosaik.ui.components.ButtonVariant
+import mosaik.ui.components.DrawerBreakpoint
 import mosaik.ui.components.FileInputVariant
 import mosaik.ui.components.LoadingType
 import mosaik.ui.components.Size
@@ -55,6 +56,7 @@ class PagesTest :
                 "button",
                 "card",
                 "navbar",
+                "drawer",
                 "footer",
                 "badge",
                 "table",
@@ -484,6 +486,22 @@ class PagesTest :
             }
         }
 
+        test("the sidebar links the drawer page and it carries the active marker") {
+            landingPage() shouldContain "href=\"/components/drawer\""
+            drawerPage() shouldContain "menu-active"
+        }
+
+        test("the drawer page documents responsive always-open behavior") {
+            val html = drawerPage()
+            html shouldContain "<h1>Drawer</h1>"
+            html shouldContain "./gradlew mosaikAdd --component=drawer"
+            html shouldContain "Responsive always-open sidebar"
+            html shouldContain "DrawerBreakpoint.Lg"
+            html shouldContain "lg:drawer-open"
+            html shouldContain "DrawerPlacement.End"
+            DrawerBreakpoint.entries.forEach { breakpoint -> html shouldContain breakpoint.name }
+        }
+
         test("the sidebar links the footer page and it carries the active marker") {
             landingPage() shouldContain "href=\"/components/footer\""
             footerPage() shouldContain "menu-active"
@@ -822,6 +840,7 @@ class PagesTest :
                 "button" to (buttonPage() to 10),
                 "card" to (cardPage() to 4),
                 "navbar" to (navbarPage() to 4),
+                "drawer" to (drawerPage() to 3),
                 "footer" to (footerPage() to 3),
                 "badge" to (badgePage() to 3),
                 "table" to (tablePage() to 5),
