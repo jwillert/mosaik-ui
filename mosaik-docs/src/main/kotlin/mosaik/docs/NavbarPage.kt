@@ -207,6 +207,26 @@ fun FlowContent.navbarPageContent() {
             code { +"mMenu" }
             +" so mobile users get a full-height navigation panel."
         }
+        div("rounded-box border border-base-300 bg-base-100 p-4") {
+            h3 { +"Advanced drawer customization" }
+            p {
+                +"The basic mobile pattern above should stay the default teaching path. "
+                +"When you need custom side-panel behavior, pass "
+                code { +"overlay = false" }
+                +" to "
+                code { +"mDrawerSide" }
+                +" and render your own close affordance inside the side slot. "
+                +"Advanced state styling remains a class pass-through concern: "
+                +"utility combinations such as "
+                code { +"is-drawer-open:" }
+                +" and "
+                code { +"is-drawer-close:" }
+                +" are intentionally out of scope for the typed API in this slice. "
+                +"Put those utilities in the existing "
+                code { +"classes" }
+                +" parameters only when a page has a one-off need."
+            }
+        }
         exampleCard(
             code =
                 """
