@@ -91,6 +91,19 @@ class DrawerTest :
             html shouldContain "class=\"drawer-side bg-base-200\""
         }
 
+        test("the drawer side overlay can be disabled for custom side-panel behavior") {
+            val html =
+                render {
+                    mDrawer(toggleId = "custom-side-drawer") {
+                        mDrawerSide(overlay = false) { +"Sidebar" }
+                    }
+                }
+
+            html shouldContain "<div class=\"drawer-side\">Sidebar</div>"
+            html shouldNotContain "drawer-overlay"
+            html shouldNotContain "aria-label=\"close sidebar\""
+        }
+
         test("the drawer block receives a context with root html attributes") {
             val html =
                 render {

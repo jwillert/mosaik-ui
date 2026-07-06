@@ -516,6 +516,16 @@ class PagesTest :
             html shouldContain "mMenuItem"
         }
 
+        test("the navbar page documents advanced Drawer customization as a secondary path") {
+            val html = navbarPage()
+
+            html shouldContain "Advanced drawer customization"
+            html shouldContain "overlay = false"
+            html shouldContain "is-drawer-open:"
+            html shouldContain "is-drawer-close:"
+            html shouldContain "out of scope for the typed API"
+        }
+
         test("the sidebar links the footer page and it carries the active marker") {
             landingPage() shouldContain "href=\"/components/footer\""
             footerPage() shouldContain "menu-active"
