@@ -49,6 +49,18 @@ class DrawerTest :
                 "<input type=\"checkbox\" class=\"drawer-toggle\" id=\"open-drawer\" checked=\"checked\">"
         }
 
+        test("responsive open modifier keeps the drawer open from a breakpoint") {
+            val html =
+                render {
+                    mDrawer(
+                        toggleId = "responsive-drawer",
+                        openFrom = DrawerBreakpoint.Lg,
+                    ) {}
+                }
+
+            html shouldContain "class=\"drawer lg:drawer-open\""
+        }
+
         test("slot custom classes are appended after their base classes") {
             val html =
                 render {
