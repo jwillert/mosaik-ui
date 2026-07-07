@@ -147,7 +147,7 @@ private fun FlowContent.dashboardHeader() {
 
 private fun FlowContent.dashboardSidebar() {
     aside(classes = "flex min-h-full flex-col gap-6 p-4") {
-        a(href = DASHBOARD_01_PATH, classes = "flex items-center gap-3 px-2") {
+        a(href = DASHBOARD_01_STANDALONE_PREVIEW_PATH, classes = "flex items-center gap-3 px-2") {
             img(src = "/static/mosaik-logo.svg", alt = "Mosaik UI", classes = "h-8 w-8")
             div {
                 p(classes = "text-sm text-base-content/60") { +"Mosaik" }

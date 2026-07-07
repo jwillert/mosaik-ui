@@ -18,6 +18,8 @@ class DashboardBlockPreviewTest :
             html shouldContain "Revenue"
             html shouldContain "Recent orders"
             html shouldContain "mosaik-logo.svg"
+            html shouldContain "href=\"/blocks/dashboard-01/preview\""
+            html shouldNotContain "href=\"/blocks/dashboard-01\""
             html shouldNotContain "alpinejs"
             html shouldNotContain "mosaik-docs-client.js"
             html shouldNotContain "id=\"main-content\""
