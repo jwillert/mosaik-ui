@@ -37,6 +37,10 @@ class DashboardBlockPreviewTest :
             html shouldContain "title=\"Dashboard 01 preview\""
             html shouldContain "Open standalone preview"
             html shouldContain "./gradlew mosaikAdd --block=dashboard-01"
+            html shouldContain "Future CLI boundary"
+            html shouldContain "Block installation is not available in the current Gradle plugin yet."
+            html shouldContain "Today, install the referenced components with"
+            html shouldContain "./gradlew mosaikAdd --component=drawer"
             html shouldNotContain "data-block-preview=\"dashboard-01\""
         }
     })

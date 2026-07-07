@@ -8,7 +8,10 @@ import kotlinx.html.h2
 import kotlinx.html.iframe
 import kotlinx.html.p
 import kotlinx.html.section
+import kotlinx.html.strong
+import mosaik.ui.components.AlertVariant
 import mosaik.ui.components.ButtonVariant
+import mosaik.ui.components.mAlert
 import mosaik.ui.components.mButtonLink
 
 fun FlowContent.dashboard01PageContent() {
@@ -20,7 +23,19 @@ fun FlowContent.dashboard01PageContent() {
     }
 
     h2 { +"Installation" }
+    mAlert(AlertVariant.Info) {
+        strong { +"Future CLI boundary: " }
+        +"Block installation is not available in the current Gradle plugin yet. "
+        +"The command below documents the planned block-install boundary, where dashboard source, "
+        +"sample data, and route wiring install as a Block rather than as a DaisyUI reference component."
+    }
     codeBlock("./gradlew mosaikAdd --block=dashboard-01")
+    p {
+        +"Today, install the referenced components with "
+        code { +"./gradlew mosaikAdd --component=drawer" }
+        +" and the other listed component names, then copy the route-sized dashboard source "
+        +"from this preview into your app."
+    }
 
     section {
         h2 { +"Preview" }
