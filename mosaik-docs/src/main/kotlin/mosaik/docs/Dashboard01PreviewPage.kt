@@ -66,6 +66,12 @@ import mosaik.ui.components.mTable
 const val DASHBOARD_01_PATH = "/blocks/dashboard-01"
 const val DASHBOARD_01_STANDALONE_PREVIEW_PATH = "$DASHBOARD_01_PATH/preview"
 
+internal const val DASHBOARD_01_ACTION_EXPORT_REPORT = "export-report"
+internal const val DASHBOARD_01_ACTION_SELECT_RANGE = "select-range"
+internal const val DASHBOARD_01_ACTION_TOGGLE_PAID_ORDERS = "toggle-paid-orders"
+internal const val DASHBOARD_01_ACTION_VIEW_ORDERS = "view-orders"
+internal const val DASHBOARD_01_ACTION_SAVE_NOTE = "save-note"
+
 private fun <T> TagConsumer<T>.dashboardHtmlDocument(block: HTML.() -> Unit): T =
     HTML(mapOf("data-theme" to DEFAULT_THEME, "lang" to "en"), this, namespace = null)
         .visitAndFinalize(this, block)
@@ -123,7 +129,10 @@ private fun FlowContent.dashboardHeader() {
             }
         }
         div(classes = "flex items-center gap-3") {
-            mButton(variant = ButtonVariant.Primary, size = Size.Sm) { +"Export" }
+            mButton(variant = ButtonVariant.Primary, size = Size.Sm) {
+                attributes["data-dashboard-action"] = DASHBOARD_01_ACTION_EXPORT_REPORT
+                +"Export"
+            }
             mDropdown(alignment = DropdownAlignment.End) {
                 mDropdownTrigger(classes = "rounded-full") {
                     mAvatar(classes = "ring ring-primary ring-offset-2 ring-offset-base-100") {
@@ -192,7 +201,12 @@ private fun FlowContent.dashboardHero() {
                         variant = if (index == 1) ButtonVariant.Primary else ButtonVariant.Default,
                         size = Size.Sm,
                         classes = "rounded-none",
-                    ) { +label }
+                    ) {
+                        attributes["data-dashboard-action"] = DASHBOARD_01_ACTION_SELECT_RANGE
+                        attributes["data-dashboard-range"] = label.lowercase()
+                        attributes["aria-pressed"] = (index == 1).toString()
+                        +label
+                    }
                 }
             }
         }
@@ -231,12 +245,18 @@ private fun FlowContent.dashboardMainGrid() {
                         ) { +"A static snapshot for the standalone block preview." }
                     }
                     div(classes = "flex items-center gap-2") {
-                        mCheckbox(variant = CheckboxVariant.Primary, size = Size.Sm)
+                        mCheckbox(variant = CheckboxVariant.Primary, size = Size.Sm) {
+                            attributes["data-dashboard-action"] = DASHBOARD_01_ACTION_TOGGLE_PAID_ORDERS
+                            attributes["aria-label"] = "Show paid orders only"
+                        }
                         mButton(
                             variant = ButtonVariant.Default,
                             style = ButtonStyle.Outline,
                             size = Size.Sm,
-                        ) { +"View all" }
+                        ) {
+                            attributes["data-dashboard-action"] = DASHBOARD_01_ACTION_VIEW_ORDERS
+                            +"View all"
+                        }
                     }
                 }
                 div(classes = "overflow-x-auto") { ordersTable() }
@@ -309,7 +329,10 @@ private fun FlowContent.notesCard() {
             div(classes = "min-h-28 rounded-lg border border-base-300 bg-base-200 p-4 text-sm text-base-content/60") {
                 +"Add a handoff note for the next shift"
             }
-            mButton(variant = ButtonVariant.Primary, width = ButtonWidth.Block) { +"Save note" }
+            mButton(variant = ButtonVariant.Primary, width = ButtonWidth.Block) {
+                attributes["data-dashboard-action"] = DASHBOARD_01_ACTION_SAVE_NOTE
+                +"Save note"
+            }
         }
     }
 }
