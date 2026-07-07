@@ -495,10 +495,12 @@ class PagesTest :
             val html = drawerPage()
             html shouldContain "<h1>Drawer</h1>"
             html shouldContain "./gradlew mosaikAdd --component=drawer"
-            html shouldContain "Responsive always-open sidebar"
+            html shouldContain "Responsive app-shell trigger"
             html shouldContain "DrawerBreakpoint.Lg"
             html shouldContain "lg:drawer-open"
             html shouldContain "DrawerPlacement.End"
+            html shouldContain "mDrawerButton"
+            html shouldContain "for=\"responsive-docs-drawer\""
             DrawerBreakpoint.entries.forEach { breakpoint -> html shouldContain breakpoint.name }
         }
 
@@ -512,7 +514,7 @@ class PagesTest :
             html shouldContain "site-drawer"
             html shouldContain "mDrawerContent"
             html shouldContain "mDrawerSide"
-            html shouldContain "htmlFor"
+            html shouldContain "mDrawerButton"
             html shouldContain "mMenuItem"
         }
 

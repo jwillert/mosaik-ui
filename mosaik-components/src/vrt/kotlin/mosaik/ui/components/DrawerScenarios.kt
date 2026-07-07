@@ -12,7 +12,11 @@ object DrawerScenarios {
                 classes = "min-h-80 w-[72rem] bg-base-100",
             ) {
                 mDrawerContent(classes = "p-6") {
-                    mButtonLink(href = "#", variant = ButtonVariant.Primary, classes = "lg:hidden") { +"Open menu" }
+                    mDrawerButton(
+                        toggleId = "vrt-responsive-drawer",
+                        variant = ButtonVariant.Primary,
+                        classes = "lg:hidden",
+                    ) { +"Open menu" }
                     p { +"Responsive drawer content with the sidebar pinned open on large screens." }
                 }
                 mDrawerSide(classes = "bg-base-200 min-h-full w-64") {

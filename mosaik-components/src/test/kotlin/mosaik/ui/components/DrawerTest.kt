@@ -29,6 +29,38 @@ class DrawerTest :
                 "Sidebar</div>"
         }
 
+        test("a drawer button renders a label targeting the generated toggle") {
+            val html =
+                render {
+                    mDrawerButton(toggleId = "docs-drawer") { +"Open menu" }
+                }
+
+            html shouldContain "<label class=\"btn drawer-button\" for=\"docs-drawer\">Open menu</label>"
+        }
+
+        test("a drawer button reuses button modifiers and label attributes") {
+            val html =
+                render {
+                    mDrawerButton(
+                        toggleId = "settings-drawer",
+                        variant = ButtonVariant.Primary,
+                        style = ButtonStyle.Outline,
+                        shape = ButtonShape.Square,
+                        width = ButtonWidth.Wide,
+                        size = Size.Lg,
+                        classes = "lg:hidden",
+                    ) {
+                        id = "settings-trigger"
+                        attributes["aria-label"] = "Open settings"
+                        +"Settings"
+                    }
+                }
+
+            html shouldContain
+                "<label class=\"btn btn-primary btn-outline btn-square btn-wide btn-lg drawer-button lg:hidden\" " +
+                "for=\"settings-drawer\" id=\"settings-trigger\" aria-label=\"Open settings\">Settings</label>"
+        }
+
         test("custom classes and placement/open modifiers are appended to the drawer") {
             val html =
                 render {
