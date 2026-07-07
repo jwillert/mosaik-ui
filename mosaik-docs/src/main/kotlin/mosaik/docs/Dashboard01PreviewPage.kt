@@ -66,6 +66,12 @@ import mosaik.ui.components.mTable
 const val DASHBOARD_01_PATH = "/blocks/dashboard-01"
 const val DASHBOARD_01_STANDALONE_PREVIEW_PATH = "$DASHBOARD_01_PATH/preview"
 
+internal const val DASHBOARD_01_ACTION_EXPORT_REPORT = "export-report"
+internal const val DASHBOARD_01_ACTION_SELECT_RANGE = "select-range"
+internal const val DASHBOARD_01_ACTION_TOGGLE_PAID_ORDERS = "toggle-paid-orders"
+internal const val DASHBOARD_01_ACTION_VIEW_ORDERS = "view-orders"
+internal const val DASHBOARD_01_ACTION_SAVE_NOTE = "save-note"
+
 private fun <T> TagConsumer<T>.dashboardHtmlDocument(block: HTML.() -> Unit): T =
     HTML(mapOf("data-theme" to DEFAULT_THEME, "lang" to "en"), this, namespace = null)
         .visitAndFinalize(this, block)
@@ -124,7 +130,7 @@ private fun FlowContent.dashboardHeader() {
         }
         div(classes = "flex items-center gap-3") {
             mButton(variant = ButtonVariant.Primary, size = Size.Sm) {
-                attributes["data-dashboard-action"] = "export-report"
+                attributes["data-dashboard-action"] = DASHBOARD_01_ACTION_EXPORT_REPORT
                 +"Export"
             }
             mDropdown(alignment = DropdownAlignment.End) {
@@ -196,8 +202,9 @@ private fun FlowContent.dashboardHero() {
                         size = Size.Sm,
                         classes = "rounded-none",
                     ) {
-                        attributes["data-dashboard-action"] = "select-range"
+                        attributes["data-dashboard-action"] = DASHBOARD_01_ACTION_SELECT_RANGE
                         attributes["data-dashboard-range"] = label.lowercase()
+                        attributes["aria-pressed"] = (index == 1).toString()
                         +label
                     }
                 }
@@ -239,14 +246,15 @@ private fun FlowContent.dashboardMainGrid() {
                     }
                     div(classes = "flex items-center gap-2") {
                         mCheckbox(variant = CheckboxVariant.Primary, size = Size.Sm) {
-                            attributes["data-dashboard-action"] = "toggle-paid-orders"
+                            attributes["data-dashboard-action"] = DASHBOARD_01_ACTION_TOGGLE_PAID_ORDERS
+                            attributes["aria-label"] = "Show paid orders only"
                         }
                         mButton(
                             variant = ButtonVariant.Default,
                             style = ButtonStyle.Outline,
                             size = Size.Sm,
                         ) {
-                            attributes["data-dashboard-action"] = "view-orders"
+                            attributes["data-dashboard-action"] = DASHBOARD_01_ACTION_VIEW_ORDERS
                             +"View all"
                         }
                     }
@@ -322,7 +330,7 @@ private fun FlowContent.notesCard() {
                 +"Add a handoff note for the next shift"
             }
             mButton(variant = ButtonVariant.Primary, width = ButtonWidth.Block) {
-                attributes["data-dashboard-action"] = "save-note"
+                attributes["data-dashboard-action"] = DASHBOARD_01_ACTION_SAVE_NOTE
                 +"Save note"
             }
         }

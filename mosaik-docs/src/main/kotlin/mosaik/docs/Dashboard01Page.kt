@@ -84,33 +84,33 @@ fun FlowContent.dashboard01PageContent() {
         }
         ul {
             li {
-                code { +"data-dashboard-action=\"select-range\"" }
+                code { +"data-dashboard-action=\"$DASHBOARD_01_ACTION_SELECT_RANGE\"" }
                 +" with "
                 code { +"data-dashboard-range" }
                 +" on Today/7d/30d filters."
             }
             li {
-                code { +"data-dashboard-action=\"export-report\"" }
+                code { +"data-dashboard-action=\"$DASHBOARD_01_ACTION_EXPORT_REPORT\"" }
                 +" on the header export button."
             }
             li {
-                code { +"data-dashboard-action=\"toggle-paid-orders\"" }
+                code { +"data-dashboard-action=\"$DASHBOARD_01_ACTION_TOGGLE_PAID_ORDERS\"" }
                 +" on the orders checkbox."
             }
             li {
-                code { +"data-dashboard-action=\"view-orders\"" }
+                code { +"data-dashboard-action=\"$DASHBOARD_01_ACTION_VIEW_ORDERS\"" }
                 +" on the recent orders shortcut."
             }
             li {
-                code { +"data-dashboard-action=\"save-note\"" }
-                +" on the notes form action."
+                code { +"data-dashboard-action=\"$DASHBOARD_01_ACTION_SAVE_NOTE\"" }
+                +" on the notes save action."
             }
         }
         codeBlock(
             """
             // Example: replace static selectors with behavior in the installed block.
             mButton {
-                attributes["data-dashboard-action"] = "select-range"
+                attributes["data-dashboard-action"] = "$DASHBOARD_01_ACTION_SELECT_RANGE"
                 attributes["data-dashboard-range"] = "7d"
                 attributes["hx-get"] = "/dashboard/metrics?range=7d"
                 attributes["hx-target"] = "#dashboard-metrics"
