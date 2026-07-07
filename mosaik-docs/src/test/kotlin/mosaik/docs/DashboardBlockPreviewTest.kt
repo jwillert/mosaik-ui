@@ -23,4 +23,18 @@ class DashboardBlockPreviewTest :
             html shouldNotContain "id=\"main-content\""
             html shouldNotContain "id=\"theme-switcher\""
         }
+
+        test("dashboard-01 block docs page embeds the standalone preview in an iframe") {
+            val html = dashboard01Page()
+
+            html shouldContain "<h1>Dashboard 01</h1>"
+            html shouldContain "href=\"/blocks/dashboard-01\""
+            html shouldContain "Blocks"
+            html shouldContain "iframe"
+            html shouldContain "src=\"/blocks/dashboard-01/preview\""
+            html shouldContain "title=\"Dashboard 01 preview\""
+            html shouldContain "Open standalone preview"
+            html shouldContain "./gradlew mosaikAdd --block=dashboard-01"
+            html shouldNotContain "data-block-preview=\"dashboard-01\""
+        }
     })

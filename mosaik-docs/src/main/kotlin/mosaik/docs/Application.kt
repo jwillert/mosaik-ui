@@ -20,15 +20,12 @@ fun Application.module() {
         // Compiled Tailwind/DaisyUI output, served from resources/static/output.css.
         staticResources("/static", "static")
 
-        get(DASHBOARD_01_PREVIEW_PATH) {
-            call.respondText(dashboard01PreviewPage(), ContentType.Text.Html)
-        }
-        get("$DASHBOARD_01_PREVIEW_PATH/preview") {
+        get(DASHBOARD_01_STANDALONE_PREVIEW_PATH) {
             call.respondText(dashboard01PreviewPage(), ContentType.Text.Html)
         }
 
         // One route per nav item, so the sidebar and the routing table can't drift.
-        (listOf(HOME) + COMPONENTS + GUIDES).forEach { page ->
+        (listOf(HOME) + COMPONENTS + BLOCKS + GUIDES).forEach { page ->
             get(page.path) {
                 val isPartial = call.request.queryParameters["partial"] == "true"
                 val variant = call.request.queryParameters["variant"]

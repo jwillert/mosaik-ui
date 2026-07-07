@@ -147,6 +147,13 @@ private fun FlowContent.sidebar(activePath: String) {
                     +item.label
                 }
             }
+            mMenuTitle { +"Blocks" }
+            BLOCKS.forEach { item ->
+                mMenuItem(item.path, active = item.path == activePath) {
+                    pageVariantSupport(item)
+                    +item.label
+                }
+            }
             mMenuTitle { +"Guides" }
             GUIDES.forEach { item ->
                 mMenuItem(item.path, active = item.path == activePath) {

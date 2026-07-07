@@ -49,5 +49,7 @@ fun statPagePartial(): String = partialContent { statPageContent() }
 
 fun joinPagePartial(): String = partialContent { joinPageContent() }
 
+fun dashboard01PagePartial(): String = partialContent { dashboard01PageContent() }
+
 fun interactivityPagePartial(variant: String? = DEFAULT_INTERACTIVITY_PAGE_VARIANT_ID): String =
     partialContent { interactivityPageContent(variant) }
