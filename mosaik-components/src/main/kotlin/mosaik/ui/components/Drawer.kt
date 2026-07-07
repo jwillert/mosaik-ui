@@ -49,8 +49,8 @@ class MDrawer internal constructor(
  * content/side slots.
  *
  * The [toggleId] identifies the hidden checkbox and is used by [mDrawerSide]'s
- * overlay label. Use any ordinary label or button elsewhere with `for` set to
- * the same id to open and close the drawer.
+ * overlay label. Use [mDrawerButton] with the same id to open and close the
+ * drawer from the page content or app chrome.
  */
 fun FlowContent.mDrawer(
     toggleId: String,
