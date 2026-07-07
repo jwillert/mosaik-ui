@@ -17,7 +17,6 @@ import kotlinx.html.link
 import kotlinx.html.main
 import kotlinx.html.meta
 import kotlinx.html.p
-import kotlinx.html.script
 import kotlinx.html.section
 import kotlinx.html.stream.appendHTML
 import kotlinx.html.tbody
@@ -79,7 +78,6 @@ fun dashboard01PreviewPage(): String =
                 meta(name = "viewport", content = "width=device-width, initial-scale=1")
                 title { +"Mosaik UI · Dashboard 01" }
                 link(rel = "stylesheet", href = "/static/output.css")
-                script(src = "https://unpkg.com/alpinejs@3.14.7/dist/cdn.min.js") { defer = true }
             }
             body(classes = "min-h-screen bg-base-200 text-base-content") {
                 attributes["data-block-preview"] = "dashboard-01"
