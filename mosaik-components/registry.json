@@ -150,6 +150,68 @@
         { "name": "mFileInput", "kind": "function" },
         { "name": "mSelect", "kind": "function" }
       ]
+    },
+    {
+      "name": "avatar",
+      "description": "DaisyUI avatar and avatar group wrappers with type-safe online/offline and placeholder modifiers.",
+      "files": ["Avatar.kt"],
+      "dependencies": ["theme"],
+      "api": [
+        { "name": "AvatarStatus", "kind": "enum" },
+        { "name": "mAvatar", "kind": "function" },
+        { "name": "mAvatarGroup", "kind": "function" }
+      ]
+    },
+    {
+      "name": "checkbox",
+      "description": "DaisyUI checkbox input with type-safe variant, size, and indeterminate modifiers.",
+      "files": ["Checkbox.kt"],
+      "dependencies": ["theme"],
+      "api": [
+        { "name": "CheckboxVariant", "kind": "enum" },
+        { "name": "mCheckbox", "kind": "function" }
+      ]
+    },
+    {
+      "name": "divider",
+      "description": "DaisyUI divider with type-safe orientation, placement, and color modifiers.",
+      "files": ["Divider.kt"],
+      "dependencies": ["theme"],
+      "api": [
+        { "name": "DividerOrientation", "kind": "enum" },
+        { "name": "DividerPlacement", "kind": "enum" },
+        { "name": "DividerColor", "kind": "enum" },
+        { "name": "mDivider", "kind": "function" }
+      ]
+    },
+    {
+      "name": "stat",
+      "description": "DaisyUI stats container with constrained stat, figure, title, value, description, and actions sub-components.",
+      "files": ["Stat.kt"],
+      "dependencies": ["theme"],
+      "api": [
+        { "name": "MStats", "kind": "type" },
+        { "name": "MStat", "kind": "type" },
+        { "name": "mStats", "kind": "function" },
+        { "name": "mStat", "kind": "function" },
+        { "name": "mStatFigure", "kind": "function" },
+        { "name": "mStatTitle", "kind": "function" },
+        { "name": "mStatValue", "kind": "function" },
+        { "name": "mStatDesc", "kind": "function" },
+        { "name": "mStatActions", "kind": "function" }
+      ]
+    },
+    {
+      "name": "join",
+      "description": "DaisyUI join group with type-safe orientation and constrained join item sub-component.",
+      "files": ["Join.kt"],
+      "dependencies": ["theme"],
+      "api": [
+        { "name": "JoinOrientation", "kind": "enum" },
+        { "name": "MJoin", "kind": "type" },
+        { "name": "mJoin", "kind": "function" },
+        { "name": "mJoinItem", "kind": "function" }
+      ]
     }
   ]
 }
