@@ -76,6 +76,9 @@ val STAT = NavItem("/components/stat", "Stat", ::statPage, ::statPagePartial)
 /** The Join documentation page. */
 val JOIN = NavItem("/components/join", "Join", ::joinPage, ::joinPagePartial)
 
+/** The Dashboard 01 block documentation page. */
+val DASHBOARD_01 = NavItem(DASHBOARD_01_PATH, "Dashboard 01", ::dashboard01Page, ::dashboard01PagePartial)
+
 /** The Interactivity guide page. */
 val INTERACTIVITY =
     NavItem(
@@ -87,7 +90,7 @@ val INTERACTIVITY =
     )
 
 /**
- * Every component documentation page. Together with [HOME] and [GUIDES] this is
+ * Every component documentation page. Together with [HOME], [BLOCKS], and [GUIDES] this is
  * the single source of truth for the sidebar links and the routing table (see
  * [mosaik.docs.module]), so adding a component page is one [NavItem] plus its
  * renderer.
@@ -116,7 +119,13 @@ val COMPONENTS =
     )
 
 /**
- * Every guide documentation page. Together with [HOME] and [COMPONENTS] this is
+ * Every block documentation page. Together with [HOME], [COMPONENTS], and [GUIDES] this is
+ * the single source of truth for the sidebar links and the routing table.
+ */
+val BLOCKS = listOf(DASHBOARD_01)
+
+/**
+ * Every guide documentation page. Together with [HOME], [COMPONENTS], and [BLOCKS] this is
  * the single source of truth for the sidebar links and the routing table.
  */
 val GUIDES = listOf(INTERACTIVITY)
