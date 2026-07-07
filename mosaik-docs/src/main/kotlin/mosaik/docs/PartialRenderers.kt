@@ -37,5 +37,15 @@ fun menuPagePartial(): String = partialContent { menuPageContent() }
 
 fun tabsPagePartial(): String = partialContent { tabsPageContent() }
 
+fun avatarPagePartial(): String = partialContent { avatarPageContent() }
+
+fun checkboxPagePartial(): String = partialContent { checkboxPageContent() }
+
+fun dividerPagePartial(): String = partialContent { dividerPageContent() }
+
+fun statPagePartial(): String = partialContent { statPageContent() }
+
+fun joinPagePartial(): String = partialContent { joinPageContent() }
+
 fun interactivityPagePartial(variant: String? = DEFAULT_INTERACTIVITY_PAGE_VARIANT_ID): String =
     partialContent { interactivityPageContent(variant) }
