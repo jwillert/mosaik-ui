@@ -61,6 +61,21 @@ val MENU = NavItem("/components/menu", "Menu", ::menuPage, ::menuPagePartial)
 /** The Tabs documentation page. */
 val TABS = NavItem("/components/tabs", "Tabs", ::tabsPage, ::tabsPagePartial)
 
+/** The Avatar documentation page. */
+val AVATAR = NavItem("/components/avatar", "Avatar", ::avatarPage, ::avatarPagePartial)
+
+/** The Checkbox documentation page. */
+val CHECKBOX = NavItem("/components/checkbox", "Checkbox", ::checkboxPage, ::checkboxPagePartial)
+
+/** The Divider documentation page. */
+val DIVIDER = NavItem("/components/divider", "Divider", ::dividerPage, ::dividerPagePartial)
+
+/** The Stat documentation page. */
+val STAT = NavItem("/components/stat", "Stat", ::statPage, ::statPagePartial)
+
+/** The Join documentation page. */
+val JOIN = NavItem("/components/join", "Join", ::joinPage, ::joinPagePartial)
+
 /** The Interactivity guide page. */
 val INTERACTIVITY =
     NavItem(
@@ -93,6 +108,11 @@ val COMPONENTS =
         LOADING,
         MENU,
         TABS,
+        AVATAR,
+        CHECKBOX,
+        DIVIDER,
+        STAT,
+        JOIN,
     )
 
 /**
