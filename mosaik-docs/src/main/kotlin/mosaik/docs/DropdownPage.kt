@@ -1,17 +1,16 @@
 package mosaik.docs
 
 import kotlinx.html.FlowContent
-import kotlinx.html.a
 import kotlinx.html.code
 import kotlinx.html.h1
 import kotlinx.html.h2
-import kotlinx.html.li
 import kotlinx.html.p
 import mosaik.ui.components.DropdownAlignment
 import mosaik.ui.components.DropdownDirection
 import mosaik.ui.components.mDropdown
 import mosaik.ui.components.mDropdownContent
 import mosaik.ui.components.mDropdownTrigger
+import mosaik.ui.components.mMenuItem
 
 fun FlowContent.dropdownPageContent() {
     h1 { +"Dropdown" }
@@ -37,12 +36,13 @@ fun FlowContent.dropdownPageContent() {
             import mosaik.ui.components.mDropdown
             import mosaik.ui.components.mDropdownContent
             import mosaik.ui.components.mDropdownTrigger
+            import mosaik.ui.components.mMenuItem
 
             mDropdown {
                 mDropdownTrigger(classes = "rounded-md border px-4 py-2") { +"Account" }
                 mDropdownContent(classes = "w-52 rounded-box bg-base-100 p-2 shadow-sm") {
-                    li { a(href = "/profile") { +"Profile" } }
-                    li { a(href = "/settings") { +"Settings" } }
+                    mMenuItem("/profile") { +"Profile" }
+                    mMenuItem("/settings") { +"Settings" }
                 }
             }
             """.trimIndent(),
@@ -50,8 +50,8 @@ fun FlowContent.dropdownPageContent() {
         mDropdown {
             mDropdownTrigger(classes = "rounded-md border px-4 py-2") { +"Account" }
             mDropdownContent(classes = "w-52 rounded-box bg-base-100 p-2 shadow-sm") {
-                li { a(href = "/profile") { +"Profile" } }
-                li { a(href = "/settings") { +"Settings" } }
+                mMenuItem("/profile") { +"Profile" }
+                mMenuItem("/settings") { +"Settings" }
             }
         }
     }
@@ -67,8 +67,8 @@ fun FlowContent.dropdownPageContent() {
             ) {
                 mDropdownTrigger(classes = "rounded-md border px-4 py-2") { +"Open upward" }
                 mDropdownContent(classes = "w-52 rounded-box bg-base-100 p-2 shadow-sm") {
-                    li { a(href = "#") { +"First action" } }
-                    li { a(href = "#") { +"Second action" } }
+                    mMenuItem("#") { +"First action" }
+                    mMenuItem("#") { +"Second action" }
                 }
             }
             """.trimIndent(),
@@ -80,8 +80,8 @@ fun FlowContent.dropdownPageContent() {
         ) {
             mDropdownTrigger(classes = "rounded-md border px-4 py-2") { +"Open upward" }
             mDropdownContent(classes = "w-52 rounded-box bg-base-100 p-2 shadow-sm") {
-                li { a(href = "#") { +"First action" } }
-                li { a(href = "#") { +"Second action" } }
+                mMenuItem("#") { +"First action" }
+                mMenuItem("#") { +"Second action" }
             }
         }
     }
@@ -114,9 +114,9 @@ fun FlowContent.dropdownPageContent() {
             ),
             ApiParam(
                 "mDropdownContent.block",
-                "UL.() -> Unit",
+                "MMenu.() -> Unit",
                 "{}",
-                "Receiver block on the raw kotlinx.html UL element.",
+                "Constrained receiver where menu child components are available.",
             ),
         ),
     )

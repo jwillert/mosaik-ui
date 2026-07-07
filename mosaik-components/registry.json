@@ -69,7 +69,7 @@
       "name": "dropdown",
       "description": "DaisyUI dropdown container with type-safe direction, alignment, hover, and open modifiers plus constrained mDropdownTrigger and mDropdownContent child components.",
       "files": ["Dropdown.kt"],
-      "dependencies": ["theme"],
+      "dependencies": ["menu"],
       "api": [
         { "name": "DropdownDirection", "kind": "enum" },
         { "name": "DropdownAlignment", "kind": "enum" },

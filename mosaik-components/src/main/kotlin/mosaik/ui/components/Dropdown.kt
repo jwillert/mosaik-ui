@@ -2,7 +2,6 @@ package mosaik.ui.components
 
 import kotlinx.html.DIV
 import kotlinx.html.FlowContent
-import kotlinx.html.UL
 import kotlinx.html.div
 import kotlinx.html.id
 import kotlinx.html.ul
@@ -94,15 +93,16 @@ fun MDropdown.mDropdownTrigger(
 }
 
 /**
- * The focusable dropdown content list for a [mDropdown]. Only callable from
- * [MDropdown]. [block] receives the raw [UL] for normal list markup.
+ * The focusable dropdown content menu for a [mDropdown]. Only callable from
+ * [MDropdown]. [block] receives an [MMenu] context so menu children such as
+ * [mMenuItem] and [mMenuTitle] remain available without raw DaisyUI classes.
  */
 fun MDropdown.mDropdownContent(
     classes: String? = null,
-    block: UL.() -> Unit = {},
+    block: MMenu.() -> Unit = {},
 ) {
     underlying.ul(classes = buildClasses("dropdown-content", "menu", classes)) {
         attributes["tabindex"] = "0"
-        block()
+        MMenu(this).block()
     }
 }

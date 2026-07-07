@@ -3,9 +3,7 @@ package mosaik.ui.components
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.string.shouldContain
 import kotlinx.html.FlowContent
-import kotlinx.html.a
 import kotlinx.html.div
-import kotlinx.html.li
 import kotlinx.html.stream.createHTML
 
 private fun render(block: FlowContent.() -> Unit): String = createHTML(prettyPrint = false).div { block() }
@@ -46,9 +44,9 @@ class DropdownTest :
         }
 
         test("mDropdownTrigger custom classes are appended to the trigger") {
-            val html = render { mDropdown { mDropdownTrigger("btn") { +"Open" } } }
+            val html = render { mDropdown { mDropdownTrigger("px-2") { +"Open" } } }
 
-            html shouldContain "<div class=\"btn\" tabindex=\"0\" role=\"button\">Open</div>"
+            html shouldContain "<div class=\"px-2\" tabindex=\"0\" role=\"button\">Open</div>"
         }
 
         test("mDropdownContent renders a focusable menu list with dropdown content classes") {
@@ -56,7 +54,7 @@ class DropdownTest :
                 render {
                     mDropdown {
                         mDropdownContent {
-                            li { a(href = "/profile") { +"Profile" } }
+                            mMenuItem("/profile") { +"Profile" }
                         }
                     }
                 }
