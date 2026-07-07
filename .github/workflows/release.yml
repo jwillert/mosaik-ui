@@ -1,0 +1,82 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version, e.g. 0.1.1"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Validate version
+        run: |
+          set -euo pipefail
+          VERSION="${{ inputs.version }}"
+          if ! echo "$VERSION" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$'; then
+            echo "Invalid version: $VERSION"
+            echo "Expected format: 0.1.1 or 0.1.1-rc.1"
+            exit 1
+          fi
+
+      - name: Bump mosaikVersion
+        run: |
+          set -euo pipefail
+          VERSION="${{ inputs.version }}"
+          sed -i "s/^mosaikVersion=.*/mosaikVersion=$VERSION/" gradle.properties
+          grep '^mosaikVersion=' gradle.properties
+
+      - name: Run checks
+        run: ./gradlew check
+
+      - name: Commit and tag release
+        run: |
+          set -euo pipefail
+          VERSION="${{ inputs.version }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add gradle.properties
+          git commit -m "Release v$VERSION"
+          git tag "v$VERSION"
+
+      - name: Publish to GitHub Packages
+        env:
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ./gradlew :mosaik-core:publishAllPublicationsToGitHubPackagesRepository \
+            :mosaik-gradle:publishAllPublicationsToGitHubPackagesRepository
+
+      - name: Push release commit and tag
+        run: |
+          set -euo pipefail
+          VERSION="${{ inputs.version }}"
+          git push origin HEAD:${{ github.ref_name }}
+          git push origin "v$VERSION"
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ inputs.version }}
+          name: v${{ inputs.version }}
+          generate_release_notes: true

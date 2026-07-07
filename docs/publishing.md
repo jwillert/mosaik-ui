@@ -8,7 +8,7 @@ Mosaik UI is published as Maven artifacts to GitHub Packages.
 - Gradle plugin implementation artifact for `:mosaik-gradle`
 - Gradle plugin marker for `id("dev.jwillert.mosaik") version "<version>"`
 
-The version is currently defined in `build-logic/src/main/kotlin/mosaik.kotlin-library.gradle.kts`.
+The version is defined by `mosaikVersion` in `gradle.properties`.
 
 ## Credentials
 

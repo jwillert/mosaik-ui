@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "dev.jwillert.mosaik"
-version = "0.1.0"
+version = providers.gradleProperty("mosaikVersion").get()
 
 repositories {
     mavenCentral()
