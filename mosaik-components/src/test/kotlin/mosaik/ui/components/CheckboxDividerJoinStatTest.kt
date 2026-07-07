@@ -54,11 +54,11 @@ class CheckboxDividerJoinStatTest :
             html shouldNotContain "divider-center"
         }
 
-        test("divider maps orientation, placement, color, and custom classes") {
+        test("divider maps vertical orientation, placement, color, and custom classes") {
             val html =
                 renderReference {
                     mDivider(
-                        orientation = DividerOrientation.Horizontal,
+                        orientation = DividerOrientation.Vertical,
                         placement = DividerPlacement.Start,
                         color = DividerColor.Primary,
                         classes = "my-0",
@@ -99,7 +99,7 @@ class CheckboxDividerJoinStatTest :
         test("stats render constrained stat sections") {
             val html =
                 renderReference {
-                    mStats("shadow") {
+                    mStats(classes = "shadow") {
                         mStat {
                             mStatTitle { +"Downloads" }
                             mStatValue { +"31K" }
@@ -111,6 +111,12 @@ class CheckboxDividerJoinStatTest :
             html shouldContain "<div class=\"stats shadow\"><div class=\"stat\">" +
                 "<div class=\"stat-title\">Downloads</div><div class=\"stat-value\">31K</div>" +
                 "<div class=\"stat-desc\">Jan 1st - Feb 1st</div></div></div>"
+        }
+
+        test("stats support vertical orientation") {
+            val html = renderReference { mStats(orientation = StatsOrientation.Vertical) }
+
+            html shouldContain "class=\"stats stats-vertical\""
         }
 
         test("stat subcomponents append custom classes") {

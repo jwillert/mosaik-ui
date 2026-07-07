@@ -21,11 +21,26 @@ class MStat(
 internal val MStats.underlying: DIV get() = div
 internal val MStat.underlying: DIV get() = div
 
+enum class StatsOrientation(
+    val token: String?,
+) {
+    Horizontal(null),
+    Vertical("vertical"),
+}
+
 fun FlowContent.mStats(
+    orientation: StatsOrientation = StatsOrientation.Horizontal,
     classes: String? = null,
     block: MStats.() -> Unit = {},
 ) {
-    div(classes = buildClasses("stats", classes)) {
+    div(
+        classes =
+            buildClasses(
+                "stats",
+                orientation.token?.let { "stats-$it" },
+                classes,
+            ),
+    ) {
         MStats(this).block()
     }
 }

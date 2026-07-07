@@ -5,8 +5,8 @@ import kotlinx.html.*
 enum class DividerOrientation(
     val token: String?,
 ) {
-    Vertical(null),
-    Horizontal("horizontal"),
+    Horizontal(null),
+    Vertical("horizontal"),
 }
 
 enum class DividerPlacement(
@@ -31,7 +31,7 @@ enum class DividerColor(
 }
 
 fun FlowContent.mDivider(
-    orientation: DividerOrientation = DividerOrientation.Vertical,
+    orientation: DividerOrientation = DividerOrientation.Horizontal,
     placement: DividerPlacement = DividerPlacement.Center,
     color: DividerColor? = null,
     classes: String? = null,

@@ -186,10 +186,11 @@
     },
     {
       "name": "stat",
-      "description": "DaisyUI stats container with constrained stat, figure, title, value, description, and actions sub-components.",
+      "description": "DaisyUI stats container with type-safe orientation and constrained stat, figure, title, value, description, and actions sub-components.",
       "files": ["Stat.kt"],
       "dependencies": ["theme"],
       "api": [
+        { "name": "StatsOrientation", "kind": "enum" },
         { "name": "MStats", "kind": "type" },
         { "name": "MStat", "kind": "type" },
         { "name": "mStats", "kind": "function" },
