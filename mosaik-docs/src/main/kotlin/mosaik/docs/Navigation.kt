@@ -31,6 +31,9 @@ val NAVBAR = NavItem("/components/navbar", "Navbar", ::navbarPage, ::navbarPageP
 /** The Drawer documentation page. */
 val DRAWER = NavItem("/components/drawer", "Drawer", ::drawerPage, ::drawerPagePartial)
 
+/** The Dropdown documentation page. */
+val DROPDOWN = NavItem("/components/dropdown", "Dropdown", ::dropdownPage, ::dropdownPagePartial)
+
 /** The Footer documentation page. */
 val FOOTER = NavItem("/components/footer", "Footer", ::footerPage, ::footerPagePartial)
 
@@ -80,6 +83,7 @@ val COMPONENTS =
         CARD,
         NAVBAR,
         DRAWER,
+        DROPDOWN,
         FOOTER,
         BADGE,
         TABLE_PAGE,

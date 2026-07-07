@@ -67,6 +67,20 @@
       ]
     },
     {
+      "name": "dropdown",
+      "description": "DaisyUI dropdown container with type-safe direction, alignment, hover, and open modifiers plus constrained mDropdownTrigger and mDropdownContent child components.",
+      "files": ["Dropdown.kt"],
+      "dependencies": ["menu"],
+      "api": [
+        { "name": "DropdownDirection", "kind": "enum" },
+        { "name": "DropdownAlignment", "kind": "enum" },
+        { "name": "MDropdown", "kind": "type" },
+        { "name": "mDropdown", "kind": "function" },
+        { "name": "mDropdownTrigger", "kind": "function" },
+        { "name": "mDropdownContent", "kind": "function" }
+      ]
+    },
+    {
       "name": "footer",
       "description": "DaisyUI footer container with no variant, size, or sub-components — a simple wrapper around the footer classes, styled by the utility classes the caller passes.",
       "files": ["Footer.kt"],

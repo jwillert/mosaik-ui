@@ -19,6 +19,8 @@ fun navbarPagePartial(): String = partialContent { navbarPageContent() }
 
 fun drawerPagePartial(): String = partialContent { drawerPageContent() }
 
+fun dropdownPagePartial(): String = partialContent { dropdownPageContent() }
+
 fun footerPagePartial(): String = partialContent { footerPageContent() }
 
 fun badgePagePartial(): String = partialContent { badgePageContent() }
