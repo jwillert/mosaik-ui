@@ -9,7 +9,9 @@ import kotlinx.html.iframe
 import kotlinx.html.p
 import kotlinx.html.section
 import kotlinx.html.strong
+import mosaik.ui.components.AlertVariant
 import mosaik.ui.components.ButtonVariant
+import mosaik.ui.components.mAlert
 import mosaik.ui.components.mButtonLink
 
 fun FlowContent.dashboard01PageContent() {
@@ -21,7 +23,7 @@ fun FlowContent.dashboard01PageContent() {
     }
 
     h2 { +"Installation" }
-    p("alert alert-info") {
+    mAlert(AlertVariant.Info) {
         strong { +"Future CLI boundary: " }
         +"Block installation is not available in the current Gradle plugin yet. "
         +"The command below documents the planned block-install boundary, where dashboard source, "
