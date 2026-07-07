@@ -19,6 +19,11 @@ class DashboardBlockPreviewTest :
             html shouldContain "Recent orders"
             html shouldContain "mosaik-logo.svg"
             html shouldContain "href=\"/blocks/dashboard-01/preview\""
+            html shouldContain "data-dashboard-action=\"export-report\""
+            html shouldContain "data-dashboard-action=\"select-range\""
+            html shouldContain "data-dashboard-range=\"7d\""
+            html shouldContain "data-dashboard-action=\"toggle-paid-orders\""
+            html shouldContain "data-dashboard-action=\"save-note\""
             html shouldNotContain "href=\"/blocks/dashboard-01\""
             html shouldNotContain "alpinejs"
             html shouldNotContain "mosaik-docs-client.js"
@@ -37,6 +42,10 @@ class DashboardBlockPreviewTest :
             html shouldContain "title=\"Dashboard 01 preview\""
             html shouldContain "Open standalone preview"
             html shouldContain "./gradlew mosaikAdd --block=dashboard-01"
+            html shouldContain "Interaction hooks"
+            html shouldContain "data-dashboard-action=&quot;select-range&quot;"
+            html shouldContain "data-dashboard-action=&quot;save-note&quot;"
+            html shouldContain "Use these as stable selectors for htmx, Alpine.js, Datastar, or server routes."
             html shouldNotContain "data-block-preview=\"dashboard-01\""
         }
     })

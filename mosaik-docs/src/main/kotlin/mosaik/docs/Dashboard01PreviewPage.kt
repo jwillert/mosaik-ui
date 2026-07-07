@@ -123,7 +123,10 @@ private fun FlowContent.dashboardHeader() {
             }
         }
         div(classes = "flex items-center gap-3") {
-            mButton(variant = ButtonVariant.Primary, size = Size.Sm) { +"Export" }
+            mButton(variant = ButtonVariant.Primary, size = Size.Sm) {
+                attributes["data-dashboard-action"] = "export-report"
+                +"Export"
+            }
             mDropdown(alignment = DropdownAlignment.End) {
                 mDropdownTrigger(classes = "rounded-full") {
                     mAvatar(classes = "ring ring-primary ring-offset-2 ring-offset-base-100") {
@@ -192,7 +195,11 @@ private fun FlowContent.dashboardHero() {
                         variant = if (index == 1) ButtonVariant.Primary else ButtonVariant.Default,
                         size = Size.Sm,
                         classes = "rounded-none",
-                    ) { +label }
+                    ) {
+                        attributes["data-dashboard-action"] = "select-range"
+                        attributes["data-dashboard-range"] = label.lowercase()
+                        +label
+                    }
                 }
             }
         }
@@ -231,12 +238,17 @@ private fun FlowContent.dashboardMainGrid() {
                         ) { +"A static snapshot for the standalone block preview." }
                     }
                     div(classes = "flex items-center gap-2") {
-                        mCheckbox(variant = CheckboxVariant.Primary, size = Size.Sm)
+                        mCheckbox(variant = CheckboxVariant.Primary, size = Size.Sm) {
+                            attributes["data-dashboard-action"] = "toggle-paid-orders"
+                        }
                         mButton(
                             variant = ButtonVariant.Default,
                             style = ButtonStyle.Outline,
                             size = Size.Sm,
-                        ) { +"View all" }
+                        ) {
+                            attributes["data-dashboard-action"] = "view-orders"
+                            +"View all"
+                        }
                     }
                 }
                 div(classes = "overflow-x-auto") { ordersTable() }
@@ -309,7 +321,10 @@ private fun FlowContent.notesCard() {
             div(classes = "min-h-28 rounded-lg border border-base-300 bg-base-200 p-4 text-sm text-base-content/60") {
                 +"Add a handoff note for the next shift"
             }
-            mButton(variant = ButtonVariant.Primary, width = ButtonWidth.Block) { +"Save note" }
+            mButton(variant = ButtonVariant.Primary, width = ButtonWidth.Block) {
+                attributes["data-dashboard-action"] = "save-note"
+                +"Save note"
+            }
         }
     }
 }

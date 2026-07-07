@@ -6,8 +6,10 @@ import kotlinx.html.div
 import kotlinx.html.h1
 import kotlinx.html.h2
 import kotlinx.html.iframe
+import kotlinx.html.li
 import kotlinx.html.p
 import kotlinx.html.section
+import kotlinx.html.ul
 import mosaik.ui.components.ButtonVariant
 import mosaik.ui.components.mButtonLink
 
@@ -71,6 +73,50 @@ fun FlowContent.dashboard01PageContent() {
             code { +DASHBOARD_01_STANDALONE_PREVIEW_PATH }
             +" for the rendered page shell."
         }
+    }
+
+    section {
+        h2 { +"Interaction hooks" }
+        p {
+            +"The preview stays static, but the block scaffolds explicit action attributes where "
+            +"applications commonly attach behavior. Use these as stable selectors for htmx, "
+            +"Alpine.js, Datastar, or server routes."
+        }
+        ul {
+            li {
+                code { +"data-dashboard-action=\"select-range\"" }
+                +" with "
+                code { +"data-dashboard-range" }
+                +" on Today/7d/30d filters."
+            }
+            li {
+                code { +"data-dashboard-action=\"export-report\"" }
+                +" on the header export button."
+            }
+            li {
+                code { +"data-dashboard-action=\"toggle-paid-orders\"" }
+                +" on the orders checkbox."
+            }
+            li {
+                code { +"data-dashboard-action=\"view-orders\"" }
+                +" on the recent orders shortcut."
+            }
+            li {
+                code { +"data-dashboard-action=\"save-note\"" }
+                +" on the notes form action."
+            }
+        }
+        codeBlock(
+            """
+            // Example: replace static selectors with behavior in the installed block.
+            mButton {
+                attributes["data-dashboard-action"] = "select-range"
+                attributes["data-dashboard-range"] = "7d"
+                attributes["hx-get"] = "/dashboard/metrics?range=7d"
+                attributes["hx-target"] = "#dashboard-metrics"
+            }
+            """.trimIndent(),
+        )
     }
 }
 
