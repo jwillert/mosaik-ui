@@ -6,6 +6,7 @@ import mosaik.ui.components.ButtonVariant
 import mosaik.ui.components.mButton
 import mosaik.ui.components.mButtonLink
 import mosaik.ui.components.mDrawer
+import mosaik.ui.components.mDrawerButton
 import mosaik.ui.components.mDrawerContent
 import mosaik.ui.components.mDrawerSide
 import mosaik.ui.components.mMenu
@@ -231,6 +232,7 @@ fun FlowContent.navbarPageContent() {
             code =
                 """
                 import mosaik.ui.components.mDrawer
+                import mosaik.ui.components.mDrawerButton
                 import mosaik.ui.components.mDrawerContent
                 import mosaik.ui.components.mDrawerSide
                 import mosaik.ui.components.mMenu
@@ -248,10 +250,11 @@ fun FlowContent.navbarPageContent() {
                     mDrawerContent {
                         mNavbar("bg-base-100 shadow-sm") {
                             mNavbarStart {
-                                label(classes = "inline-flex cursor-pointer px-3 py-2 lg:hidden") {
-                                    htmlFor = "site-drawer"
-                                    +"Menu"
-                                }
+                                mDrawerButton(
+                                    toggleId = "site-drawer",
+                                    style = ButtonStyle.Ghost,
+                                    classes = "lg:hidden",
+                                ) { +"Menu" }
                                 mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
                             }
                             mNavbarCenter("hidden lg:flex") {
@@ -276,10 +279,11 @@ fun FlowContent.navbarPageContent() {
                 mDrawerContent {
                     mNavbar("bg-base-100 shadow-sm") {
                         mNavbarStart {
-                            label(classes = "inline-flex cursor-pointer px-3 py-2 lg:hidden") {
-                                htmlFor = "site-drawer"
-                                +"Menu"
-                            }
+                            mDrawerButton(
+                                toggleId = "site-drawer",
+                                style = ButtonStyle.Ghost,
+                                classes = "lg:hidden",
+                            ) { +"Menu" }
                             mButtonLink(href = "/", style = ButtonStyle.Ghost, classes = "text-xl") { +"Mosaik" }
                         }
                         mNavbarCenter("hidden lg:flex") {

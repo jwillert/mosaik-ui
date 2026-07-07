@@ -8,8 +8,8 @@ import kotlinx.html.p
 import mosaik.ui.components.ButtonVariant
 import mosaik.ui.components.DrawerBreakpoint
 import mosaik.ui.components.DrawerPlacement
-import mosaik.ui.components.mButtonLink
 import mosaik.ui.components.mDrawer
+import mosaik.ui.components.mDrawerButton
 import mosaik.ui.components.mDrawerContent
 import mosaik.ui.components.mDrawerSide
 import mosaik.ui.components.mMenu
@@ -59,9 +59,11 @@ fun FlowContent.drawerPageContent() {
         }
     }
 
-    h2 { +"Responsive always-open sidebar" }
+    h2 { +"Responsive app-shell trigger" }
     p {
-        +"Pass "
+        +"Use "
+        code { +"mDrawerButton" }
+        +" for a CSS-only app-shell trigger, then pass "
         code { +"openFrom = DrawerBreakpoint.Lg" }
         +" to keep the drawer overlay-style on small screens while rendering it "
         +"as an always-open sidebar from the large breakpoint upward."
@@ -70,8 +72,9 @@ fun FlowContent.drawerPageContent() {
         code =
             """
             import mosaik.ui.components.DrawerBreakpoint
-            import mosaik.ui.components.mButtonLink
+            import mosaik.ui.components.ButtonVariant
             import mosaik.ui.components.mDrawer
+            import mosaik.ui.components.mDrawerButton
             import mosaik.ui.components.mDrawerContent
             import mosaik.ui.components.mDrawerSide
             import mosaik.ui.components.mMenu
@@ -80,7 +83,11 @@ fun FlowContent.drawerPageContent() {
 
             mDrawer(toggleId = "responsive-docs-drawer", openFrom = DrawerBreakpoint.Lg) {
                 mDrawerContent(classes = "p-6") {
-                    mButtonLink(href = "#", classes = "lg:hidden") { +"Open menu" }
+                    mDrawerButton(
+                        toggleId = "responsive-docs-drawer",
+                        variant = ButtonVariant.Primary,
+                        classes = "lg:hidden",
+                    ) { +"Open menu" }
                     p { +"The sidebar stays open on large screens." }
                 }
                 mDrawerSide(classes = "bg-base-200 min-h-full w-64") {
@@ -95,8 +102,8 @@ fun FlowContent.drawerPageContent() {
     ) {
         mDrawer(toggleId = "responsive-docs-drawer", openFrom = DrawerBreakpoint.Lg) {
             mDrawerContent(classes = "p-6") {
-                mButtonLink(
-                    href = "#",
+                mDrawerButton(
+                    toggleId = "responsive-docs-drawer",
                     variant = ButtonVariant.Primary,
                     classes = "lg:hidden",
                 ) {
@@ -174,6 +181,24 @@ fun FlowContent.drawerPageContent() {
                 "MDrawer.() -> Unit",
                 "{}",
                 "Constrained receiver where drawer slots are available.",
+            ),
+            ApiParam(
+                "mDrawerButton.toggleId",
+                "String",
+                "required",
+                "ID of the generated drawer checkbox to target with the label trigger.",
+            ),
+            ApiParam(
+                "mDrawerButton.variant/style/shape/width/size/classes",
+                "Button modifiers",
+                "button defaults",
+                "Same modifier vocabulary as mButton, rendered on a label trigger.",
+            ),
+            ApiParam(
+                "mDrawerButton.block",
+                "LABEL.() -> Unit",
+                "{}",
+                "Receiver block on the raw kotlinx.html LABEL element.",
             ),
             ApiParam(
                 "mDrawerContent.classes",

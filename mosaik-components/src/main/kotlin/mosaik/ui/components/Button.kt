@@ -27,6 +27,24 @@ enum class ButtonVariant(
 
 private fun ButtonVariant.cssClass(): String? = token.takeIf { it.isNotBlank() }?.let { "btn-$it" }
 
+internal fun buttonClasses(
+    variant: ButtonVariant = ButtonVariant.Default,
+    style: ButtonStyle? = null,
+    shape: ButtonShape? = null,
+    width: ButtonWidth? = null,
+    size: Size = Size.Md,
+    classes: String? = null,
+): String =
+    buildClasses(
+        "btn",
+        variant.cssClass(),
+        style?.let { "btn-${it.token}" },
+        shape?.let { "btn-${it.token}" },
+        width?.let { "btn-${it.token}" },
+        size.token?.let { "btn-$it" },
+        classes,
+    )
+
 /**
  * The DaisyUI button style modifiers.
  *
@@ -93,16 +111,7 @@ fun FlowContent.mButton(
     block: BUTTON.() -> Unit = {},
 ) {
     button(
-        classes =
-            buildClasses(
-                "btn",
-                variant.cssClass(),
-                style?.let { "btn-${it.token}" },
-                shape?.let { "btn-${it.token}" },
-                width?.let { "btn-${it.token}" },
-                size.token?.let { "btn-$it" },
-                classes,
-            ),
+        classes = buttonClasses(variant, style, shape, width, size, classes),
         block = block,
     )
 }
@@ -140,16 +149,7 @@ fun FlowContent.mButtonLink(
 ) {
     a(
         href = href,
-        classes =
-            buildClasses(
-                "btn",
-                variant.cssClass(),
-                style?.let { "btn-${it.token}" },
-                shape?.let { "btn-${it.token}" },
-                width?.let { "btn-${it.token}" },
-                size.token?.let { "btn-$it" },
-                classes,
-            ),
+        classes = buttonClasses(variant, style, shape, width, size, classes),
         block = block,
     )
 }

@@ -53,14 +53,15 @@
     },
     {
       "name": "drawer",
-      "description": "DaisyUI drawer layout with a generated checkbox toggle, type-safe placement/open/responsive-open modifiers, and constrained mDrawerContent and mDrawerSide slots.",
+      "description": "DaisyUI drawer layout with a generated checkbox toggle, label-based mDrawerButton trigger, type-safe placement/open/responsive-open modifiers, and constrained mDrawerContent and mDrawerSide slots.",
       "files": ["Drawer.kt"],
-      "dependencies": ["theme"],
+      "dependencies": ["button"],
       "api": [
         { "name": "DrawerPlacement", "kind": "enum" },
         { "name": "DrawerBreakpoint", "kind": "enum" },
         { "name": "MDrawer", "kind": "type" },
         { "name": "mDrawer", "kind": "function" },
+        { "name": "mDrawerButton", "kind": "function" },
         { "name": "mDrawerContent", "kind": "function" },
         { "name": "mDrawerSide", "kind": "function" }
       ]
